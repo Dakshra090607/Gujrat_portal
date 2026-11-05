@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-11-03T11:06:57.536466+00:00",
+  "tool": "scripts/ingest/extract_cgdcr.py",
+  "extractionTools": {
+    "pageText": {
+      "name": "pypdf",
+      "version": "6.10.0"
+    },
+    "tableCandidates": {
+      "name": "pdfplumber",
+      "version": "0.11.9"
+    }
+  },
+  "documents": [
+    {
+      "filename": "CGDCR-2017 PART-I PROCEDURE REGULATIONS.pdf",
+      "part": "Part I",
+      "sha256": "58cdd25228bde40bcfe835a6a23182b88677aca57823d5d8e1b154dfe20c3e16",
+      "pdfPageCount": 166,
+      "textPages": 166,
+      "pagesNeedingReview": 0,
+      "candidateCounts": {
+        "numbered_heading_or_clause_candidate": 505,
+        "definition_candidate": 192,
+        "numeric_parameter_candidate": 141,
+        "table_or_schedule_candidate": 144,
+        "cross_reference_candidate": 147,
+        "condition_or_exception_candidate": 45
+      },
+      "tableCandidatePages": 54,
+      "tableCandidates": 61,
+      "verificationStatus": "EXTRACTED"
+    },
+    {
+      "filename": "CGDCR-2017 PART-II PLANNING REGULATIONS.pdf",
+      "part": "Part II",
+      "sha256": "a10dbfc634b24e7bdca9e55360cf482b4bc8bb3165d6a46029249f58d7fcaf95",
+      "pdfPageCount": 76,
+      "textPages": 76,
+      "pagesNeedingReview": 0,
+      "candidateCounts": {
+        "chapter_toc_candidate": 4,
+        "numbered_heading_or_clause_candidate": 221,
+        "numeric_parameter_candidate": 538,
+        "table_or_schedule_candidate": 221,
+        "cross_reference_candidate": 213,
+        "condition_or_exception_candidate": 81,
+        "definition_candidate": 23
+      },
+      "tableCandidatePages": 48,
+      "tableCandidates": 83,
+      "verificationStatus": "EXTRACTED"
+    },
+    {
+      "filename": "CGDCR-2017 PART-III PERFORMANCE REGULATION.pdf",
+      "part": "Part III",
+      "sha256": "f348fc9a70da3d583343dca528a9f97bb79d924edfcca81086658aea9e108274",
+      "pdfPageCount": 50,
+      "textPages": 50,
+      "pagesNeedingReview": 0,
+      "candidateCounts": {
+        "numbered_heading_or_clause_candidate": 253,
+        "numeric_parameter_candidate": 182,
+        "table_or_schedule_candidate": 52,
+        "cross_reference_candidate": 55,
+        "definition_candidate": 17,
+        "condition_or_exception_candidate": 28
+      },
+      "tableCandidatePages": 14,
+      "tableCandidates": 17,
+      "verificationStatus": "EXTRACTED"
+    }
+  ],
+  "totals": {
+    "documents": 3,
+    "pdfPages": 292,
+    "textPages": 292,
+    "pagesNeedingReview": 0,
+    "tableCandidatePages": 116,
+    "tableCandidates": 161,
+    "candidateObjectsForReview": 3223,
+    "candidateCounts": {
+      "numbered_heading_or_clause_candidate": 979,
+      "definition_candidate": 232,
+      "numeric_parameter_candidate": 861,
+      "table_or_schedule_candidate": 417,
+      "cross_reference_candidate": 415,
+      "condition_or_exception_candidate": 154,
+      "chapter_toc_candidate": 4
+    }
+  },
+  "verifiedRegulatoryRecordCounts": {
+    "parts": 0,
+    "chapters": 0,
+    "regulations": 0,
+    "tables": 0,
+    "definitions": 0,
+    "numericalParameters": 0
+  },
+  "recordCompleteness": "PAGE_TEXT_EXTRACTED; REGULATORY RECORDS NOT VERIFIED",
+  "errors": []
+}

@@ -1,0 +1,27 @@
+{
+  "name": "buildrule-gujarat-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --import ./scripts/bootstrap-env.js --test",
+    "db:migrate": "node scripts/migrate.js",
+    "seed:source": "node scripts/seed-source-documents.js",
+    "db:validate": "node scripts/validate-database.js",
+    "review:backfill": "node scripts/backfill-review-queue.js",
+    "admin:create": "node scripts/admin-create.js",
+    "test:integration": "node scripts/run-integration-tests.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "jose": "^6.2.15",
+    "pg": "^8.23.1",
+    "zod": "^4.1.12"
+  }
+}

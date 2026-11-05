@@ -1,0 +1,22 @@
+{
+  "name": "buildrule-gujarat",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev:client",
+    "dev:client": "npm --prefix client run dev",
+    "dev:server": "npm --prefix server run dev",
+    "start": "npm --prefix server start",
+    "build": "npm --prefix client run build",
+    "test": "npm --prefix server test",
+    "test:integration": "npm --prefix server run test:integration",
+    "db:migrate": "npm --prefix server run db:migrate",
+    "seed:source": "npm --prefix server run seed:source",
+    "db:validate": "npm --prefix server run db:validate",
+    "review:backfill": "npm --prefix server run review:backfill",
+    "admin:create": "npm --prefix server run admin:create"
+  },
+  "dependencies": {
+    "@neon/config": "^1.11.3",
+    "@neon/env": "^1.6.15"
+  }
+}

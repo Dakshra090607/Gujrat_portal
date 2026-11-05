@@ -1,0 +1,17 @@
+**/node_modules/
+**/dist/
+.playwright-cli/
+output/auth-smoke/
+output/playwright/
+server/.cache/
+.DS_Store
+__pycache__/
+*.py[cod]
+.neon
+node_modules/
+.env.local
+.env
+.env.test
+.env.preview
+client/.env
+server/.env
