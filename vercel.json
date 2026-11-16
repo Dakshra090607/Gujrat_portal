@@ -14,7 +14,11 @@
     "server": {
       "root": "server",
       "framework": "express",
-      "includeFiles": ["source-documents/**/*.pdf", "server/source-documents/**/*.pdf"]
+      "functions": {
+        "src/server.js": {
+          "includeFiles": "source-documents/**/*.pdf"
+        }
+      }
     }
   },
   "rewrites": [
