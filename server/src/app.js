@@ -14,11 +14,27 @@ import usersRouter from './modules/users/routes.js';
 
 export function createApp() {
   const app = express();
-  const allowedOrigin = process.env.CLIENT_ORIGIN ?? 'http://localhost:5173';
+  const allowedOrigin = process.env.CLIENT_ORIGIN;
+  const isAllowedOrigin = (origin) => {
+    if (!origin) return true;
+    if (allowedOrigin && (origin === allowedOrigin || allowedOrigin === '*')) return true;
+    if (origin.endsWith('.vercel.app')) return true;
+    if (origin === 'http://localhost:5173' || origin === 'http://127.0.0.1:5173') return true;
+    return false;
+  };
 
   app.disable('x-powered-by');
-  app.use(helmet());
-  app.use(cors({ origin: allowedOrigin, credentials: true }));
+  app.use(helmet({ contentSecurityPolicy: false }));
+  app.use(cors({
+    origin: (origin, callback) => {
+      if (isAllowedOrigin(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, false);
+      }
+    },
+    credentials: true,
+  }));
   app.use(express.json({ limit: '1mb' }));
   app.use('/api', rateLimit({ windowMs: 60_000, limit: 120, standardHeaders: 'draft-8', legacyHeaders: false }));
 

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SourceDocument, SourcePage } from '../../models/index.js';
@@ -36,7 +37,12 @@ router.get('/:id/pdf', async (req, res) => {
   if (!document) return res.status(404).json({ error: { code: 'DOCUMENT_NOT_FOUND', message: 'Source document not found.' } });
   const knownName = ['CGDCR-2017 PART-I PROCEDURE REGULATIONS.pdf', 'CGDCR-2017 PART-II PLANNING REGULATIONS.pdf', 'CGDCR-2017 PART-III PERFORMANCE REGULATION.pdf'].includes(document.filename);
   if (!knownName) return res.status(404).json({ error: { code: 'SOURCE_FILE_UNAVAILABLE', message: 'The source PDF is unavailable.' } });
-  res.type('application/pdf').sendFile(path.join(rootDir, document.filename));
+
+  let filePath = path.join(rootDir, document.filename);
+  if (!fs.existsSync(filePath)) {
+    filePath = path.join(process.cwd(), document.filename);
+  }
+  res.type('application/pdf').sendFile(filePath);
 });
 
 router.get('/:id', async (req, res) => {

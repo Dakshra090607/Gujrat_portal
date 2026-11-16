@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { getNeonAccessToken } from './auth.js';
 
+const defaultBaseUrl = import.meta.env.PROD ? '/api/v1' : 'http://localhost:4000/api/v1';
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4000/api/v1',
+  baseURL: import.meta.env.VITE_API_BASE_URL || defaultBaseUrl,
   timeout: 10_000,
   headers: { Accept: 'application/json' },
 });
