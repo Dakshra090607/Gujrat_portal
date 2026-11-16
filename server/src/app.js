@@ -68,11 +68,13 @@ export function createApp() {
 
   app.use((_req, res) => res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Route not found.' } }));
   app.use((error, _req, res, _next) => {
+    console.error('API Error:', error);
     const databaseUnavailable = !process.env.DATABASE_URL || ['ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT', '08000', '08001', '08003', '08004', '08006', '53300'].includes(error.code);
     const status = Number.isInteger(error.status) ? error.status : databaseUnavailable ? 503 : 500;
+    const isMissingConfig = !process.env.DATABASE_URL || !process.env.NEON_AUTH_BASE_URL;
     res.status(status).json({ error: {
       code: status === 503 ? 'DATABASE_UNAVAILABLE' : error.code ?? 'INTERNAL_ERROR',
-      message: status >= 500 ? 'An unexpected server error occurred.' : error.message,
+      message: (status >= 500 && !isMissingConfig) ? 'An unexpected server error occurred.' : (error.message || 'An unexpected server error occurred.'),
       ...(status < 500 && error.details ? { details: error.details } : {}),
     } });
   });
