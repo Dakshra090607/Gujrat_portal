@@ -297,7 +297,7 @@ def write_summary(documents: list[dict[str, Any]], output_dir: Path) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source-dir", type=Path, default=ROOT, help="Directory containing the three original PDFs")
+    parser.add_argument("--source-dir", type=Path, default=ROOT / "server" / "source-documents", help="Directory containing the three original PDFs")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "data" / "extracted", help="Directory for extracted JSON and manifest")
     args = parser.parse_args()
 

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { SourceDocument, SourcePage } from '../../models/index.js';
 
 const router = Router();
-const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../../');
+const sourceDocumentsDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../source-documents');
 
 router.get('/', async (_req, res) => {
   const documents = await SourceDocument.find()
@@ -38,11 +38,11 @@ router.get('/:id/pdf', async (req, res) => {
   const knownName = ['CGDCR-2017 PART-I PROCEDURE REGULATIONS.pdf', 'CGDCR-2017 PART-II PLANNING REGULATIONS.pdf', 'CGDCR-2017 PART-III PERFORMANCE REGULATION.pdf'].includes(document.filename);
   if (!knownName) return res.status(404).json({ error: { code: 'SOURCE_FILE_UNAVAILABLE', message: 'The source PDF is unavailable.' } });
 
-  let filePath = path.join(rootDir, document.filename);
+  const filePath = path.join(sourceDocumentsDir, document.filename);
   if (!fs.existsSync(filePath)) {
-    filePath = path.join(process.cwd(), document.filename);
+    return res.status(404).json({ error: { code: 'SOURCE_FILE_UNAVAILABLE', message: 'The source PDF is unavailable.' } });
   }
-  res.type('application/pdf').sendFile(filePath);
+  res.type('application/pdf').set('Content-Disposition', 'inline').sendFile(filePath);
 });
 
 router.get('/:id', async (req, res) => {
