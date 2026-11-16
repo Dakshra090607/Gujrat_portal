@@ -156,3 +156,4 @@ output/playwright/
 .DS_Store
 __pycache__/
 *.py[cod]
+
