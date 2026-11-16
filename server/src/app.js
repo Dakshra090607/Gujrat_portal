@@ -38,9 +38,13 @@ export function createApp() {
     credentials: true,
   }));
   app.use(express.json({ limit: '1mb' }));
-  app.use('/api', rateLimit({ windowMs: 60_000, limit: 120, standardHeaders: 'draft-8', legacyHeaders: false }));
+  app.use(rateLimit({ windowMs: 60_000, limit: 120, standardHeaders: 'draft-8', legacyHeaders: false }));
 
-  app.get('/api/v1/health', async (_req, res) => {
+  app.get(['/', '/api', '/api/v1', '/v1'], (_req, res) => {
+    res.json({ service: 'buildrule-gujarat-api', status: 'online' });
+  });
+
+  app.get(['/api/v1/health', '/v1/health', '/health'], async (_req, res) => {
     const databaseConnected = await db.isConnected();
     res.status(databaseConnected ? 200 : 503).json({
       status: databaseConnected ? 'ready' : 'database_unavailable',
@@ -49,22 +53,27 @@ export function createApp() {
     });
   });
 
-  app.use('/api/v1/auth', authRouter);
-  app.use('/api/v1/users', usersRouter);
+  app.use(['/api/v1/auth', '/v1/auth'], authRouter);
+  app.use(['/api/v1/users', '/v1/users'], usersRouter);
 
-  app.use(['/api/v1/documents', '/api/v1/parts', '/api/v1/chapters', '/api/v1/regulations'], async (_req, res, next) => {
+  app.use([
+    '/api/v1/documents', '/v1/documents',
+    '/api/v1/parts', '/v1/parts',
+    '/api/v1/chapters', '/v1/chapters',
+    '/api/v1/regulations', '/v1/regulations'
+  ], async (_req, res, next) => {
     if (!await db.isConnected()) {
       return res.status(503).json({ error: { code: 'DATABASE_UNAVAILABLE', message: 'PostgreSQL is unavailable. Source records cannot be loaded until the database is connected.' } });
     }
     next();
   });
 
-  app.use('/api/v1/documents', documentsRouter);
-  app.use('/api/v1', regulationsRouter);
-  app.use('/api/v1/search', searchRouter);
-  app.use('/api/v1', complianceRouter);
-  app.use('/api/v1/admin', adminRouter);
-  app.use('/api/v1/admin', reviewRouter);
+  app.use(['/api/v1/documents', '/v1/documents'], documentsRouter);
+  app.use(['/api/v1', '/v1'], regulationsRouter);
+  app.use(['/api/v1/search', '/v1/search'], searchRouter);
+  app.use(['/api/v1', '/v1'], complianceRouter);
+  app.use(['/api/v1/admin', '/v1/admin'], adminRouter);
+  app.use(['/api/v1/admin', '/v1/admin'], reviewRouter);
 
   app.use((_req, res) => res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Route not found.' } }));
   app.use((error, _req, res, _next) => {
