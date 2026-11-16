@@ -204,7 +204,7 @@ function RegulationSearch() {
     if (!q.trim()) { setState({ loading: false, data: [], pagination: null, answer: '', notice: '', error: 'Enter a question, keyword, phrase, regulation number, or technical term.' }); return; }
     setState((current) => ({ ...current, loading: true, error: '', notice: '' }));
     try {
-      const response = await api.post('/search/ask', { q: q.trim(), ...(part && { part }) });
+      const response = await api.post('/search/ask', { q: q.trim(), ...(part && { part }) }, { timeout: 120_000 });
       const sources = response.data.sources.map((source) => ({
         citationId: source.citationId,
         sourceDocument: { _id: source.sourceDocumentId, part: source.part, partTitle: source.part, filename: source.filename },

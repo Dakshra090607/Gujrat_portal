@@ -75,6 +75,13 @@ router.post('/ask', async (req, res) => {
     res.json({ answer, sources, query: q, status: 'ANSWERED', verificationStatus: 'NEEDS_REVIEW' });
   } catch (error) {
     const status = Number.isInteger(error.status) ? error.status : 502;
+    console.error('RAG search failed:', JSON.stringify({
+      code: error.code ?? 'RAG_SEARCH_FAILED',
+      message: error.message,
+      providerStatus: error.providerStatus,
+      providerCode: error.providerCode,
+      providerMessage: error.providerMessage,
+    }));
     res.status(status).json({
       error: {
         code: error.code ?? 'RAG_SEARCH_FAILED',

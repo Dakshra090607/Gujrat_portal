@@ -1,4 +1,9 @@
 const API_URL = 'https://api.cloudflare.com/client/v4/accounts';
+const MAX_AI_RETRIES = 3;
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export const DEFAULT_EMBEDDING_MODEL = '@cf/baai/bge-m3';
 export const DEFAULT_CHAT_MODEL = '@cf/zai-org/glm-4.7-flash';
@@ -17,26 +22,40 @@ function credentials() {
 
 export async function runCloudflareModel(model, input) {
   const { accountId, token } = credentials();
-  const response = await fetch(`${API_URL}/${encodeURIComponent(accountId)}/ai/run/${model}`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(input),
-    signal: AbortSignal.timeout(25_000),
-  });
-  const body = await response.json().catch(() => ({}));
-  if (!response.ok || body.success === false) {
-    const providerError = Array.isArray(body.errors) ? body.errors.find((item) => item?.code || item?.message) : null;
-    const error = new Error('Cloudflare AI could not process this search. Please retry shortly.');
-    error.status = response.status === 429 ? 429 : 502;
-    error.code = response.status === 429 ? 'AI_RATE_LIMITED' : 'AI_PROVIDER_ERROR';
-    error.providerStatus = response.status;
-    error.providerCode = providerError?.code == null ? undefined : String(providerError.code).slice(0, 40);
-    error.providerMessage = typeof providerError?.message === 'string'
-      ? providerError.message.replace(/[\r\n\t]+/g, ' ').slice(0, 180)
-      : undefined;
-    throw error;
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      const response = await fetch(`${API_URL}/${encodeURIComponent(accountId)}/ai/run/${model}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+        signal: AbortSignal.timeout(25_000),
+      });
+      const body = await response.json().catch(() => ({}));
+      if (response.ok && body.success !== false) return body.result ?? body;
+
+      const providerError = Array.isArray(body.errors) ? body.errors.find((item) => item?.code || item?.message) : null;
+      const error = new Error('Cloudflare AI could not process this search. Please retry shortly.');
+      error.status = response.status === 429 ? 429 : 502;
+      error.code = response.status === 429 ? 'AI_RATE_LIMITED' : 'AI_PROVIDER_ERROR';
+      error.providerStatus = response.status;
+      error.providerCode = providerError?.code == null ? undefined : String(providerError.code).slice(0, 40);
+      error.providerMessage = typeof providerError?.message === 'string'
+        ? providerError.message.replace(/[\r\n\t]+/g, ' ').slice(0, 180)
+        : undefined;
+
+      const transient = response.status === 409 || response.status === 429 || response.status >= 500;
+      if (!transient || attempt >= MAX_AI_RETRIES) throw error;
+      const delayMs = 1000 * (2 ** attempt);
+      console.warn(`Cloudflare AI request failed (HTTP ${response.status}); retrying in ${delayMs / 1000}s (${attempt + 1}/${MAX_AI_RETRIES}).`);
+      await delay(delayMs);
+    } catch (error) {
+      if (error.providerStatus) throw error;
+      if (attempt >= MAX_AI_RETRIES) throw error;
+      const delayMs = 1000 * (2 ** attempt);
+      console.warn(`Cloudflare AI request failed; retrying in ${delayMs / 1000}s (${attempt + 1}/${MAX_AI_RETRIES}).`);
+      await delay(delayMs);
+    }
   }
-  return body.result ?? body;
 }
 
 export async function embedTexts(texts) {

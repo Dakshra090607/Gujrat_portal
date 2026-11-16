@@ -18,10 +18,9 @@ export function createApp() {
   const isAllowedOrigin = (origin) => {
     // Same-origin requests, mobile apps, or curl don't send an Origin header
     if (!origin) return true;
-    if (configuredOrigin && origin === configuredOrigin) return true;
-    if (process.env.NODE_ENV !== 'production' && (origin === 'http://localhost:5173' || origin === 'http://127.0.0.1:5173')) {
-      return true;
-    }
+    if (configuredOrigin && (origin === configuredOrigin || configuredOrigin === '*')) return true;
+    if (origin === 'http://localhost:5173' || origin === 'http://127.0.0.1:5173') return true;
+    if (origin.endsWith('.vercel.app')) return true;
     return false;
   };
 

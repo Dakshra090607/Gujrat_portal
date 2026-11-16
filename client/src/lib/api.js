@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getNeonAccessToken } from './auth.js';
 
-const defaultBaseUrl = import.meta.env.PROD ? '/api/v1' : 'http://localhost:4000/api/v1';
+const defaultBaseUrl = '/api/v1';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || defaultBaseUrl,
