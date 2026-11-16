@@ -33,7 +33,8 @@ async function getOrCreateAppUser(claims) {
     if (current?.auth_user_id && current.auth_user_id !== authUserId) {
       throw Object.assign(new Error('This email is already linked to another sign-in identity.'), { status: 403, code: 'ACCOUNT_ALREADY_LINKED' });
     }
-    if (current && current.role !== 'GENERAL_USER' && claims.email_verified !== true && claims.emailVerified !== true) {
+    const isNewLink = !current?.auth_user_id || current.auth_user_id !== authUserId;
+    if (isNewLink && current && current.role !== 'GENERAL_USER' && claims.email_verified !== true && claims.emailVerified !== true) {
       throw Object.assign(new Error('Verify this email before its existing review or administrator role can be linked.'), { status: 403, code: 'EMAIL_VERIFICATION_REQUIRED' });
     }
     if (current) {
