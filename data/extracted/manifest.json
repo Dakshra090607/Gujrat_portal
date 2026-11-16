@@ -1,15 +1,19 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-11-03T11:06:57.536466+00:00",
+  "generatedAt": "2026-11-16T09:51:50.183730+00:00",
   "tool": "scripts/ingest/extract_cgdcr.py",
   "extractionTools": {
     "pageText": {
+      "name": "pdfplumber",
+      "version": "0.11.10"
+    },
+    "pageTextFallback": {
       "name": "pypdf",
-      "version": "6.10.0"
+      "version": "6.21.4"
     },
     "tableCandidates": {
       "name": "pdfplumber",
-      "version": "0.11.9"
+      "version": "0.11.10"
     }
   },
   "documents": [
@@ -21,9 +25,9 @@
       "textPages": 166,
       "pagesNeedingReview": 0,
       "candidateCounts": {
-        "numbered_heading_or_clause_candidate": 505,
+        "numbered_heading_or_clause_candidate": 511,
         "definition_candidate": 192,
-        "numeric_parameter_candidate": 141,
+        "numeric_parameter_candidate": 140,
         "table_or_schedule_candidate": 144,
         "cross_reference_candidate": 147,
         "condition_or_exception_candidate": 45
@@ -41,11 +45,11 @@
       "pagesNeedingReview": 0,
       "candidateCounts": {
         "chapter_toc_candidate": 4,
-        "numbered_heading_or_clause_candidate": 221,
-        "numeric_parameter_candidate": 538,
-        "table_or_schedule_candidate": 221,
+        "numbered_heading_or_clause_candidate": 212,
+        "numeric_parameter_candidate": 514,
+        "table_or_schedule_candidate": 222,
         "cross_reference_candidate": 213,
-        "condition_or_exception_candidate": 81,
+        "condition_or_exception_candidate": 83,
         "definition_candidate": 23
       },
       "tableCandidatePages": 48,
@@ -61,7 +65,7 @@
       "pagesNeedingReview": 0,
       "candidateCounts": {
         "numbered_heading_or_clause_candidate": 253,
-        "numeric_parameter_candidate": 182,
+        "numeric_parameter_candidate": 183,
         "table_or_schedule_candidate": 52,
         "cross_reference_candidate": 55,
         "definition_candidate": 17,
@@ -79,14 +83,14 @@
     "pagesNeedingReview": 0,
     "tableCandidatePages": 116,
     "tableCandidates": 161,
-    "candidateObjectsForReview": 3223,
+    "candidateObjectsForReview": 3199,
     "candidateCounts": {
-      "numbered_heading_or_clause_candidate": 979,
+      "numbered_heading_or_clause_candidate": 976,
       "definition_candidate": 232,
-      "numeric_parameter_candidate": 861,
-      "table_or_schedule_candidate": 417,
+      "numeric_parameter_candidate": 837,
+      "table_or_schedule_candidate": 418,
       "cross_reference_candidate": 415,
-      "condition_or_exception_candidate": 154,
+      "condition_or_exception_candidate": 156,
       "chapter_toc_candidate": 4
     }
   },

@@ -198,21 +198,45 @@ function RegulationSearch() {
   const navigate = useNavigate();
   const [q, setQ] = useState('');
   const [part, setPart] = useState('');
-  const [state, setState] = useState({ loading: false, data: [], pagination: null, error: '' });
+  const [state, setState] = useState({ loading: false, data: [], pagination: null, answer: '', notice: '', error: '' });
   const search = async (event, nextPage = 1) => {
     event?.preventDefault();
-    if (!q.trim()) { setState({ loading: false, data: [], pagination: null, error: 'Enter a keyword, phrase, regulation number, or technical term.' }); return; }
-    setState((current) => ({ ...current, loading: true, error: '' }));
+    if (!q.trim()) { setState({ loading: false, data: [], pagination: null, answer: '', notice: '', error: 'Enter a question, keyword, phrase, regulation number, or technical term.' }); return; }
+    setState((current) => ({ ...current, loading: true, error: '', notice: '' }));
     try {
-      const response = await api.get('/search', { params: { q: q.trim(), ...(part && { part }), page: nextPage, pageSize: 10 } });
-      setState({ loading: false, data: response.data.data, pagination: response.data.pagination, error: '' });
-    } catch (error) { setState({ loading: false, data: [], pagination: null, error: getApiErrorMessage(error) }); }
+      const response = await api.post('/search/ask', { q: q.trim(), ...(part && { part }) });
+      const sources = response.data.sources.map((source) => ({
+        citationId: source.citationId,
+        sourceDocument: { _id: source.sourceDocumentId, part: source.part, partTitle: source.part, filename: source.filename },
+        pdfPageNumber: source.pdfPageNumber,
+        verificationStatus: source.verificationStatus,
+        similarity: source.similarity,
+        snippet: source.content,
+      }));
+      setState({ loading: false, data: sources, pagination: null, answer: response.data.answer, notice: '', error: '' });
+    } catch (ragError) {
+      try {
+        const response = await api.get('/search', { params: { q: q.trim(), ...(part && { part }), page: nextPage, pageSize: 10 } });
+        setState({
+          loading: false,
+          data: response.data.data,
+          pagination: response.data.pagination,
+          answer: '',
+          notice: `AI-assisted search is unavailable (${getApiErrorMessage(ragError)}). Showing exact keyword matches instead.`,
+          error: '',
+        });
+      } catch (error) {
+        setState({ loading: false, data: [], pagination: null, answer: '', notice: '', error: getApiErrorMessage(error) });
+      }
+    }
   };
-  return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> REGULATION SEARCH</div><div className="page-title-row"><div><h1>Search the source text</h1><p>Search extracted PDF pages with a source file and page reference on every result.</p></div></div>
-    <form className="search-panel" onSubmit={search}><div className="search-input-wrap"><Search size={18}/><input value={q} onChange={(event) => setQ(event.target.value)} placeholder="Try “floor space index” or a clause number" aria-label="Search the source text"/><button className="button button-primary" type="submit" disabled={state.loading}>{state.loading ? 'Searching…' : 'Search'}</button></div><div className="filter-row"><label>Part <select value={part} onChange={(event) => setPart(event.target.value)}><option value="">All parts</option><option>Part I</option><option>Part II</option><option>Part III</option></select></label><span>Conventional text search · Partial matches · Page-linked results</span></div></form>
+  return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> REGULATION SEARCH</div><div className="page-title-row"><div><h1>Search the source text</h1><p>Ask a question or search for a clause. Answers use retrieved passages linked to their original PDF pages.</p></div></div>
+    <form className="search-panel" onSubmit={search}><div className="search-input-wrap"><Search size={18}/><input value={q} onChange={(event) => setQ(event.target.value)} placeholder="e.g. What setbacks apply near a road?" aria-label="Search the source text"/><button className="button button-primary" type="submit" disabled={state.loading}>{state.loading ? 'Searching…' : 'Search'}</button></div><div className="filter-row"><label>Part <select value={part} onChange={(event) => setPart(event.target.value)}><option value="">All parts</option><option>Part I</option><option>Part II</option><option>Part III</option></select></label><span>AI-assisted retrieval · PDF page citations · Source text needs review</span></div></form>
     {state.error && <StateNotice tone={state.error.includes('Enter') ? 'info' : 'error'}>{state.error}</StateNotice>}
+    {state.notice && <StateNotice>{state.notice}</StateNotice>}
     {state.loading && <div className="panel-state">Searching extracted pages…</div>}
-    {!state.loading && state.pagination && <><div className="search-results-head"><b>{state.pagination.total} source page{state.pagination.total === 1 ? '' : 's'} found</b><span>Sorted by source part and PDF page</span></div>{state.data.length ? <div className="search-results">{state.data.map((result) => <article key={`${result.sourceDocument?._id}-${result.pdfPageNumber}`} className="search-result"><div className="result-meta"><span>{result.sourceDocument?.part} · {result.sourceDocument?.partTitle}</span><span className="review-pill">EXTRACTED · NEEDS REVIEW</span></div><button className="result-snippet" onClick={() => navigate(`/regulations?document=${result.sourceDocument?._id}&page=${result.pdfPageNumber}`)}><HighlightedSnippet text={result.snippet} query={q.trim()}/></button><div className="result-footer"><span>{result.sourceDocument?.filename}</span><button onClick={() => navigate(`/regulations?document=${result.sourceDocument?._id}&page=${result.pdfPageNumber}`)}>PDF page {result.pdfPageNumber} <ArrowRight size={14}/></button></div></article>)}</div> : <div className="hierarchy-pending"><Search size={18}/><div><b>No matching extracted pages.</b><p>Try a shorter term or clear the part filter. Search only covers extracted source text.</p></div></div>}{state.pagination.pages > 1 && <div className="pagination-row"><button className="reader-button" disabled={state.pagination.page <= 1} onClick={(event) => search(event, state.pagination.page - 1)}>Previous</button><span>Page {state.pagination.page} of {state.pagination.pages}</span><button className="reader-button" disabled={state.pagination.page >= state.pagination.pages} onClick={(event) => search(event, state.pagination.page + 1)}>Next</button></div>}</>}
+    {!state.loading && state.answer && <section className="rag-answer-card"><span className="panel-label">ANSWER FROM SOURCE PASSAGES</span><p>{state.answer}</p><small>Informational only. Retrieved passages are extracted material awaiting regulatory review; this is not an official interpretation.</small></section>}
+    {!state.loading && (state.answer || state.pagination) && <><div className="search-results-head"><b>{state.answer ? `${state.data.length} cited source passage${state.data.length === 1 ? '' : 's'}` : `${state.pagination.total} source page${state.pagination.total === 1 ? '' : 's'} found`}</b><span>{state.answer ? 'Open the cited PDF page to verify the source' : 'Exact keyword matches'}</span></div>{state.data.length ? <div className="search-results">{state.data.map((result) => <article key={`${result.sourceDocument?._id}-${result.pdfPageNumber}-${result.citationId ?? ''}`} className="search-result"><div className="result-meta"><span>{result.citationId ? `[${result.citationId}] · ` : ''}{result.sourceDocument?.part} · {result.sourceDocument?.partTitle}</span><span className="review-pill">EXTRACTED · NEEDS REVIEW</span></div><button className="result-snippet" onClick={() => navigate(`/regulations?document=${result.sourceDocument?._id}&page=${result.pdfPageNumber}`)}><HighlightedSnippet text={result.snippet} query={state.answer ? '' : q.trim()}/></button><div className="result-footer"><span>{result.sourceDocument?.filename}</span><button onClick={() => navigate(`/regulations?document=${result.sourceDocument?._id}&page=${result.pdfPageNumber}`)}>PDF page {result.pdfPageNumber} <ArrowRight size={14}/></button></div></article>)}</div> : <div className="hierarchy-pending"><Search size={18}/><div><b>No relevant source passages found.</b><p>Try a different wording or clear the part filter.</p></div></div>}{state.pagination?.pages > 1 && <div className="pagination-row"><button className="reader-button" disabled={state.pagination.page <= 1} onClick={(event) => search(event, state.pagination.page - 1)}>Previous</button><span>Page {state.pagination.page} of {state.pagination.pages}</span><button className="reader-button" disabled={state.pagination.page >= state.pagination.pages} onClick={(event) => search(event, state.pagination.page + 1)}>Next</button></div>}</>}
   </div></AppShell>;
 }
 

@@ -17,6 +17,7 @@
     "db:migrate": "npm --prefix server run db:migrate",
     "seed:source": "npm --prefix server run seed:source",
     "db:validate": "npm --prefix server run db:validate",
+    "rag:index": "npm --prefix server run rag:index",
     "review:backfill": "npm --prefix server run review:backfill",
     "admin:create": "npm --prefix server run admin:create"
   },

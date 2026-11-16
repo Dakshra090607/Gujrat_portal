@@ -32,6 +32,8 @@ npm run db:validate
 
 To create the review queue from extracted candidates, run `npm run review:backfill`. This operation is idempotent and writes queued review items; it does not change the extracted candidate status.
 
+To enable question answering in Search, configure `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_AI_TOKEN` on the server (including the deployed Vercel server service), then run `npm run db:migrate`, `npm run seed:source`, and `npm run rag:index` against the application database. See [docs/RAG_SEARCH.md](docs/RAG_SEARCH.md) for model defaults, free-tier limits, and the retrieval/indexing details. The existing keyword search remains available as a fallback.
+
 ## Run locally
 
 Start the API and browser app in separate PowerShell terminals from the project root.

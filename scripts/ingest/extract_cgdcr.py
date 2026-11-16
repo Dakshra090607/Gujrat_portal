@@ -104,7 +104,10 @@ def extract_document(source: Path, output_dir: Path) -> dict[str, Any]:
       if len(layout_pdf.pages) != len(reader.pages):
           raise ValueError(f"Page-count mismatch between pypdf and pdfplumber for {source.name}")
       for pdf_page_number, (page, layout_page) in enumerate(zip(reader.pages, layout_pdf.pages), start=1):
-        text = page.extract_text() or ""
+        layout_text = layout_page.extract_text() or ""
+        fallback_text = page.extract_text() or ""
+        text = layout_text if layout_text.strip() else fallback_text
+        text_tool = "pdfplumber" if layout_text.strip() else "pypdf"
         page_candidates = candidate_lines(text, pdf_page_number)
         raw_tables = layout_page.extract_tables()
         table_candidates = []
@@ -132,6 +135,7 @@ def extract_document(source: Path, output_dir: Path) -> dict[str, Any]:
                 "pdfPageNumber": pdf_page_number,
                 "printedPageLabel": None,
                 "textCharacterCount": len(text),
+                "textExtractionTool": text_tool,
                 "textExtractionStatus": "EXTRACTED" if text_present else "NEEDS_REVIEW",
                 "ocrRequired": not text_present,
                 "text": text,
@@ -156,8 +160,10 @@ def extract_document(source: Path, output_dir: Path) -> dict[str, Any]:
             "metadata": metadata,
         },
         "extraction": {
-            "tool": "pypdf",
-            "toolVersion": PYPDF_VERSION,
+            "tool": "pdfplumber",
+            "toolVersion": PDFPLUMBER_VERSION,
+            "fallbackTool": "pypdf",
+            "fallbackToolVersion": PYPDF_VERSION,
             "tableTool": "pdfplumber",
             "tableToolVersion": PDFPLUMBER_VERSION,
             "extractedAt": datetime.now(timezone.utc).isoformat(),
@@ -191,6 +197,7 @@ def write_summary(documents: list[dict[str, Any]], output_dir: Path) -> None:
         "tool": "scripts/ingest/extract_cgdcr.py",
         "extractionTools": {
             "pageText": {"name": documents[0]["extraction"]["tool"], "version": documents[0]["extraction"]["toolVersion"]},
+            "pageTextFallback": {"name": documents[0]["extraction"]["fallbackTool"], "version": documents[0]["extraction"]["fallbackToolVersion"]},
             "tableCandidates": {"name": documents[0]["extraction"]["tableTool"], "version": documents[0]["extraction"]["tableToolVersion"]},
         },
         "documents": [
@@ -268,7 +275,7 @@ def write_summary(documents: list[dict[str, Any]], output_dir: Path) -> None:
         f"| Numerical parameters | 0 | {manifest['totals']['candidateCounts'].get('numeric_parameter_candidate', 0)} numeric snippets |",
         f"| Total heuristic review objects | — | {manifest['totals']['candidateObjectsForReview']} (snippet matches can overlap categories) |",
         "",
-        f"Extraction tools: {manifest['extractionTools']['pageText']['name']} {manifest['extractionTools']['pageText']['version']} (text), {manifest['extractionTools']['tableCandidates']['name']} {manifest['extractionTools']['tableCandidates']['version']} (table candidates).",
+        f"Extraction tools: {manifest['extractionTools']['pageText']['name']} {manifest['extractionTools']['pageText']['version']} (page text), {manifest['extractionTools']['pageTextFallback']['name']} {manifest['extractionTools']['pageTextFallback']['version']} (text fallback), {manifest['extractionTools']['tableCandidates']['name']} {manifest['extractionTools']['tableCandidates']['version']} (table candidates).",
         "",
         "All supplied source parts were identified, but canonical part/chapter/regulation records are not yet verified.",
         "",

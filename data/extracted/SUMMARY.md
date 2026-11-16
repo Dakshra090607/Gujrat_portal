@@ -1,6 +1,6 @@
 # CGDCR Extraction Run Summary
 
-Generated: 2026-11-03T11:06:57.536466+00:00
+Generated: 2026-11-16T09:51:50.183730+00:00
 
 > Page text extraction is complete for pages with selectable text. Heuristic candidates are unverified. This is not a complete verified regulation/table inventory.
 
@@ -8,9 +8,9 @@ Generated: 2026-11-03T11:06:57.536466+00:00
 
 | Part | PDF pages | Pages with text | Pages needing review | Table candidates | Candidate counts (heuristic) | Status |
 |---|---:|---:|---:|---:|---|---|
-| Part I | 166 | 166 | 0 | 61 on 54 pages | condition_or_exception_candidate: 45, cross_reference_candidate: 147, definition_candidate: 192, numbered_heading_or_clause_candidate: 505, numeric_parameter_candidate: 141, table_or_schedule_candidate: 144 | EXTRACTED |
-| Part II | 76 | 76 | 0 | 83 on 48 pages | chapter_toc_candidate: 4, condition_or_exception_candidate: 81, cross_reference_candidate: 213, definition_candidate: 23, numbered_heading_or_clause_candidate: 221, numeric_parameter_candidate: 538, table_or_schedule_candidate: 221 | EXTRACTED |
-| Part III | 50 | 50 | 0 | 17 on 14 pages | condition_or_exception_candidate: 28, cross_reference_candidate: 55, definition_candidate: 17, numbered_heading_or_clause_candidate: 253, numeric_parameter_candidate: 182, table_or_schedule_candidate: 52 | EXTRACTED |
+| Part I | 166 | 166 | 0 | 61 on 54 pages | condition_or_exception_candidate: 45, cross_reference_candidate: 147, definition_candidate: 192, numbered_heading_or_clause_candidate: 511, numeric_parameter_candidate: 140, table_or_schedule_candidate: 144 | EXTRACTED |
+| Part II | 76 | 76 | 0 | 83 on 48 pages | chapter_toc_candidate: 4, condition_or_exception_candidate: 83, cross_reference_candidate: 213, definition_candidate: 23, numbered_heading_or_clause_candidate: 212, numeric_parameter_candidate: 514, table_or_schedule_candidate: 222 | EXTRACTED |
+| Part III | 50 | 50 | 0 | 17 on 14 pages | condition_or_exception_candidate: 28, cross_reference_candidate: 55, definition_candidate: 17, numbered_heading_or_clause_candidate: 253, numeric_parameter_candidate: 183, table_or_schedule_candidate: 52 | EXTRACTED |
 
 Total pages: **292**; text extracted: **292**; pages needing review/OCR: **0**.
 
@@ -20,13 +20,13 @@ Total pages: **292**; text extracted: **292**; pages needing review/OCR: **0**.
 |---|---:|---:|
 | Parts | 0 verified structures | 3 source parts identified from supplied files |
 | Chapters | 0 | 4 chapter heading candidates |
-| Regulations/clauses | 0 | 979 numbered heading/clause snippets; not canonical regulation records |
+| Regulations/clauses | 0 | 976 numbered heading/clause snippets; not canonical regulation records |
 | Tables | 0 | 161 extracted table candidates across 116 pages |
 | Definitions | 0 | 232 wording candidates |
-| Numerical parameters | 0 | 861 numeric snippets |
-| Total heuristic review objects | — | 3223 (snippet matches can overlap categories) |
+| Numerical parameters | 0 | 837 numeric snippets |
+| Total heuristic review objects | — | 3199 (snippet matches can overlap categories) |
 
-Extraction tools: pypdf 6.10.0 (text), pdfplumber 0.11.9 (table candidates).
+Extraction tools: pdfplumber 0.11.10 (page text), pypdf 6.21.4 (text fallback), pdfplumber 0.11.10 (table candidates).
 
 All supplied source parts were identified, but canonical part/chapter/regulation records are not yet verified.
 
