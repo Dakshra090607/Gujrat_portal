@@ -27,11 +27,34 @@ function Brand({ light = false }) {
 }
 
 function Landing() {
+  const [account, setAccount] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    api.get('/auth/me').then((response) => {
+      if (active) setAccount(response.data.data.user);
+    }).catch(() => {
+      if (active) setAccount(null);
+    });
+    return () => { active = false; };
+  }, []);
+
   return <div className="landing">
     <header className="site-header wrap">
       <Brand />
       <nav className="landing-nav"><a href="#platform">Platform</a><a href="#coverage">Regulatory coverage</a><Link to="/search">Search</Link></nav>
-      <div className="header-actions"><Link className="signin-cta" to="/login">Sign in</Link><Link className="button button-dark button-small" to="/register">Create account <ArrowRight size={15} /></Link></div>
+      <div className="header-actions">
+        {account ? (
+          <Link className="button button-primary button-small" to="/app">
+            <Compass size={16} /> <span>Dashboard</span> <ArrowRight size={14} />
+          </Link>
+        ) : (
+          <>
+            <Link className="signin-cta" to="/login">Sign in</Link>
+            <Link className="button button-dark button-small" to="/register">Create account <ArrowRight size={15} /></Link>
+          </>
+        )}
+      </div>
     </header>
     <main>
       <section className="hero wrap">
@@ -39,7 +62,18 @@ function Landing() {
           <div className="eyebrow"><span className="eyebrow-dot" /> CGDCR-2017 · GUJARAT</div>
           <h1>Understand building regulations.<br /><span>Evaluate development possibilities.</span></h1>
           <p className="hero-lede">A clear, source-linked workspace for exploring Gujarat’s development regulations and checking preliminary project parameters.</p>
-          <div className="hero-actions"><Link className="button button-primary" to="/regulations">Explore regulations <ArrowRight size={16} /></Link><Link className="button button-outline" to="/fsi-calculator">Check development potential <ArrowDownRight size={16} /></Link></div>
+          <div className="hero-actions">
+            {account ? (
+              <Link className="button button-primary" to="/app">
+                <Compass size={16} /> Go to dashboard <ArrowRight size={16} />
+              </Link>
+            ) : (
+              <Link className="button button-primary" to="/regulations">
+                Explore regulations <ArrowRight size={16} />
+              </Link>
+            )}
+            <Link className="button button-outline" to="/fsi-calculator">Check development potential <ArrowDownRight size={16} /></Link>
+          </div>
           <div className="hero-proof"><ShieldCheck size={17} /><span>Source traceability built in</span><span className="proof-divider" /><span>Preliminary assistance</span><span className="proof-divider" /><span>Gujarat focused</span></div>
         </div>
         <div className="hero-visual" aria-label="Abstract building plan illustration">
