@@ -104,11 +104,20 @@ export async function generateGroundedAnswer(question, sources) {
         },
         { role: 'user', content: `Question: ${question}\n\nSource passages:\n${context}` },
       ],
-      max_tokens: 700,
+      max_completion_tokens: 700,
       temperature: 0.1,
+      chat_template_kwargs: { enable_thinking: false },
     },
   );
-  const answer = result.response ?? result.choices?.[0]?.message?.content;
+  const rawAnswer = result.response
+    ?? result.choices?.[0]?.message?.content
+    ?? result.choices?.[0]?.text
+    ?? result.output_text;
+  const answer = typeof rawAnswer === 'string'
+    ? rawAnswer
+    : Array.isArray(rawAnswer)
+      ? rawAnswer.filter((item) => item?.type === 'text' && typeof item.text === 'string').map((item) => item.text).join('')
+      : '';
   if (typeof answer !== 'string' || !answer.trim()) {
     const error = new Error('The answer service returned an empty response.');
     error.status = 502;
