@@ -29,15 +29,11 @@ function splitLongParagraph(paragraph, maxChars) {
   return parts;
 }
 
-function makeChunks(page) {
-  const tableText = (page.tableCandidates ?? []).map((table, index) => {
-    const rows = (table.rows ?? []).map((row) => row.filter(Boolean).join(' | ')).filter(Boolean);
-    return rows.length ? `Unverified table candidate ${index + 1}:\n${rows.join('\n')}` : '';
-  }).filter(Boolean).join('\n\n');
-  const text = cleanText([page.extractedText, tableText].filter(Boolean).join('\n\n'));
-  if (!text) return [];
+function makeTextChunks(text) {
+  const cleanedText = cleanText(text);
+  if (!cleanedText) return [];
 
-  const paragraphs = text.split(/\n\s*\n|\n/).map((part) => part.trim()).filter(Boolean);
+  const paragraphs = cleanedText.split(/\n\s*\n|\n/).map((part) => part.trim()).filter(Boolean);
   const segments = paragraphs.flatMap((paragraph) => splitLongParagraph(paragraph, TARGET_CHARS));
   const chunks = [];
   let current = '';
@@ -54,6 +50,80 @@ function makeChunks(page) {
   }
   if (current.trim()) chunks.push(current.trim());
   return chunks;
+}
+
+function isColumnNumberRow(row) {
+  return row.length > 0 && row.every((cell) => !cell || /^\(\d+\)$/.test(cell));
+}
+
+function tableCaption(text, index) {
+  const captions = String(text ?? '').match(/\b(?:Table|Schedule)\s+(?:No\.?\s*)?[\d.]+\s*:?[^\n]*/gi) ?? [];
+  return captions[index] ? cleanText(captions[index]) : `Extracted table candidate ${index + 1}`;
+}
+
+function makeTableChunks(page) {
+  const tables = page.tableCandidates ?? [];
+  return tables.flatMap((table, tableIndex) => {
+    const rows = (table.rows ?? []).map((row) => row.map((cell) => cleanText(cell).replace(/\s+/g, ' ').trim()));
+    const nonEmptyRows = rows.filter((row) => row.some(Boolean));
+    if (nonEmptyRows.length < 2) return [];
+
+    const headers = nonEmptyRows[0].map((cell, index) => cell || `Column ${index + 1}`);
+    const dataRows = nonEmptyRows.slice(1).filter((row) => !isColumnNumberRow(row));
+    const caption = tableCaption(page.extractedText, tableIndex);
+    const prefix = cleanText([
+      `Extracted source table: ${caption}.`,
+      `Columns: ${headers.join(' | ')}.`,
+      'Each row below preserves its source column labels; blank cells remain identified as blank in the extraction.',
+    ].join('\n'));
+
+    let previousNumber = '';
+    let previousValues = [];
+    const rowLines = dataRows.map((row, rowIndex) => {
+      const continuation = !row[0] && Boolean(previousNumber);
+      const firstCell = row[0] || (continuation ? `${previousNumber} (continued from merged row)` : `[blank in source cell 1; row ${rowIndex + 1}]`);
+      const isNote = /^note\s*:?/i.test(firstCell);
+      if (isNote) return `Table note: ${row.filter(Boolean).join(' ')}`;
+      if (row[0]) previousNumber = row[0];
+      const fields = headers.map((header, columnIndex) => {
+        const sourceValue = row[columnIndex];
+        let value = sourceValue;
+        if (!value && continuation && previousValues[columnIndex]) {
+          value = `${previousValues[columnIndex]} (same merged cell as preceding row)`;
+        }
+        if (sourceValue) previousValues[columnIndex] = sourceValue;
+        value ||= '[blank in extracted source cell]';
+        return `${header}: ${value}`;
+      });
+      return `Source row ${rowIndex + 1}: ${fields.join('; ')}`;
+    });
+
+    const chunks = [];
+    let current = prefix;
+    for (const rowLine of rowLines) {
+      if (current.length + rowLine.length + 1 > TARGET_CHARS && current !== prefix) {
+        chunks.push(current);
+        current = prefix;
+      }
+      const available = Math.max(200, TARGET_CHARS - current.length - 1);
+      const pieces = splitLongParagraph(rowLine, available);
+      for (const piece of pieces) {
+        if (current.length + piece.length + 1 > TARGET_CHARS && current !== prefix) {
+          chunks.push(current);
+          current = prefix;
+        }
+        current = `${current}\n${piece}`;
+      }
+    }
+    if (current !== prefix) chunks.push(current);
+    return chunks;
+  });
+}
+
+function makeChunks(page) {
+  const textChunks = makeTextChunks(page.extractedText);
+  const tableChunks = makeTableChunks(page);
+  return [...textChunks, ...tableChunks];
 }
 
 function vectorLiteral(vector) {
