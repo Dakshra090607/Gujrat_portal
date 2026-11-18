@@ -47,13 +47,16 @@ router.get('/users', authenticate, requireAdministrator, async (req, res) => {
     page: z.coerce.number().int().min(1).default(1),
     pageSize: z.coerce.number().int().min(1).max(100).default(25),
     role: z.enum(userRoles).optional(),
+    status: z.enum(['ALL', 'ACTIVE', 'DISABLED']).default('ALL'),
     q: z.string().trim().max(120).optional(),
   }).safeParse(req.query);
   if (!parsed.success) return res.status(400).json({ error: { code: 'INVALID_USER_QUERY', message: 'Check the role, search text, or page values.' } });
-  const { page, pageSize, role, q } = parsed.data;
+  const { page, pageSize, role, q, status } = parsed.data;
   const values = [];
   const where = [];
   if (role) where.push(`role = $${values.push(role)}`);
+  if (status === 'ACTIVE') where.push('is_active = true');
+  if (status === 'DISABLED') where.push('is_active = false');
   if (q) where.push(`(name ILIKE $${values.push(`%${q.replace(/[%_\\]/g, '\\$&')}%`)} ESCAPE '\\' OR email ILIKE $${values.length} ESCAPE '\\')`);
   const clause = where.length ? `WHERE ${where.join(' AND ')}` : '';
   const count = await db.query(`SELECT count(*)::integer AS total FROM app_users ${clause}`, values);

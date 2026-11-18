@@ -12,6 +12,7 @@ import {
   LogOut,
   RefreshCw,
   ShieldCheck,
+  UserRoundX,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api, getApiErrorMessage } from '../../lib/api.js';
@@ -38,10 +39,12 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [usersPagination, setUsersPagination] = useState(null);
   const [usersError, setUsersError] = useState('');
+  const [usersLoading, setUsersLoading] = useState(false);
   const [usersPage, setUsersPage] = useState(1);
-  const [userFilters, setUserFilters] = useState({ q: '', role: '' });
+  const [userFilters, setUserFilters] = useState({ q: '', role: '', status: 'ALL' });
   const [userSearch, setUserSearch] = useState('');
   const [userRoleFilter, setUserRoleFilter] = useState('');
+  const [userStatusFilter, setUserStatusFilter] = useState('ALL');
   const [userActionId, setUserActionId] = useState(null);
 
   useEffect(() => {
@@ -82,12 +85,15 @@ export default function AdminDashboard() {
 
   const loadUsers = useCallback(async () => {
     setUsersError('');
+    setUsersLoading(true);
     try {
-      const response = await api.get('/admin/users', { params: { page: usersPage, pageSize: 25, ...userFilters } });
+      const response = await api.get('/admin/users', { params: { page: usersPage, pageSize: 100, ...userFilters } });
       setUsers(response.data.data);
       setUsersPagination(response.data.pagination);
     } catch (error) {
       setUsersError(getApiErrorMessage(error));
+    } finally {
+      setUsersLoading(false);
     }
   }, [usersPage, userFilters]);
 
@@ -130,10 +136,28 @@ export default function AdminDashboard() {
     }
   };
 
+  const removeUserAccess = async (target) => {
+    const confirmed = window.confirm(`Remove sign-in access for ${target.name} (${target.email})? Their profile and audit history will be retained.`);
+    if (!confirmed) return;
+    const note = window.prompt(`Add an audit note for removing ${target.name}'s access:`);
+    if (note === null) return;
+    setUserActionId(target.id);
+    setUsersError('');
+    try {
+      await api.patch(`/admin/users/${target.id}/status`, { isActive: false, note });
+      await loadUsers();
+      await loadOverview();
+    } catch (error) {
+      setUsersError(getApiErrorMessage(error));
+    } finally {
+      setUserActionId(null);
+    }
+  };
+
   const searchUsers = (event) => {
     event.preventDefault();
     setUsersPage(1);
-    setUserFilters({ q: userSearch.trim(), role: userRoleFilter });
+    setUserFilters({ q: userSearch.trim(), role: userRoleFilter, status: userStatusFilter });
   };
 
   const logout = async () => {
@@ -176,9 +200,11 @@ export default function AdminDashboard() {
     users={users}
     usersPagination={usersPagination}
     usersError={usersError}
+    usersLoading={usersLoading}
     usersPage={usersPage}
     userSearch={userSearch}
     userRoleFilter={userRoleFilter}
+    userStatusFilter={userStatusFilter}
     userActionId={userActionId}
     onUserSearch={searchUsers}
     onUserSearchChange={setUserSearch}
@@ -186,12 +212,14 @@ export default function AdminDashboard() {
     onUsersPageChange={setUsersPage}
     onUserRoleChange={updateUserRole}
     onUserStatusChange={updateUserStatus}
+    onUserStatusFilterChange={setUserStatusFilter}
+    onUserRemove={removeUserAccess}
     onRefresh={loadOverview}
     onLogout={logout}
   />;
 }
 
-function AdminOverview({ overview, overviewError, refreshing, user, users, usersPagination, usersError, usersPage, userSearch, userRoleFilter, userActionId, onUserSearch, onUserSearchChange, onUserRoleFilterChange, onUsersPageChange, onUserRoleChange, onUserStatusChange, onRefresh, onLogout }) {
+function AdminOverview({ overview, overviewError, refreshing, user, users, usersPagination, usersError, usersLoading, usersPage, userSearch, userRoleFilter, userStatusFilter, userActionId, onUserSearch, onUserSearchChange, onUserRoleFilterChange, onUserStatusFilterChange, onUsersPageChange, onUserRoleChange, onUserStatusChange, onUserRemove, onRefresh, onLogout }) {
   const source = overview?.source;
   const review = overview?.review;
   const verified = overview?.verified;
@@ -308,25 +336,27 @@ function AdminOverview({ overview, overviewError, refreshing, user, users, users
         </section>
 
         <section className="admin-users-panel">
-          <div className="admin-users-heading"><div><span className="admin-section-label">ACCOUNT ADMINISTRATION</span><h2>Users and access</h2><p>Manage account roles and access. Every change requires an audit note.</p></div><span className="admin-panel-icon"><LockKeyhole size={18} /></span></div>
+          <div className="admin-users-heading"><div><span className="admin-section-label">ACCOUNT ADMINISTRATION</span><h2>Users and access</h2><p>{count(usersPagination?.total)} accounts · manage roles, sign-in access, and account removal.</p></div><span className="admin-panel-icon"><LockKeyhole size={18} /></span></div>
           <form className="admin-user-filters" onSubmit={onUserSearch}>
             <label>Search users<input value={userSearch} onChange={(event) => onUserSearchChange(event.target.value)} placeholder="Name or email" maxLength={120} /></label>
             <label>Role<select value={userRoleFilter} onChange={(event) => onUserRoleFilterChange(event.target.value)}><option value="">All roles</option><option value="GENERAL_USER">General user</option><option value="PROFESSIONAL_USER">Professional user</option><option value="REVIEWER">Reviewer</option><option value="ADMIN">Administrator</option></select></label>
+            <label>Access<select value={userStatusFilter} onChange={(event) => onUserStatusFilterChange(event.target.value)}><option value="ALL">All accounts</option><option value="ACTIVE">Active</option><option value="DISABLED">Disabled</option></select></label>
             <button className="admin-toolbar-button" type="submit"><RefreshCw size={14} /> Apply filters</button>
           </form>
           {usersError && <div className="admin-login-error" role="alert"><CircleAlert size={15} />{usersError}</div>}
           <div className="admin-users-table-wrap"><table className="admin-users-table"><thead><tr><th>User</th><th>Role</th><th>Status</th><th>Joined</th><th>Last sign in</th><th>Actions</th></tr></thead><tbody>
-            {users.map((account) => <tr key={account.id}>
+            {!usersLoading && users.map((account) => <tr key={account.id}>
               <td><strong>{account.name}</strong><span>{account.email}</span></td>
               <td><select aria-label={`Role for ${account.name}`} value={account.role} disabled={userActionId === account.id} onChange={(event) => onUserRoleChange(account, event.target.value)}><option value="GENERAL_USER">General user</option><option value="PROFESSIONAL_USER">Professional user</option><option value="REVIEWER">Reviewer</option><option value="ADMIN">Administrator</option></select></td>
               <td><span className={`admin-user-status ${account.isActive ? 'active' : 'inactive'}`}>{account.isActive ? 'Active' : 'Disabled'}</span></td>
               <td>{account.createdAt ? new Date(account.createdAt).toLocaleDateString() : '—'}</td>
               <td>{account.lastLoginAt ? new Date(account.lastLoginAt).toLocaleDateString() : 'Never'}</td>
-              <td><button className="admin-user-action" disabled={userActionId === account.id} onClick={() => onUserStatusChange(account)}>{account.isActive ? 'Disable' : 'Enable'}</button></td>
+              <td className="admin-user-actions"><button className="admin-user-action" disabled={userActionId === account.id} onClick={() => onUserStatusChange(account)}>{account.isActive ? 'Disable' : 'Enable'}</button>{account.isActive && account.id !== user.id && <button className="admin-user-action admin-user-remove" disabled={userActionId === account.id} onClick={() => onUserRemove(account)}><UserRoundX size={12} /> Remove access</button>}</td>
             </tr>)}
-            {!users.length && <tr><td colSpan="6" className="admin-users-empty">No accounts match these filters.</td></tr>}
+            {usersLoading && <tr><td colSpan="6" className="admin-users-empty">Loading accounts…</td></tr>}
+            {!usersLoading && !users.length && <tr><td colSpan="6" className="admin-users-empty">No accounts match these filters.</td></tr>}
           </tbody></table></div>
-          {usersPagination && <div className="admin-users-pagination"><span>{count(usersPagination.total)} account{usersPagination.total === 1 ? '' : 's'} · page {usersPage} of {Math.max(1, usersPagination.pages)}</span><div><button className="reader-button" disabled={usersPage <= 1} onClick={() => onUsersPageChange(usersPage - 1)}>Previous</button><button className="reader-button" disabled={usersPage >= usersPagination.pages} onClick={() => onUsersPageChange(usersPage + 1)}>Next</button></div></div>}
+          {usersPagination && <div className="admin-users-pagination"><span>Showing {users.length ? (usersPage - 1) * usersPagination.pageSize + 1 : 0}–{Math.min(usersPage * usersPagination.pageSize, usersPagination.total)} of {count(usersPagination.total)} accounts · page {usersPage} of {Math.max(1, usersPagination.pages)}</span><div><button className="reader-button" disabled={usersLoading || usersPage <= 1} onClick={() => onUsersPageChange(usersPage - 1)}>Previous</button><button className="reader-button" disabled={usersLoading || usersPage >= usersPagination.pages} onClick={() => onUsersPageChange(usersPage + 1)}>Next</button></div></div>}
         </section>
 
         <section className="admin-setup-note">

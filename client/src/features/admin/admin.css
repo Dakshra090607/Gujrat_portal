@@ -101,6 +101,9 @@
 .admin-user-status.active{background:#edf7f4;color:#25857c}.admin-user-status.inactive{background:#fff2f0;color:#ad574d}
 .admin-user-action{padding:5px 8px;border:1px solid #e3e8ee;border-radius:4px;background:#fff;color:#68798e;font:700 7px 'DM Sans',sans-serif;cursor:pointer}
 .admin-user-action:hover{border-color:#c6d3df;background:#f8fafc}.admin-user-action:disabled{opacity:.55;cursor:wait}
+.admin-user-actions{display:flex;align-items:center;gap:5px}
+.admin-user-remove{display:inline-flex;align-items:center;gap:4px;border-color:#f0d4d1;color:#a34d45}
+.admin-user-remove:hover{border-color:#dba9a3;background:#fff7f6}
 .admin-users-empty{text-align:center;color:#8b97a5!important;padding:22px!important}
 .admin-users-pagination{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px;color:#8490a0;font-size:8px}
 .admin-users-pagination>div{display:flex;gap:6px}
