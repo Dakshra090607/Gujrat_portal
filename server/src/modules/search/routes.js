@@ -16,6 +16,19 @@ const askSchema = z.object({
   part: z.enum(['Part I', 'Part II', 'Part III']).optional(),
 });
 
+const QUERY_STOP_WORDS = new Set(['a', 'an', 'and', 'for', 'in', 'is', 'of', 'on', 'the', 'to', 'what', 'with']);
+
+function getSearchTerms(question) {
+  const tokens = question.toLocaleLowerCase().match(/[a-z0-9]+/g) ?? [];
+  const terms = tokens.filter((term) => term.length > 1 && !QUERY_STOP_WORDS.has(term));
+  // PDFs and user queries often write road widths as either "30mt" or "30 mt".
+  for (const term of terms) {
+    const width = term.match(/^(\d+)(?:m|mt|mts|meter|meters)$/);
+    if (width) terms.push(width[1]);
+  }
+  return [...new Set(terms)].slice(0, 16);
+}
+
 router.post('/ask', async (req, res) => {
   const parsed = askSchema.safeParse(req.body);
   if (!parsed.success) {
@@ -28,21 +41,29 @@ router.post('/ask', async (req, res) => {
     const embedding = `[${queryVector.join(',')}]`;
     const values = [embedding, process.env.CLOUDFLARE_EMBEDDING_MODEL || DEFAULT_EMBEDDING_MODEL];
     const partClause = part ? `AND part = $${values.push(part)}` : '';
+    values.push(getSearchTerms(q));
+    const termsParameter = `$${values.length}::text[]`;
     const retrieved = await db.query(`
       WITH ranked AS (
         SELECT id, source_document_id, source_page_number, part, filename, content, verification_status,
           1 - (embedding <=> $1::vector) AS similarity,
+          COALESCE(lexical.score, 0) AS lexical_score,
           row_number() OVER (
             PARTITION BY source_document_id, source_page_number
-            ORDER BY embedding <=> $1::vector
+            ORDER BY COALESCE(lexical.score, 0) DESC, embedding <=> $1::vector
           ) AS page_rank
         FROM rag_chunks
+        LEFT JOIN LATERAL (
+          SELECT sum(CASE WHEN term IN ('fsi', 'r1', 'auda') THEN 2.0 ELSE 1.0 END) AS score
+          FROM unnest(${termsParameter}) AS term
+          WHERE lower(rag_chunks.content) LIKE '%' || term || '%'
+        ) lexical ON true
         WHERE embedding_model = $2 ${partClause}
       )
-      SELECT id, source_document_id, source_page_number, part, filename, content, verification_status, similarity
+      SELECT id, source_document_id, source_page_number, part, filename, content, verification_status, similarity, lexical_score
       FROM ranked
       WHERE page_rank <= 2
-      ORDER BY similarity DESC
+      ORDER BY lexical_score DESC, similarity DESC
       LIMIT 8
     `, values);
 
@@ -62,7 +83,7 @@ router.post('/ask', async (req, res) => {
       content: row.content,
     }));
 
-    if (sources[0].similarity < 0.15) {
+    if (sources[0].similarity < 0.15 && Number(retrieved.rows[0].lexical_score) === 0) {
       return res.json({
         answer: 'I could not find a sufficiently relevant passage in the indexed source documents to answer this question.',
         sources: [],
