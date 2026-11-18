@@ -240,16 +240,164 @@ function RegulationSearch() {
   </div></AppShell>;
 }
 
+const DEVELOPMENT_CATEGORIES = [
+  { code: 'D1', label: 'D1 — Urban Development Authorities', authorities: ['Ahmedabad Urban Development Authority (AUDA)', 'Gandhinagar Urban Development Authority (GUDA)', 'Surat Urban Development Authority (SUDA)', 'Vadodara Urban Development Authority (VUDA)', 'Rajkot Urban Development Authority (RUDA)'] },
+  { code: 'D2', label: 'D2 — Urban / Area Development Authorities', authorities: ['Junagadh Urban Development Authority (JuUDA)', 'Jamnagar Area Development Authority (JADA)', 'Bhavnagar Area Development Authority (BADA)', 'Bharuch-Ankleshwar Urban Development Authority (BAUDA)'] },
+  { code: 'D3', label: 'D3 — Seismic Zone V authorities / municipality', authorities: ['Bhuj Area Development Authority (BhuADA)', 'Bhachau Area Development Authority (BhaADA)', 'Rapar Area Development Authority (RADA)', 'Anjar Area Development Authority (AADA)', 'Mandvi (Kutch) Municipality'] },
+  { code: 'D4', label: 'D4 — Other Urban / Area Development Authorities', authorities: ['Himmatnagar Urban Development Authority (HUDA)', 'Surendranagar-Wadhwan Urban Development Authority (SWUDA)', 'Morbi-Wankaner Urban Development Authority (MWUDA)', 'Bardoli Urban Development Authority (BUDA)', 'Navsari Urban Development Authority (NUDA)', 'Anand-Vidhyanagar-Karmasad Urban Development Authority (AVKUDA)'] },
+  { code: 'D5', label: 'D5 — Special Project Area Development Authorities', authorities: ['Alang Area Development Authority (AlADA)', 'Ambaji Area Development Authority (AmADA)', 'Shamlaji Area Development Authority (ShADA)', 'Khambhaliya Area Development Authority'] },
+  { code: 'D6', label: 'D6 — Gandhidham Development Authority', authorities: ['Gandhidham Development Authority'] },
+  { code: 'D7A', label: 'D7A — Designated Area Development Authorities', authorities: ['Amreli', 'Botad', 'Godhra', 'Jetpur-Navagadh', 'Mahesana', 'Nadiad', 'Palanpur', 'Patan', 'Porbandar', 'Valsad', 'Vapi', 'Veraval-Patan', 'Bilimora', 'Borsad', 'Dabhoi', 'Dahod', 'Deesa', 'Dhangadhra', 'Dholka', 'Dhoraji', 'Gondal', 'Kadi', 'Keshod', 'Khambhat', 'Mahuva', 'Mangrol', 'Modasa', 'Okha', 'Palitana', 'Petlad', 'Savarkundala', 'Siddhapur', 'Una', 'Unjha', 'Upleta', 'Viramgam', 'Visnagar'] },
+  { code: 'D7B', label: 'D7B — Designated Area Development Authorities', authorities: ['Ahawa (Dang)', 'Anklav', 'Bagasara', 'Balasinor', 'Barwara', 'Bavla', 'Becharaji', 'Bhayavdar', 'Chansma', 'Chhaya', 'Chhotaudepur', 'Chorwad', 'Dakor', 'Devgadhbaria', 'Dhandhuka', 'Dharampur', 'Dharmaj', 'Dwarka', 'Gandevi', 'Halol', 'Halwad', 'Idar', 'Jagadiya-Sultanpura', 'Jambusar', 'Jamjodhpur', 'Kalawad', 'Kalol (Godhra)', 'Kapadvanj', 'Karjan', 'Kathor', 'Kayavarohan', 'Kheda', 'Khedbrahma', 'Kodinar', 'Kosamba', 'Limbdi', 'Lunawda', 'Manavadar', 'Mandal', 'Mandvi (Surat)', 'Mansa', 'Matar', 'Pardi', 'Prantij', 'Radhanpur', 'Rajpipla', 'Ranpur', 'Sankheda', 'Santarampura', 'Savali', 'Shihor', 'Sojitra', 'Talod', 'Tarsadi', 'Thangadh', 'Udwada', 'Umargam', 'Umreth', 'Vadinar', 'Vadnagar', 'Vaghodia', 'Vaso', 'Vijapur', 'Vyara', 'Waghai (Dang)'] },
+  { code: 'D8', label: 'D8 — Other municipalities', authorities: ['Other municipality (enter name in Development area)'] },
+  { code: 'D9', label: 'D9 — GIDC industrial estates / areas', authorities: ['GIDC industrial estate / area (enter name in Development area)'] },
+  { code: 'D10', label: 'D10 — All other areas', authorities: ['Other area (enter name in Development area)'] },
+];
+
+const DESIGNATED_ZONES = [
+  { zone: 'Core Walled City', conceptualisedZone: 'Core Walled Area', code: 'CW', permissibleUse: 'AS1, DW1, DW2, DW3, EDU1, H1, H2, HO, INST, M1, M2, PI, PU, REG, REC, SP&L, TEMP.' },
+  { zone: 'Walled City / Nucleus Vistar / Existing Nucleus Node / Gamtal / Gauthan', conceptualisedZone: 'Gamtal', code: 'GM', permissibleUse: 'AS1, DW1, DW2, DW3, EDU1, H1, H2, HO, INST, M1, M2, PI, PU, REG, REC, SP&L, TEMP.' },
+  { zone: 'Residential Area A (Alang ADA)', conceptualisedZone: 'Gamtal', code: 'GM', permissibleUse: 'AS1, DW1, DW2, DW3, EDU1, H1, H2, HO, INST, M1, M2, PI, PU, REG, REC, SP&L, TEMP.' },
+  { zone: 'Bhavanath (JuUDA) / City Area A (JADA, BADA, RUDA) / City Area B (RUDA)', conceptualisedZone: 'Gamtal', code: 'GM', permissibleUse: 'AS1, DW1, DW2, DW3, EDU1, H1, H2, HO, INST, M1, M2, PI, PU, REG, REC, SP&L, TEMP.' },
+  { zone: 'Village Extension / Gamtal Extension / Natural Growth of Village / Buffer zone of Gamtal', conceptualisedZone: 'Gamtal Extension', code: 'GME', permissibleUse: 'Those permissible in CW and EDU2, AS4.' },
+  { zone: 'Residential Zone / Mix Use (other than Thangadh) / Residential Zone 1 (other than GUDA) / GUDA Residential Zones 2–5 / designated City and Residential Areas', conceptualisedZone: 'Residential 1', code: 'R1', permissibleUse: 'Those permissible in CW and AS2, AS3, AS4, EDU2, H3, HO, M3, SE.' },
+  { zone: 'Residential Zone R2 (other than GUDA) / Residential Zone III (VUDA) / City Area F (BADA)', conceptualisedZone: 'Residential 2', code: 'R2', permissibleUse: 'Those permissible in R1.' },
+  { zone: 'Residential Zone R3 (other than GUDA and VUDA) / Recreation Zone (GUDA) / REZ', conceptualisedZone: 'Residential 3', code: 'R3', permissibleUse: 'AS1, AS2, AS3, AS4, DW1, DW2, DW3 (only within 200 m on either side of TOZ), EDU1, EDU2, H1, H2, H3, HO, INST, M1, M2, M3, PI, PU, REG, REC, SE, SP&L, TEMP.' },
+  { zone: 'Residential Zone R1 (GUDA)', conceptualisedZone: 'Residential 4', code: 'R4', permissibleUse: 'Those permissible in R1.' },
+  { zone: 'Residential Renewal Zone (GUDA)', conceptualisedZone: 'Residential 5', code: 'R5', permissibleUse: 'DW3, PU, PI.' },
+  { zone: 'Residential Affordable Housing Zone 1 (AUDA)', conceptualisedZone: 'Residential Affordable Housing-1', code: 'RAH1', permissibleUse: 'DW3, EDU1, EDU2, H1, H2, INST, PU, PI, TEMP; maximum aggregated 10% of total utilised FSI for M1 / M2 / AS1 / SE. AUDA-specific DW1 and DW2 are permitted for qualifying small sub-plot layouts with prior NA permission and layout approval before 13/02/2009.' },
+  { zone: 'Residential Affordable Housing Zone (Overlay Zone)', conceptualisedZone: 'Residential Affordable Housing', code: 'RAH', permissibleUse: 'DW3, EDU1, EDU2, H1, H2, INST, PU, PI, TEMP; maximum aggregated 10% of total utilised FSI for M1 / M2 / AS1 / SE.' },
+  { zone: 'Restricted Residential Zone / Restricted Area / Flood Prone Area / VUDA RZ1–RZ5 / Hazard Prone Area / Defence Zone', conceptualisedZone: 'Restricted Zone', code: 'RZ', permissibleUse: 'Those permissible in R1 subject to Restricted Zone regulations, plus H1 and H2.' },
+  { zone: 'Local Commercial Zone / Commercial Zone (excluding UDA)', conceptualisedZone: 'Commercial 1', code: 'C1', permissibleUse: 'AS1, AS2, AS3, AS4, DW1, DW2, DW3, EDU1, EDU2, H1, H2, H3, HO, INST, M1, M2, M3, PI, PU, REC, REG, SP&L, SE, ST, TEMP.' },
+  { zone: 'Commercial Zone of UDA / Commercial Zone I–II', conceptualisedZone: 'Commercial 2', code: 'C2', permissibleUse: 'Those permissible in C1.' },
+  { zone: 'Commercial Zone III–IV (other than GUDA)', conceptualisedZone: 'Commercial 2', code: 'C2', permissibleUse: 'Those permissible in C1.' },
+  { zone: 'Commercial Zone III–IV (GUDA)', conceptualisedZone: 'Commercial - 3', code: 'C3', permissibleUse: 'Those permissible in C1.' },
+  { zone: 'General Commercial Zone (GCZ) / General Commercial Zone', conceptualisedZone: 'Commercial - 4', code: 'C4', permissibleUse: 'Those permissible in C1 and TO.' },
+  { zone: 'Central Business District', conceptualisedZone: 'Commercial – 5', code: 'C5', permissibleUse: 'Those permissible in C1 and TO.' },
+  { zone: 'Industrial Zone General / Non-obnoxious and Non-hazardous / Light Industrial / Industrial-A / GIDC', conceptualisedZone: 'Industrial Zone-1', code: 'IZ1', permissibleUse: 'AS2, AS3, AS4, EDU2, H1, H2, H3, IN1, IN2, M1, M2, M3, PI, PU, REC, REG, SP&L, SE, ST, TEMP. For a building used for IN1 or IN2, up to 20% of utilized FSI may be DW2/DW3 for units up to 66 sq.m.' },
+  { zone: 'Industrial Buffer Zone', conceptualisedZone: 'Industrial Zone - 2', code: 'IZ2', permissibleUse: 'Those permissible in IZ1 and IN3 & IN4.' },
+  { zone: 'GIDC Estate 1', conceptualisedZone: 'Industrial Zone - 3', code: 'IZ3', permissibleUse: 'IN1, IN2, IN3, M1, M2, SE.' },
+  { zone: 'GIDC Estate 2', conceptualisedZone: 'Industrial Zone - 4', code: 'IZ4', permissibleUse: 'Those permissible in IZ3 and ST.' },
+  { zone: 'Heavy Industrial / Industrial Zone Special / Obnoxious and Hazardous Industrial Zone', conceptualisedZone: 'Industrial Zone - 5', code: 'IZ5', permissibleUse: 'REG, SE, ST, TR, PI, PU, I2, IN4, DW2 and DW3, each up to 20% of utilized FSI with units up to 66 sq.m.' },
+  { zone: 'Industrial-B', conceptualisedZone: 'Industrial Zone - 6', code: 'IZ6', permissibleUse: 'IN1, IN2, those permissible in C1, DW2 and DW3 each up to 20% of utilized FSI with units up to 66 sq.m.' },
+  { zone: 'Mix Industrial Use', conceptualisedZone: 'Industrial Zone - 7', code: 'IZ7', permissibleUse: 'AS2, AS3, AS4, DW1, DW2, DW3, EDU2, H1, H2, H3, IN1, IN2, M1, M2, M3, PI, PU, REC, REG, SP&L, SE, ST, TEMP.' },
+  { zone: 'Education / Educational Purpose / Religious and other Facilities / Service and Institutional / Knowledge Precinct / Institutional Zones / Special Nodes / Health Node / Knowledge Township (VUDA)', conceptualisedZone: 'Knowledge and Institutional Zone-1', code: 'KZ1', permissibleUse: 'AS2, DW1, DW2, DW3, EDU1, EDU2, HO, INST, M1, M2, PU, PI, REC, REG, SP&L, TEMP.' },
+  { zone: 'Institutional Zone IV (GUDA)', conceptualisedZone: 'Knowledge and Institutional Zone-2', code: 'KZ2', permissibleUse: 'Those permissible in KZ1.' },
+  { zone: 'Essential Public Purpose / Public Service / Public Purpose (other than RUDA) / Public and Semi-Public / Public Utility / Neighbourhood and Town Centre / Parking / Public Use', conceptualisedZone: 'Public Purpose Zone - 1', code: 'PPZ1', permissibleUse: 'PU, PI.' },
+  { zone: 'Public Purpose (RUDA)', conceptualisedZone: 'Public Purpose Zone - 2', code: 'PPZ2', permissibleUse: 'AG1, AG2, AG3, AS4, DW1, EDU1, EDU2, INST, PI, PU, REC, REG, SP&L, ST.' },
+  { zone: 'Recreational / Recreational Zone 1–2 / Green Institutional Zone-GI 1 / Natural Reserve / Sanctuary / Race Track / Shooting Range / Zoo / Nursery / Stadium', conceptualisedZone: 'Recreation Zone', code: 'REZ', permissibleUse: 'Botanical Garden, DW1, PI, PU, REG, REC, SP&L, TEMP.' },
+  { zone: 'Parks / Gardens / Open Space', conceptualisedZone: 'PGO', code: 'P', permissibleUse: 'REC, SP&L, REG, PI, PU.' },
+  { zone: 'Agriculture Zone / Agriculture / General Agriculture Zone', conceptualisedZone: 'Agriculture – 1', code: 'AGZ1', permissibleUse: 'AG1, AG2, AG3, AS4, DW1, EDU1, EDU2, HO, INST, IN3, PI, PU, REC, REG, SCK, ST, SP&L, TEMP, TR.' },
+  { zone: 'Prime Agriculture / Agriculture (SP) / Agriculture Special / High-tech Agriculture / Hi-Tech Agriculture Use', conceptualisedZone: 'Agriculture – 2', code: 'AGZ2', permissibleUse: 'AG1, AG3, EDU1, EDU2, PI, PU. Service apartment, bread and breakfast, guest house, hotel, motel, lodging and boarding are not permitted.' },
+  { zone: 'Restricted Agriculture Zone', conceptualisedZone: 'Agriculture – 3', code: 'AGZ3', permissibleUse: 'Zoo and Botanical Garden and any activity undertaken by Government for infrastructure.' },
+  { zone: 'Restricted Agriculture Zone (High Flood Zone)', conceptualisedZone: 'Agriculture – 4', code: 'AGZ4', permissibleUse: 'AG1, PI, PU, TEMP. Service apartment, bread and breakfast, guest house, hotel, motel, lodging and boarding are not permitted.' },
+  { zone: 'Logistics Zone / Logistic Park / Transport Node / Transport and Communication / Public Purpose (ST)', conceptualisedZone: 'Logistics Zone', code: 'LZ', permissibleUse: 'AS1, AS3, DW2 and DW3 (both max 20% of utilized FSI with units up to 66 sq.m. for industrial workers), H1, HO, INST, IN1, IN2, M1, M2, M3, PI, PU, REG, SE, ST, TR.' },
+  { zone: 'Special Plan Development Zone of GIFT', conceptualisedZone: 'Special Plan Development Zone - 1', code: 'SPD1', permissibleUse: 'As per GIFT Master Plan.' },
+  { zone: 'Special Plan Development Zone of Sabarmati Riverfront Development', conceptualisedZone: 'Special Plan Development Zone - 2', code: 'SPD2', permissibleUse: 'As per SRFDCL Master Plan.' },
+  { zone: 'SPD – Science Park', conceptualisedZone: 'Special Plan Development Zone - 3', code: 'SPD3', permissibleUse: 'Those permissible in R1.' },
+  { zone: 'SPD – Gandhi Ashram Special Development Area', conceptualisedZone: 'Special Plan Development Zone - 4', code: 'SPD4', permissibleUse: 'Those permissible in R1.' },
+  { zone: 'Transit Oriented Zone / Smart City Node / Transport Node / high-density zone within 200 m of road edge', conceptualisedZone: 'Smart City & TOZ', code: 'SPD5', permissibleUse: 'Those permissible in R1, C1, REZ.' },
+  { zone: 'Closed Textile Mill Zone', conceptualisedZone: 'CZ', code: 'CZ', permissibleUse: 'Those permissible in KZ1, RAH.' },
+  { zone: 'Forest Land', conceptualisedZone: 'Forest Zone', code: 'FZ', permissibleUse: 'As permitted by the competent authority and subject to Defence and Central Government regulations.' },
+  { zone: 'Fishing Beach Zone', conceptualisedZone: 'Special Zone 1', code: 'SZ1', permissibleUse: 'As per Environment Protection and CRZ criteria; temporary use from wooden and cloth materials only for fishing activity.' },
+  { zone: 'Buffer Zone', conceptualisedZone: 'Special Zone 2', code: 'SZ2', permissibleUse: 'As per IZ1.' },
+  { zone: 'Hilly Area', conceptualisedZone: 'Special Zone 3', code: 'SZ3', permissibleUse: 'As per Environment Regulation.' },
+  { zone: 'Heritage Zone / Heritage Precinct (SZ4)', conceptualisedZone: 'Special Zone 4', code: 'SZ4', permissibleUse: 'Subject to Heritage Regulations.' },
+  { zone: 'Residential Tourist Accommodation Zone', conceptualisedZone: 'Special Zone 5', code: 'SZ5', permissibleUse: 'DW1, DW2, DW3, HO, M1, M2, M3, PI, PU, REC, REG, TO.' },
+  { zone: 'Special Tourism Project Area', conceptualisedZone: 'Special Zone 6', code: 'SZ6', permissibleUse: 'DW3, M2, M3, REC, TO.' },
+  { zone: 'Vacant Land', conceptualisedZone: 'Vacant Land', code: 'VL', permissibleUse: 'No development permission.' },
+  { zone: 'Heritage Area', conceptualisedZone: 'Heritage', code: 'HA', permissibleUse: 'DW1, DW2, DW3, M1, M2, HO. Owners must conserve all facades, building footprint, and the character of open spaces such as courtyards, khadki, and streets.' },
+  { zone: 'Mix Use Zone (Thangadh)', conceptualisedZone: 'Mix Zone', code: 'MUZ', permissibleUse: 'AS1, AS2, AS3, AS4, DW1, DW2, DW3, EDU1, EDU2, H1, H2, H3, HO, IN1A, IN1 and IN2 for pottery/ceramic industries (proposed road at least 9 m; 30–35% open for loading, unloading and storage), INST, M1, M2, M3, PI, PU, REC, REG, SP&L, SE, ST, TEMP.' },
+  { zone: 'D8 & D10 — Gamtal Area', conceptualisedZone: '—', code: 'GMD8', permissibleUse: 'AS1, DW1, DW2, DW3, EDU1, HO, INST, M1, M2, PI, PU, REG, REC, SP&L, TEMP.' },
+  { zone: 'D8 & D10 — Outside gamtal, within 200 m of its boundary', conceptualisedZone: '—', code: 'RMD8', permissibleUse: 'Those permissible in GMD8 and AS2, AS3, AS4, EDU2, HO, M2, SE, SCK.' },
+  { zone: 'D8 & D10 — Outside gamtal, more than 200 m from its boundary', conceptualisedZone: '—', code: 'RMD9', permissibleUse: 'Those permissible in CW and AS2, AS3, AS4, HO, IN1, IN2, IN3, IN4, M2, M3, SCK, SE, ST, AG1, AG2.' },
+  { zone: 'GIDC', conceptualisedZone: 'GIDC', code: 'GIDC', permissibleUse: 'As specified by GIDC.' },
+];
+
+const TABLE_6_3_USES = {
+  DW1: { classification: 'Dwelling-1', details: 'Detached dwelling unit, Clinic not having indoor treatment facility.' },
+  DW2: { classification: 'Dwelling-2', details: 'Semi-detached dwelling unit, Row House, Tenement, Chawls, Farm House, Clinic not having indoor treatment facility, Cottage Industry (not involving use or installation of any kind which may create noise, vibration, fume or dust). Home occupant and cottage industry shall not be permitted in tenement dwelling/flats. Part of a residential building may be used for professional requirements, as office, by advocate, doctors, architects, engineers and chartered accountants and Jari Industry.' },
+  DW3: { classification: 'Dwelling-3', details: 'Apartment, Hostel, Dharamshala, Pre-school and Affordable Housing.' },
+  M1: { classification: 'Mercantile-1', details: 'Shop, Business, Restaurant, Shopping Centre, Light Home Workshop, LPG Cylinder Godown, Service Establishment, Clinic, Fitness Centre.' },
+  M2: { classification: 'Mercantile-2', details: 'Shopping Mall, Laboratory, Nursing Home, Maternity Home, Kerosene Depot, Corporate Offices, Call Centres, Training Centres, CinePlex (maximum seating capacity of 40 seats).' },
+  M3: { classification: 'Mercantile-3', details: 'Wholesale Market, Indoor Hospital, Diamond Industry, Wholesale Market and their ancillary uses, Activity Related to I.T.' },
+  EDU1: { classification: 'Educational-1', details: 'Primary Schools, Secondary Schools, Higher Secondary Schools.' },
+  EDU2: { classification: 'Educational-2', details: 'College, Polytechnic, University and ancillary use.' },
+  AS1: { classification: 'Assembly-1', details: 'Community Hall, Banquet Hall, Town Hall.' },
+  AS2: { classification: 'Assembly-2', details: 'Convention Centre, Exhibition Hall, Auditorium, Planetarium, Stadium, Museum, Exhibition Halls, Wadi.' },
+  AS3: { classification: 'Assembly-3', details: 'Theatre, Cinema, Multiplex, Drive-in Cinema, Clubs, Golf Course.' },
+  AS4: { classification: 'Assembly-4', details: 'Party Plot, Garden Restaurants.' },
+  INST: { classification: 'Institutional', details: 'Research Centres. Dwelling-1, 2 and 3, Retail Shop and Restaurants as a part of Educational Institute up to 20% of Utilised FSI.' },
+  REG: { classification: 'Religious', details: 'Temples, Church, Mosque, Gurudwara, Synagogue, Upashraya, Sant Niwas or any Religious Structure.' },
+  HO: { classification: 'Hospitality', details: 'Bed and Breakfast, Guest House, Lodging and Boarding, Hotel, Motel, Serviced Apartment.' },
+  SE: { classification: 'Service Establishment', details: 'Auto Repair, Workshop, Wood Workshop, Fabrication, Public-Garage.' },
+  IN1: { classification: 'Industrial-1', details: 'All type of Light, Service Industries, Small Factories, Warehouses, Newspaper Printing Press, Concrete Batching Plant, stone cutting and polishing; Poultry Farm, Dairy, Assembly Plant, Shipping Recycling Unit, Scrap Processing/Cutting Unit, Scrap Sorting Yard, Industrial Row House.' },
+  IN1A: { classification: 'Industrial-1A', details: 'All industries manufacturing tiles, feeting for bathroom and sanitary wares, ceramic, ceramic store, clay, glass and also ancillary industries related to manufacture of tiles, clay bricks, concrete blocks for paving and other materials and their utensils.' },
+  IN2: { classification: 'Industrial-2', details: 'All Industries except Obnoxious and Hazardous Industries, Junk Yard, Textile Units, Ice Factory, Quarrying of Stone, Quarrying of Gravel, Quarrying of Clay, Dumping of Solid Waste, Steel re-rolling, Metal Manufacturing/Sorting etc., Oil Processing/Storage.' },
+  IN3: { classification: 'Industrial-3', details: 'Slaughter House, Meat Processing Units, Leather Processing Units, Cold Storage, Oxygen Plant, Agro Industries, Packaging, Mechanical Engineering, Fly Ash.' },
+  IN4: { classification: 'Industrial-4', details: 'Fuel Storage, Storage of inflammable materials, Thermal Power Plant, Power Plant, Gas Plant, Storage of Hazardous Materials, Obnoxious and Hazardous Industries, Chemical Industries, Obnoxious and Hazardous Uses, Dying House.' },
+  ST: { classification: 'Storage', details: 'Warehouse, Godown, Cold Storage, Timber Mart, Steel Stockyard, Ice Factory.' },
+  SCK: { classification: 'Small Center (Kothar)', details: 'Building related to agricultural activities, small godowns/storage, having building dimensions not exceeding 30 m × 12 m.' },
+  TR: { classification: 'Transport', details: 'Truck Terminal, Bus Terminal (by private enterprise), Transport Terminal for Goods and Passengers.' },
+  AG1: { classification: 'Agriculture-1', details: 'Horticulture, Repair and Sale of agricultural equipment, Saw Mill, Brick Kiln, Dairy Development, Fisheries, Animal Rearing and Breeding, Natural Resource and Sanctuary, Tannery, Concrete Batching Plant, Cemetery, Burial Ground, Regional Park, Way-side Shop, Agricultural Vocational Training Centre, Panjarapole, Roofing Tiles and Cement Pipes, Studio, Animal Shed, Agro Based Storage, Farm House.' },
+  AG2: { classification: 'Agriculture-2', details: 'Agricultural Vocational Training, Mining and Quarrying, Dumping of Solid Waste, Shooting Range, Drive-in Cinema, Golf Course, Ship Building or Ship Breaking, Fishing, Aqua culture Processing of fish and industry based on it port, Harbour ferry hovercraft service marine transport, Telephone microwave or other means of communication facilities, salt pans and non-polluting salt processing activity. Any type of activity permissible as per the Environment Protection Act, 1968 and Environment (Protection) Rules, 1968.' },
+  AG3: { classification: 'Agriculture-3', details: 'Poultry Farm, Agro-based Godowns.' },
+  TEMP: { classification: 'Temporary Use', details: 'Fair, Circus, Exhibition, Mela, Pandal, Fisheries related activities.' },
+  PU: { classification: 'Public Utility', details: 'Sub-station, Bus Station and Terminals, Fuelling and eV Station and Storage with and without Service Station, Parking, Multi-level Parking; infrastructure for Water Supply, Purification Plant, Pumping Station, Electricity Sub-station; Drainage, Sanitation, Domestic Garbage Disposal Collection, Solid Waste Transfer Station; Electricity, Fire Stations, Solar Power Plant or any development activity carried out by appropriate authority for public purpose.' },
+  PI: { classification: 'Public-Institutional', details: 'Any offices for appropriate authority, government and semi-government, Public assembly, Public facilities and amenities like Health, Transport and Communication, public security, social welfare, recreation of any type, Post Office, Police-Chowki, ward office.' },
+  H1: { classification: 'Health-1', details: 'PHC, Clinic, Dispensary.' },
+  H2: { classification: 'Health-2', details: 'Indoor Hospital up to 20 Bed, Surgical Hospital, Nursing Home.' },
+  H3: { classification: 'Health-3', details: 'Civil Hospital, Medical College and Research Centre, Hospital of more than 20 Bed.' },
+  H4: { classification: 'Health-4', details: 'Hospital for infectious diseases, Mental Hospital.' },
+  TO: { classification: 'Tourism Services', details: 'Tourism Sponsored activity.' },
+  REC: { classification: 'Recreation Use', details: 'Natural Reserve and Sanctuary, Race Track, Shooting Range, Zoo, Gardens, Recreation, Nursery, Botanical Garden, Green House, Play Fields, Forest.' },
+  'SP&L': { classification: 'Sports and Leisure', details: 'Sports Complex, Swimming Pool, Playfield, Camping Ground, Facility for water sports, Theme/Amusement Park, Aquarium, Zoo, Botanical Garden, Exhibition and Mela, Motion Picture Hall.' },
+};
+
+const TABLE_6_3_CODES = Object.keys(TABLE_6_3_USES).sort((left, right) => right.length - left.length);
+const TABLE_6_2_ZONE_CODES = [...new Set(DESIGNATED_ZONES.map(({ code }) => code))].sort((left, right) => right.length - left.length);
+
+function getPermissibleUseCodes(zone, visited = new Set()) {
+  if (!zone || visited.has(zone.code)) return [];
+  const nextVisited = new Set(visited).add(zone.code);
+  const codes = new Set();
+  for (const useCode of TABLE_6_3_CODES) {
+    const escaped = useCode.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    if (new RegExp(`(^|[^A-Z0-9&])${escaped}($|[^A-Z0-9])`).test(zone.permissibleUse)) codes.add(useCode);
+  }
+  for (const zoneCode of TABLE_6_2_ZONE_CODES) {
+    const escaped = zoneCode.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    if (zoneCode !== zone.code && new RegExp(`\\b${escaped}\\b`).test(zone.permissibleUse)) {
+      DESIGNATED_ZONES.filter((candidate) => candidate.code === zoneCode).forEach((candidate) => {
+        getPermissibleUseCodes(candidate, nextVisited).forEach((useCode) => codes.add(useCode));
+      });
+    }
+  }
+  return TABLE_6_3_CODES.filter((code) => codes.has(code));
+}
+
 function FsiCalculator() {
-  const [form, setForm] = useState({ developmentAuthority: '', developmentArea: '', zone: '', plotArea: '', roadWidth: '', buildingUse: '' });
+  const [form, setForm] = useState({ developmentCategory: '', developmentAuthority: '', developmentArea: '', zone: '', plotArea: '', roadWidth: '', buildingUse: '' });
   const [state, setState] = useState({ loading: false, result: null, error: '' });
+  const [permissibleUseCode, setPermissibleUseCode] = useState('');
   const set = (key) => (event) => setForm((current) => ({ ...current, [key]: event.target.value }));
+  const selectedCategory = DEVELOPMENT_CATEGORIES.find(({ code }) => code === form.developmentCategory);
+  const selectedZones = ['D8', 'D10'].includes(form.developmentCategory)
+    ? DESIGNATED_ZONES.filter(({ code }) => ['GMD8', 'RMD8', 'RMD9'].includes(code))
+    : form.developmentCategory === 'D9'
+      ? DESIGNATED_ZONES.filter(({ code }) => code === 'GIDC')
+      : DESIGNATED_ZONES.filter(({ code }) => !['GMD8', 'RMD8', 'RMD9'].includes(code));
+  const selectedZone = selectedZones.find(({ zone }) => zone === form.zone);
+  const selectedUseCodes = selectedZone ? getPermissibleUseCodes(selectedZone) : [];
+  const activeUseCode = selectedUseCodes.includes(permissibleUseCode) ? permissibleUseCode : (selectedUseCodes[0] ?? '');
+  const setCategory = (event) => setForm((current) => ({ ...current, developmentCategory: event.target.value, developmentAuthority: '', developmentArea: '', zone: '' }));
+  const setZone = (event) => { setForm((current) => ({ ...current, zone: event.target.value })); setPermissibleUseCode(''); };
   const submit = async (event) => {
     event.preventDefault(); setState({ loading: true, result: null, error: '' });
-    try { const response = await api.post('/calculations/fsi', { ...form, plotArea: Number(form.plotArea), roadWidth: Number(form.roadWidth) }); setState({ loading: false, result: response.data, error: '' }); }
+    try { const response = await api.post('/calculations/fsi', { ...form, conceptualisedZone: selectedZone?.conceptualisedZone ?? '', zoneCode: selectedZone?.code ?? '', permissibleUse: selectedZone?.permissibleUse ?? '', permissibleUseCode: activeUseCode, plotArea: Number(form.plotArea), roadWidth: Number(form.roadWidth) }); setState({ loading: false, result: response.data, error: '' }); }
     catch (error) { setState({ loading: false, result: null, error: getApiErrorMessage(error) }); }
   };
-  return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> FSI CALCULATOR</div><div className="page-title-row"><div><h1>FSI calculator</h1><p>Enter the site context. The calculator will use only verified, applicable source parameters.</p></div><span className="source-status-tag"><ShieldCheck size={14}/> DETERMINISTIC</span></div><div className="tool-layout"><form className="form-panel" onSubmit={submit}><div className="panel-label">SITE AND DEVELOPMENT CONTEXT</div><label>Development authority<input required maxLength="160" value={form.developmentAuthority} onChange={set('developmentAuthority')} placeholder="Enter authority name"/></label><label>Development area <span className="optional-label">IF APPLICABLE</span><input maxLength="160" value={form.developmentArea} onChange={set('developmentArea')} placeholder="Development plan area"/></label><label>Zone<input required maxLength="120" value={form.zone} onChange={set('zone')} placeholder="Enter zone or land-use category"/></label><div className="field-pair"><label>Plot area <span>(m²)</span><input type="number" required min="0.01" step="any" value={form.plotArea} onChange={set('plotArea')} placeholder="e.g. 500"/></label><label>Road width <span>(m)</span><input type="number" required min="0.01" step="any" value={form.roadWidth} onChange={set('roadWidth')} placeholder="e.g. 12"/></label></div><label>Building use<input required maxLength="120" value={form.buildingUse} onChange={set('buildingUse')} placeholder="Residential, commercial, mixed…"/></label><button className="button button-primary form-submit" type="submit" disabled={state.loading}>{state.loading ? 'Checking applicable data…' : 'Establish applicable FSI'} <ArrowRight size={15}/></button><small className="form-disclaimer">Inputs are evaluated against the available regulatory data. A numeric result is withheld when verified rules are unavailable.</small></form>
+  return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> FSI CALCULATOR</div><div className="page-title-row"><div><h1>FSI calculator</h1><p>Enter the site context. The calculator will use only verified, applicable source parameters.</p></div><span className="source-status-tag"><ShieldCheck size={14}/> DETERMINISTIC</span></div><div className="tool-layout"><form className="form-panel" onSubmit={submit}><div className="panel-label">SITE AND DEVELOPMENT CONTEXT</div><label>Development authority &amp; development area category<select required value={form.developmentCategory} onChange={setCategory}><option value="">Select category from Table 1.1</option>{DEVELOPMENT_CATEGORIES.map(({ code, label }) => <option key={code} value={code}>{label}</option>)}</select></label><label>Development authority / ULB<select required value={form.developmentAuthority} onChange={set('developmentAuthority')} disabled={!selectedCategory}><option value="">{selectedCategory ? 'Select authority or area' : 'Select a category first'}</option>{selectedCategory?.authorities.map((authority) => <option key={authority} value={authority}>{authority}</option>)}</select></label><label>Development area <span className="optional-label">IF APPLICABLE</span><input maxLength="160" value={form.developmentArea} onChange={set('developmentArea')} required={['D8', 'D9', 'D10'].includes(form.developmentCategory)} placeholder="Plan area, industrial estate, or other area name"/></label><label>Use Zone (Designation in Development Plan) or general land use<select required value={form.zone} onChange={setZone} disabled={!form.developmentCategory}><option value="">{form.developmentCategory ? 'Select a zone from Table 6.2' : 'Select a category first'}</option>{selectedZones.map(({ zone, code }) => <option key={`${code}-${zone}`} value={zone}>{zone}</option>)}</select></label>{selectedZone && <><label>Conceptualised Zone<input readOnly value={selectedZone.conceptualisedZone}/></label><label>Code<input readOnly value={selectedZone.code}/></label><label>Permissible Use referred as code>{selectedUseCodes.length ? <><select value={activeUseCode} onChange={(event) => setPermissibleUseCode(event.target.value)}>{selectedUseCodes.map((useCode) => <option key={useCode} value={useCode}>{useCode}</option>)}</select>{activeUseCode && <div className="use-code-details"><b>{activeUseCode} — {TABLE_6_3_USES[activeUseCode].classification}</b><span>{TABLE_6_3_USES[activeUseCode].details}</span></div>}</> : <textarea readOnly rows="4" value={selectedZone.permissibleUse}/>}</label></>}<div className="field-pair"><label>Plot area <span>(m²)</span><input type="number" required min="0.01" step="any" value={form.plotArea} onChange={set('plotArea')} placeholder="e.g. 500"/></label><label>Road width <span>(m)</span><input type="number" required min="0.01" step="any" value={form.roadWidth} onChange={set('roadWidth')} placeholder="e.g. 12"/></label></div><label>Building use<input required maxLength="120" value={form.buildingUse} onChange={set('buildingUse')} placeholder="Residential, commercial, mixed…"/></label><button className="button button-primary form-submit" type="submit" disabled={state.loading}>{state.loading ? 'Checking applicable data…' : 'Establish applicable FSI'} <ArrowRight size={15}/></button><small className="form-disclaimer">Inputs are evaluated against the available regulatory data. A numeric result is withheld when verified rules are unavailable.</small></form>
     <div className="result-panel"><div className="panel-label">CALCULATION RESULT</div>{state.error ? <StateNotice tone="error">{state.error}</StateNotice> : state.loading ? <div className="panel-state">Resolving version, authority, zone, and applicable parameters…</div> : state.result ? <><div className="result-unresolved"><span className="warning-symbol">!</span><div><b>Verified result unavailable</b><small>{state.result.message}</small></div></div><div className="missing-list"><b>What remains unresolved</b>{state.result.missingInformation.map((item) => <p key={item}><span>•</span>{item}</p>)}</div><div className="result-reference"><FileText size={15}/><span>No verified regulation or source-page references are available for these inputs.</span></div></> : <div className="result-empty"><Calculator size={22}/><b>Your FSI breakdown will appear here</b><p>No universal FSI value is assumed. The calculator waits for verified provisions that match the authority, zone, use, and road width.</p></div>}</div></div></div></AppShell>;
 }
 

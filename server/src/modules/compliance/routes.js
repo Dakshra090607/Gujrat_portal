@@ -4,9 +4,14 @@ import { z } from 'zod';
 const router = Router();
 const positiveNumber = z.coerce.number().finite().positive();
 const fsiSchema = z.object({
+  developmentCategory: z.enum(['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7A', 'D7B', 'D8', 'D9', 'D10']).optional(),
   developmentAuthority: z.string().trim().min(1).max(160),
   developmentArea: z.string().trim().max(160).optional(),
-  zone: z.string().trim().min(1).max(120),
+  zone: z.string().trim().min(1).max(500),
+  conceptualisedZone: z.string().trim().max(120).optional(),
+  zoneCode: z.string().trim().max(20).optional(),
+  permissibleUse: z.string().trim().max(2000).optional(),
+  permissibleUseCode: z.string().trim().max(20).optional(),
   plotArea: positiveNumber,
   roadWidth: positiveNumber,
   buildingUse: z.string().trim().min(1).max(120),
