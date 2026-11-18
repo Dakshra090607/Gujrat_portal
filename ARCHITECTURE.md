@@ -40,7 +40,7 @@ React client ── email/password and reset flows ──> Neon Managed Auth
 
 The client uses `@neon/auth` for sign-up, sign-in, sign-out, password reset, and the current Auth session. The API verifies bearer JWTs against the injected branch-specific JWKS URL and expected issuer before resolving app roles. Reviewer and administrator routes check active app roles on every request. Auth endpoints live on Neon, so `/api/v1/auth/login` is intentionally not implemented.
 
-Public routes serve extracted source documents, pages, and partial text search with visible review status. FSI and preliminary compliance routes return unresolved or insufficient-information results until verified, applicable rules exist.
+Public routes serve extracted source documents, pages, and partial text search with visible review status. The FSI route provides preliminary table-based results for configured numeric CGDCR rows and stays unresolved where a row, authority, or required condition is missing. Preliminary compliance findings remain unresolved until verified, applicable rules exist.
 
 ## Local and production configuration
 
@@ -58,5 +58,5 @@ Source PDF file paths currently point to this workspace. A hosted API needs a du
 - Admin user and account-status management: implemented with audit records.
 - Regulatory review workbench and guarded approval flow: implemented; candidates remain unverified until human review.
 - Verified chapter/regulation hierarchy and parameter coverage: not yet established.
-- FSI calculations and compliance findings: intentionally unresolved until the data is verified.
+- FSI calculator: preliminary calculations are configured for explicit numeric rows in Tables 6.5–6.19; special, condition-dependent, and unsupported rows remain unresolved. Compliance findings remain unresolved until reviewed rules are available.
 - Persistent user projects/reports and hosted PDF object storage: not implemented.

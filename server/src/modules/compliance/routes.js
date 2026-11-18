@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { z } from 'zod';
+import { calculateFsi } from './fsi-calculation.js';
 
 const router = Router();
 const positiveNumber = z.coerce.number().finite().positive();
@@ -12,9 +13,15 @@ const fsiSchema = z.object({
   zoneCode: z.string().trim().max(20).optional(),
   permissibleUse: z.string().trim().max(2000).optional(),
   permissibleUseCode: z.string().trim().max(20).optional(),
+  roadWidths: z.object({
+    front: positiveNumber.optional(),
+    left: positiveNumber.optional(),
+    right: positiveNumber.optional(),
+    rear: positiveNumber.optional(),
+  }).optional(),
   plotArea: positiveNumber,
   roadWidth: positiveNumber,
-  buildingUse: z.string().trim().min(1).max(120),
+  buildingUse: z.string().trim().max(120).optional(),
 });
 
 const assessmentSchema = z.object({
@@ -35,19 +42,9 @@ const assessmentSchema = z.object({
 router.post('/calculations/fsi', (req, res) => {
   const parsed = fsiSchema.safeParse(req.body);
   if (!parsed.success) {
-    return res.status(400).json({ error: { code: 'INVALID_FSI_INPUT', message: 'Enter a positive plot area and road width, and specify the authority, zone, and building use.', details: parsed.error.issues } });
+    return res.status(400).json({ error: { code: 'INVALID_FSI_INPUT', message: 'Enter a positive plot area and at least one road width, then specify the development authority and zone. Building use is optional unless the applicable table requires it.', details: parsed.error.issues } });
   }
-  res.status(200).json({
-    status: 'UNRESOLVED',
-    message: 'Unable to establish a verified FSI result with the currently available regulatory data.',
-    inputs: parsed.data,
-    missingInformation: [
-      'No verified FSI parameters are currently available in the regulatory database.',
-      'The applicable authority, zone, building use, and road-width conditions have not been linked to reviewed source provisions.',
-    ],
-    sources: [],
-    calculation: null,
-  });
+  res.status(200).json(calculateFsi(parsed.data));
 });
 
 router.post('/assessments', (req, res) => {
