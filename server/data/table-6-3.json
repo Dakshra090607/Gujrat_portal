@@ -1,0 +1,274 @@
+{
+  "tableNumber": "6.3",
+  "title": "Use permitted in each category",
+  "source": "CGDCR 2017, user-provided Table 6.3 image",
+  "columns": [
+    "Sr. no.",
+    "Use classification",
+    "Code",
+    "Permitted uses"
+  ],
+  "rows": [
+    {
+      "sourceRow": "1",
+      "classification": "Dwelling-1",
+      "code": "DW1",
+      "permittedUses": "Detached dwelling unit, Clinic not having indoor treatment facility.",
+      "sortOrder": 1
+    },
+    {
+      "sourceRow": "2",
+      "classification": "Dwelling-2",
+      "code": "DW2",
+      "permittedUses": "Semi-detached dwelling unit, Row House, Tenement, chawls, Farm House, Clinic not having indoor treatment facility, Cottage Industry (not involving use or installation of any kind which may create noise, vibration, fume, dust etc.). Home occupant and cottage industry shall not be permitted in tenement dwelling/flats. Part of residential building may be used for professional requirements, as office, by advocate, doctors, architects, engineers and chartered accountants and Jain Industry.",
+      "sortOrder": 2
+    },
+    {
+      "sourceRow": "3",
+      "classification": "Dwelling-3",
+      "code": "DW3",
+      "permittedUses": "Apartment, Hostel, Dharamshala, Pre-school and Affordable Housing.",
+      "sortOrder": 3
+    },
+    {
+      "sourceRow": "4",
+      "classification": "Mercantile-1",
+      "code": "M1",
+      "permittedUses": "Shop, Business, Restaurant, Shopping Centre, Light Home Workshop, LPG Cylinder Godown, Service Establishment, Clinic, Fitness Centre.",
+      "sortOrder": 4
+    },
+    {
+      "sourceRow": "5",
+      "classification": "Mercantile-2",
+      "code": "M2",
+      "permittedUses": "Shopping Mall, Laboratory, Nursing Home, Maternity Home, Kerosene Depot, Corporate Offices, Call Centres, Training Centres, Cineplex (having maximum seating capacity of 40 seats).",
+      "sortOrder": 5
+    },
+    {
+      "sourceRow": "6",
+      "classification": "Mercantile-3",
+      "code": "M3",
+      "permittedUses": "Wholesale Market, Indoor Hospital, Diamond Industry, Wholesale Market and their ancillary uses, Activity Related to I.T.",
+      "sortOrder": 6
+    },
+    {
+      "sourceRow": "8",
+      "classification": "Educational-1",
+      "code": "EDU1",
+      "permittedUses": "Primary Schools, Secondary Schools, Higher Secondary Schools.",
+      "sortOrder": 7
+    },
+    {
+      "sourceRow": "9",
+      "classification": "Educational-2",
+      "code": "EDU2",
+      "permittedUses": "College, Polytechnic, University and ancillary use.",
+      "sortOrder": 8
+    },
+    {
+      "sourceRow": "10",
+      "classification": "Assembly-1",
+      "code": "AS1",
+      "permittedUses": "Community Hall, Banquet Hall, Town Hall.",
+      "sortOrder": 9
+    },
+    {
+      "sourceRow": "11",
+      "classification": "Assembly-2",
+      "code": "AS2",
+      "permittedUses": "Convention Centre, Exhibition Hall, Auditorium, Planetarium, Stadium, Museum, Exhibition Halls, Wadi.",
+      "sortOrder": 10
+    },
+    {
+      "sourceRow": "12",
+      "classification": "Assembly-3",
+      "code": "AS3",
+      "permittedUses": "Theatre, Cinema, Multiplex, Drive-in Cinema, Clubs, Golf Course.",
+      "sortOrder": 11
+    },
+    {
+      "sourceRow": "13",
+      "classification": "Assembly-4",
+      "code": "AS4",
+      "permittedUses": "Party Plot, Garden Restaurants.",
+      "sortOrder": 12
+    },
+    {
+      "sourceRow": "14",
+      "classification": "Institutional",
+      "code": "INST",
+      "permittedUses": "Research Centres, Dwelling-1, 2 & 3, Retail Shop and Restaurants as a part of Educational Institute up to 20% of Utilised FSI.",
+      "sortOrder": 13
+    },
+    {
+      "sourceRow": "15",
+      "classification": "Religious",
+      "code": "REG",
+      "permittedUses": "Temples, Church, Mosque, Gurudwara, Synagogue, Upashrava, Sant Niwas or any Religious Structure.",
+      "sortOrder": 14
+    },
+    {
+      "sourceRow": "16",
+      "classification": "Hospitality",
+      "code": "HO",
+      "permittedUses": "Bed and Breakfast, Guest House, Lodging and Boarding, Hotel, Motel, Serviced Apartment.",
+      "sortOrder": 15
+    },
+    {
+      "sourceRow": "20",
+      "classification": "Service Establishment",
+      "code": "SE",
+      "permittedUses": "Auto Repair, Workshop, Wood Workshop, Fabrication, Public-Garage.",
+      "sortOrder": 16
+    },
+    {
+      "sourceRow": "21",
+      "classification": "Industrial-1",
+      "code": "IN1",
+      "permittedUses": "All type of Light, Service Industries, Small Factories, Warehouses, Newspaper Printing Press, Concrete Batching Plant, stone cutting and polishing, Pottery Farm, Dairy, Assembly Plant, Shipping Recycling Unit, Scrap Processing/Cutting Unit, Scrap Sorting Yard, Industrial Row House.",
+      "sortOrder": 17
+    },
+    {
+      "sourceRow": "21A",
+      "classification": "Industrial-1A",
+      "code": "IN1A",
+      "permittedUses": "All industries manufacturing tiles, roofing for bathroom and sanitary wares, ceramic, ceramic store, clay, glass and also ancillary industries related to manufacture of tiles, clay bricks, concrete blocks for paving and other materials and their utensils.",
+      "sortOrder": 18
+    },
+    {
+      "sourceRow": "22",
+      "classification": "Industrial-2",
+      "code": "IN2",
+      "permittedUses": "All Industries except Obnoxious and Hazardous Industries, Junk Yard, Textile Units, Ice Factory, Quarrying of Stone, Quarrying of Gravel, Quarrying of Clay, Dumping of Solid Waste, Steel re-rolling, Metal Manufacturing/Sorting, Oil Processing/Storage.",
+      "sortOrder": 19
+    },
+    {
+      "sourceRow": "23",
+      "classification": "Industrial-3",
+      "code": "IN3",
+      "permittedUses": "Slaughter House, Meat Processing Units, Leather Processing Units, Cold Storage, Oxygen Plant, Agro Industries, Packaging, Mechanical Engineering, Fly Ash.",
+      "sortOrder": 20
+    },
+    {
+      "sourceRow": "24",
+      "classification": "Industrial-4",
+      "code": "IN4",
+      "permittedUses": "Fuel Storage, Storage of inflammable materials, Thermal Power Plant, Power Plant, Gas Plant, Storage of Hazardous Materials, Obnoxious and Hazardous Industries, Chemical Industries, Obnoxious and Hazardous Uses, Dying House.",
+      "sortOrder": 21
+    },
+    {
+      "sourceRow": "25",
+      "classification": "Storage",
+      "code": "ST",
+      "permittedUses": "Warehouse, Godown, Cold Storage, Timber Mart, Steel Stockyard, Ice Factory.",
+      "sortOrder": 22
+    },
+    {
+      "sourceRow": "25A",
+      "classification": "Small Center (Kothar)",
+      "code": "SCK",
+      "permittedUses": "Building related to agricultural activities, small godowns / storage, having building dimensions not exceeding 30 m x 12 m.",
+      "sortOrder": 23
+    },
+    {
+      "sourceRow": "26",
+      "classification": "Transport",
+      "code": "TR",
+      "permittedUses": "Truck Terminal, Bus Terminal (by private enterprise), Transport Terminal for Goods and Passengers.",
+      "sortOrder": 24
+    },
+    {
+      "sourceRow": "27",
+      "classification": "Agriculture-1",
+      "code": "AG1",
+      "permittedUses": "Horticulture, Repair and Sale of agricultural equipment, Saw Mill, Brick Kiln, Dairy Development, Fisheries, Animal Rearing and Breeding, Natural Resource and Sanctuary, Tannery, Concrete Batching Plant, Cement Burial Ground, Regional Park, Way-side Shop, Agricultural Vocational Training Centre, Panjrapole, Roofing Tiles and Cement Pipes, Studio, Animal Shed, Agro Based Storage, Farm House.",
+      "sortOrder": 25
+    },
+    {
+      "sourceRow": "28",
+      "classification": "Agriculture-2",
+      "code": "AG2",
+      "permittedUses": "Agricultural Vocational Training, Mining and Quarrying, Dumping of Solid Waste, Shooting Range, Drive-in Cinema, Golf Course, Ship Building or Ship Breaking, Fishing, Aqua culture Processing of fish and industry based on it part, Harbour ferry hovercraft service marine transport, Telephone microwave or other means of communication facilities, salt pans and non-polluting salt processing activity. Any type of activity permissible as per the provision of Environment Protection Act 1986 and Environment (Protection) Rules-1968.",
+      "sortOrder": 26
+    },
+    {
+      "sourceRow": "29",
+      "classification": "Agriculture-3",
+      "code": "AG3",
+      "permittedUses": "Poultry Farm, Agro-based Godowns.",
+      "sortOrder": 27
+    },
+    {
+      "sourceRow": "30",
+      "classification": "Temporary Use",
+      "code": "TEMP",
+      "permittedUses": "Fair, Circus, Exhibition, Mela, Pandals, Fisheries related activities.",
+      "sortOrder": 28
+    },
+    {
+      "sourceRow": "31",
+      "classification": "Public Utility",
+      "code": "PU",
+      "permittedUses": "Sub-station, Bus Station and Terminals, Fuelling and EV Station and Storage with and without Service Station, Parking, Multi-level Parking; infrastructure for water supply, purification plant, pumping station, electricity sub-station, drainage, sanitation, domestic garbage disposal collection, solid waste transfer station, pumping station, electricity purification plant, fire stations, solar power plant or any development activity carried out by appropriate authority for public purpose.",
+      "sortOrder": 29
+    },
+    {
+      "sourceRow": "32",
+      "classification": "Public-Institutional",
+      "code": "PI",
+      "permittedUses": "Any offices for appropriate authority, government and semi-government, public assembly, public facilities and amenities like Health Public facilities and amenities like Transport and Communication, Public facilities and amenities like public security, Public facilities and amenities like social welfare, recreation of any type, Post Office, Police Chowki, ward office.",
+      "sortOrder": 30
+    },
+    {
+      "sourceRow": "33",
+      "classification": "Health-1",
+      "code": "H1",
+      "permittedUses": "PHC, Clinic, Dispensary.",
+      "sortOrder": 31
+    },
+    {
+      "sourceRow": "34",
+      "classification": "Health-2",
+      "code": "H2",
+      "permittedUses": "Indoor Hospital up to 20 Bed, Surgical Hospital, Nursing Home.",
+      "sortOrder": 32
+    },
+    {
+      "sourceRow": "35",
+      "classification": "Health-3",
+      "code": "H3",
+      "permittedUses": "Civil Hospital, Medical College and Research Centre, Hospital of more than 20 Bed.",
+      "sortOrder": 33
+    },
+    {
+      "sourceRow": "36",
+      "classification": "Health-4",
+      "code": "H4",
+      "permittedUses": "Hospital for infectious diseases, Mental Hospital.",
+      "sortOrder": 34
+    },
+    {
+      "sourceRow": "37",
+      "classification": "Tourism Services",
+      "code": "TO",
+      "permittedUses": "Tourism Sponsored activity.",
+      "sortOrder": 35
+    },
+    {
+      "sourceRow": "38",
+      "classification": "Recreation Use",
+      "code": "REC",
+      "permittedUses": "Natural Reserve and Sanctuary, Race Track, Shooting Range, Zoo, Gardens, Recreation, Nursery, Botanical Garden, Green House, Play Fields, Forest.",
+      "sortOrder": 36
+    },
+    {
+      "sourceRow": "39",
+      "classification": "Sports and Leisure",
+      "code": "SP&L",
+      "permittedUses": "Sports Complex, Swimming Pool, Playfield, Camping Ground, Facility for water sports, Theme/ Amusement Park, Aquarium, Zoo, Botanical Garden, Exhibition and Mela, Motion Picture Hall.",
+      "sortOrder": 37
+    }
+  ],
+  "notes": [],
+  "transcriptionNote": "The supplied image skips source serial numbers 7 and 17 through 19; these rows have not been inferred or added."
+}

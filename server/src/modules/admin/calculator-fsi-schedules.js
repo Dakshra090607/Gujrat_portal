@@ -8,9 +8,9 @@ import { db, withTransaction } from '../../config/database.js';
 import { authenticate, requireAdministrator } from '../auth/middleware.js';
 
 const directory = path.dirname(fileURLToPath(import.meta.url));
-const source = JSON.parse(readFileSync(path.resolve(directory, '../../../../data/fsi-schedules.json'), 'utf8'));
-const buildingHeightSource = JSON.parse(readFileSync(path.resolve(directory, '../../../../data/table-6-23-building-height.json'), 'utf8'));
-const marginSource = JSON.parse(readFileSync(path.resolve(directory, '../../../../data/margin-schedules.json'), 'utf8'));
+const source = JSON.parse(readFileSync(path.resolve(directory, '../../../data/fsi-schedules.json'), 'utf8'));
+const buildingHeightSource = JSON.parse(readFileSync(path.resolve(directory, '../../../data/table-6-23-building-height.json'), 'utf8'));
+const marginSource = JSON.parse(readFileSync(path.resolve(directory, '../../../data/margin-schedules.json'), 'utf8'));
 const router = Router();
 const auditNote = z.string().trim().min(1).max(1000);
 const dataSchema = z.object({

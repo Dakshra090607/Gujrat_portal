@@ -8,7 +8,7 @@ import { db, withTransaction } from '../../config/database.js';
 import { authenticate, requireAdministrator } from '../auth/middleware.js';
 
 const directory = path.dirname(fileURLToPath(import.meta.url));
-const sourceTable = JSON.parse(readFileSync(path.resolve(directory, '../../../../data/table-6-3.json'), 'utf8'));
+const sourceTable = JSON.parse(readFileSync(path.resolve(directory, '../../../data/table-6-3.json'), 'utf8'));
 const router = Router();
 const rowSchema = z.object({
   sourceRow: z.string().trim().min(1).max(20),

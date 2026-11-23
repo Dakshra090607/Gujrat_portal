@@ -8,7 +8,7 @@ import { db, withTransaction } from '../../config/database.js';
 import { authenticate, requireAdministrator } from '../auth/middleware.js';
 
 const directory = path.dirname(fileURLToPath(import.meta.url));
-const sourceTable = JSON.parse(readFileSync(path.resolve(directory, '../../../../data/table-6-4.json'), 'utf8'));
+const sourceTable = JSON.parse(readFileSync(path.resolve(directory, '../../../data/table-6-4.json'), 'utf8'));
 const router = Router();
 const useCodeList = z.array(z.string().trim().toUpperCase().regex(/^[A-Z0-9&+_-]{1,40}$/)).max(100);
 const rowSchema = z.object({

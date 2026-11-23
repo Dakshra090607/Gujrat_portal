@@ -1,0 +1,2455 @@
+{
+  "sourceDocument": "FSI.docx",
+  "regulationVersion": "CGDCR 2017 (as identified in source context)",
+  "scheduleTitle": "Margins and setbacks",
+  "analysisRules": [
+    {
+      "id": "margin-source-coverage",
+      "text": "Margin schedules are grouped by their Table 6.24?6.41 references. Source columns preserve road width, plot size, building height, land-use zone, front/road-side margin, rear margin, side margin, and remarks separately wherever supplied. Table 6.39 specifies ground coverage only and is excluded from the margin rows."
+    }
+  ],
+  "generalProvisions": [
+    {
+      "title": "Restriction on Development in Margin",
+      "sourceText": [
+        "The required marginal open spaces except permissible uses as per Regulation no. 6.7.3 shall be kept permanently open to sky.",
+        "This space shall not be used for stocking materials or loose articles for the purpose of trade or otherwise, putting up fixed or movable platforms.",
+        "Parking shall be allowed in the rear and side marginal space after keeping minimum required margin in the case of building height more than 25.00 mt.",
+        "Vehicular or Pedestrian ramp/s leading to parking in floors above ground level shall be permitted after keeping required margin.",
+        "The sunk in lower ground floor or basement provided for the purpose of light/ ventilation shall not be permitted in the marginal open space.",
+        "No difference shall be permitted in the ground level of the marginal space of the building (in cases where the permitted margin of the basement is lesser then the permitted margin of the super structure)."
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "tableNumber": "6.24",
+      "title": "Table 6.24: Road Side Margin : All Categories except GMC and D9:",
+      "categoryCodes": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D7A",
+        "D7B",
+        "D8",
+        "D10"
+      ],
+      "sourceTableSequence": 124,
+      "columnHeaders": [
+        "Category group",
+        "Category / authority",
+        "Road up to 7.5 m",
+        "Road over 7.5 to 9 m",
+        "Road over 9 to 12 m",
+        "Road over 12 to 15 m",
+        "Road over 15 and under 18 m",
+        "Road 18 to under 30 m",
+        "Road 30 to under 45 m",
+        "Road 45 m and above"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Category",
+            "D1",
+            "2.5",
+            "2.5",
+            "3.0",
+            "3.0",
+            "4.5",
+            "6.0",
+            "7.5*",
+            "9.0"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D1"
+          ],
+          "authorityScope": "Road Side Margin : All Categories except GMC and D9:"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "",
+            "D2",
+            "2.0",
+            "2.5",
+            "2.5",
+            "3.0",
+            "3.0",
+            "6.0",
+            "7.5",
+            "9.0"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D2"
+          ],
+          "authorityScope": "Road Side Margin : All Categories except GMC and D9:"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "",
+            "D3, D4, D5, D7(A)",
+            "2.0",
+            "2.5",
+            "2.5",
+            "3.0",
+            "3.0",
+            "6.0",
+            "6.0",
+            "6.0"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D3",
+            "D4",
+            "D5",
+            "D7A"
+          ],
+          "authorityScope": "Road Side Margin : All Categories except GMC and D9:"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "",
+            "D7(B), D8, D10",
+            "2.0",
+            "2.5",
+            "2.5",
+            "3.0",
+            "3.0",
+            "4.5",
+            "4.5",
+            "4.5"
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Road Side Margin : All Categories except GMC and D9:"
+        }
+      ],
+      "notes": [
+        "Note:-For Special buildings, Road side Margin shall be 12.0mt.The road side margin for building unit area upto 1000 sq mtr. and/or height upto25.0 mtr. abutting on road width above 30.0 mtr. and upto 45.0 mtr. shall be6.00 mtr. for D1-RUDA.3. In case of D6 Category (Gandhidham) the Margin shall be regulated as per the Gandhidham regulations."
+      ],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.25",
+      "title": "Table 6.25: Margin between two buildings and margin from common plot : All Category except GMC and D9",
+      "categoryCodes": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7A",
+        "D7B",
+        "D8",
+        "D10"
+      ],
+      "sourceTableSequence": 125,
+      "columnHeaders": [
+        "Margin type / rule",
+        "Category / authority",
+        "Height up to 10 m*",
+        "Height up to 16.5 m",
+        "Height up to 25 m",
+        "Height up to 45 m",
+        "Height up to 70 m"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Margin between two buildings",
+            "D1 except GMC",
+            "4.5",
+            "4.5",
+            "6.0",
+            "9.0",
+            "12.0"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D1"
+          ],
+          "authorityScope": "Margin between two buildings and margin from common plot : All Category except GMC and D9"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "",
+            "D1-RUDA,D2",
+            "4.5",
+            "4.5",
+            "6.0",
+            "9.0",
+            "12.0"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D1",
+            "D2"
+          ],
+          "authorityScope": "Margin between two buildings and margin from common plot : All Category except GMC and D9"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "",
+            "D3, D6",
+            "4.5",
+            "4.5",
+            "-",
+            "-",
+            "-"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D3",
+            "D6"
+          ],
+          "authorityScope": "Margin between two buildings and margin from common plot : All Category except GMC and D9"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "",
+            "D4, D5, D7(A)",
+            "4.5",
+            "4.5",
+            "4.5",
+            "6.0",
+            "6.0"
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D4",
+            "D5",
+            "D7A"
+          ],
+          "authorityScope": "Margin between two buildings and margin from common plot : All Category except GMC and D9"
+        },
+        {
+          "sourceRow": "5",
+          "sourceCells": [
+            "",
+            "D7(B), D8, D10",
+            "4.5",
+            "4.5",
+            "4.5",
+            "-",
+            "-"
+          ],
+          "sortOrder": 5,
+          "categoryCodes": [
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Margin between two buildings and margin from common plot : All Category except GMC and D9"
+        },
+        {
+          "sourceRow": "6",
+          "sourceCells": [
+            "Margin from CommonPlot(mt.) In all Category wise",
+            "3.00 mt. in case of building height up to 25.0 mt. and 6.00 mt. in case ofbuilding height more than 25.0 mt.",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 6,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D6",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Margin between two buildings and margin from common plot : All Category except GMC and D9"
+        }
+      ],
+      "notes": [
+        "In case of D1-RUDA, for DW-3, for Building unit up to 500 sq.mt and Building height up to 16.50 mt, the minimum side & rear margins shall be as per Table 6.27.",
+        "Note:BH means “Building Height” Special buildings margin between two buildings and common plot as stated above.Margins for D6 category shall be as per Schedule-7.*For D3 category it shall be 11 mtr.Margin from common plot for DW1 & DW2 category shall be according to plot size of Table No. 6.26"
+      ],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.26",
+      "title": "Table 6.26: Rear and Side Margins : All Category except GMC & D9",
+      "categoryCodes": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D7A",
+        "D7B",
+        "D8",
+        "D10"
+      ],
+      "sourceTableSequence": 126,
+      "columnHeaders": [
+        "Sr. no.",
+        "Use",
+        "Plot size / building height",
+        "Rear margin",
+        "Side margin",
+        "Remarks"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "1",
+            "Dwelling 1-2",
+            "PS ≤25",
+            "Not Required",
+            "Not Required",
+            "Only G+1 floor"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "",
+            "",
+            "PS > 25 & ≤80",
+            "-",
+            "-",
+            "1.0 on any one side"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "including rear side"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "",
+            "",
+            "PS > 80 &≤150",
+            "-",
+            "-",
+            "1.5 on any one sideincluding rear side"
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "5",
+          "sourceCells": [
+            "",
+            "",
+            "PS>150 &≤300",
+            "2.00",
+            "1.5 (Any oneside)",
+            "-"
+          ],
+          "sortOrder": 5,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "6",
+          "sourceCells": [
+            "",
+            "",
+            "PS >300 &≤500",
+            "3.00",
+            "2.0 (bothside)",
+            "-"
+          ],
+          "sortOrder": 6,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "7",
+          "sourceCells": [
+            "",
+            "",
+            "PS > 500",
+            "3.00",
+            "3.0 (bothside)",
+            "-"
+          ],
+          "sortOrder": 7,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "8",
+          "sourceCells": [
+            "2",
+            "Other than Dwelling 1-2 & Industrial use",
+            "B.H. ≤16.5mt.",
+            "3.0",
+            "3.0*",
+            ""
+          ],
+          "sortOrder": 8,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "9",
+          "sourceCells": [
+            "",
+            "",
+            "B.H. > 16.5mt. & B.H.≤25mt.",
+            "4.0",
+            "4.0*",
+            "For PS ≤ 750.0 sq.mt., required margins shall be3.0 mts., for buildingheight upto 25.0 mt."
+          ],
+          "sortOrder": 9,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "10",
+          "sourceCells": [
+            "",
+            "",
+            "B.H. > 25mt.& B.H. ≤45mt.",
+            "6.0",
+            "6.0",
+            ""
+          ],
+          "sortOrder": 10,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "11",
+          "sourceCells": [
+            "",
+            "",
+            "B.H. > 45mt.",
+            "8.0",
+            "8.0",
+            ""
+          ],
+          "sortOrder": 11,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "12",
+          "sourceCells": [
+            "3",
+            "Industrial use",
+            "PS ≤ 500",
+            "-",
+            "-",
+            "3.0 mt. on any one sideincluding rear side."
+          ],
+          "sortOrder": 12,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "13",
+          "sourceCells": [
+            "",
+            "",
+            "PS > 500 & ≤ 1000",
+            "-",
+            "-",
+            "3.0 mt. on any two sidesincluding rear side"
+          ],
+          "sortOrder": 13,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        },
+        {
+          "sourceRow": "14",
+          "sourceCells": [
+            "",
+            "",
+            "PS > 1000",
+            "6.0",
+            "6.0",
+            ""
+          ],
+          "sortOrder": 14,
+          "categoryCodes": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D7A",
+            "D7B",
+            "D8",
+            "D10"
+          ],
+          "authorityScope": "Rear and Side Margins : All Category except GMC & D9"
+        }
+      ],
+      "notes": [
+        "Note:PS means “ Plot Size” and BH means “Building Height”.In case of D6 Category (Gandhidham) the Margin shall be regulated as per the Gandhidham regulations.In case of Special building side & rear margin shall be 6.0 mt. up to 25.0 mt. building height & 8.0 mt. for building height greater than 25.0mt."
+      ],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.27",
+      "title": "Table 6.27: Rear and Side Margins : D1-RUDA, for DW-3, only for Building unit up to 500 sq.mt and Building height up to 16.50 mt,",
+      "categoryCodes": [
+        "D1"
+      ],
+      "sourceTableSequence": 127,
+      "columnHeaders": [
+        "Sr. no.",
+        "Building unit area",
+        "Required rear or side margin"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "1",
+            "Up to 80",
+            "1.5 any one side"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D1"
+          ],
+          "authorityScope": "Rear and Side Margins : D1-RUDA, for DW-3, only for Building unit up to 500 sq.mt and Building height up to 16.50 mt,"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "2",
+            "Above 80 & up to 150",
+            "2.0 any one side"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D1"
+          ],
+          "authorityScope": "Rear and Side Margins : D1-RUDA, for DW-3, only for Building unit up to 500 sq.mt and Building height up to 16.50 mt,"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "3",
+            "Above 150 & up to 250",
+            "2.50 any one side"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D1"
+          ],
+          "authorityScope": "Rear and Side Margins : D1-RUDA, for DW-3, only for Building unit up to 500 sq.mt and Building height up to 16.50 mt,"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "4",
+            "Above 250 & up to 400",
+            "2.25 any two side"
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D1"
+          ],
+          "authorityScope": "Rear and Side Margins : D1-RUDA, for DW-3, only for Building unit up to 500 sq.mt and Building height up to 16.50 mt,"
+        },
+        {
+          "sourceRow": "5",
+          "sourceCells": [
+            "5",
+            "Above 400",
+            "3.00 all sides"
+          ],
+          "sortOrder": 5,
+          "categoryCodes": [
+            "D1"
+          ],
+          "authorityScope": "Rear and Side Margins : D1-RUDA, for DW-3, only for Building unit up to 500 sq.mt and Building height up to 16.50 mt,"
+        }
+      ],
+      "notes": [],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.28",
+      "title": "Table 6.28: Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 128,
+      "columnHeaders": [
+        "Sr. no.",
+        "Plot size",
+        "Rear R1/R3",
+        "Rear R2",
+        "Side R1/R3",
+        "Side R2",
+        "Balcony front (R1/R3)",
+        "Balcony side",
+        "Balcony rear",
+        "Stair landing"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "1",
+            "50",
+            "1.5",
+            "N.A.",
+            "-",
+            "N.A.",
+            "1.2 X 5",
+            "-",
+            "-",
+            "-"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "2",
+            "70",
+            "1.5",
+            "",
+            "-",
+            "",
+            "1.2 X 7",
+            "-",
+            "-",
+            "-"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "3",
+            "81(Row)",
+            "2.0",
+            "",
+            "-",
+            "",
+            "0.45 X 4",
+            "-",
+            "0.45 X 4",
+            "-"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "",
+            "81(Twin)",
+            "2.0",
+            "",
+            "1 side 2.0",
+            "",
+            "-",
+            "0.45 X 4",
+            "0.45 X 4",
+            "-"
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "5",
+          "sourceCells": [
+            "4",
+            "90",
+            "2.0",
+            "",
+            "1 side 2.0",
+            "",
+            "-",
+            "0.45 X 4",
+            "0.45 X 4",
+            "-"
+          ],
+          "sortOrder": 5,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "6",
+          "sourceCells": [
+            "5",
+            "135",
+            "2.15",
+            "",
+            "1 side 2.0",
+            "",
+            "1.20 X4",
+            "0.45 X 4",
+            "0.45 X 4",
+            "0.45"
+          ],
+          "sortOrder": 6,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "7",
+          "sourceCells": [
+            "6",
+            "200",
+            "2.0",
+            "",
+            "1 side 2.5",
+            "",
+            "No Balcony Allowed",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 7,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "8",
+          "sourceCells": [
+            "7",
+            "250",
+            "2.0",
+            "",
+            "1 side 3.0",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 8,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "9",
+          "sourceCells": [
+            "8",
+            "330",
+            "2.0",
+            "3.0",
+            "2.0",
+            "2.75",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 9,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "10",
+          "sourceCells": [
+            "9",
+            "504 &above*",
+            "3.0",
+            "4.0",
+            "2.0",
+            "3.0",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 10,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "11",
+          "sourceCells": [
+            "10",
+            "750**",
+            "",
+            "5.0",
+            "",
+            "4.0",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 11,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "12",
+          "sourceCells": [
+            "11",
+            "900**",
+            "",
+            "6.0",
+            "",
+            "4.5",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 12,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "13",
+          "sourceCells": [
+            "12",
+            "1100**",
+            "",
+            "7.0",
+            "",
+            "5.0",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 13,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        },
+        {
+          "sourceRow": "14",
+          "sourceCells": [
+            "13",
+            "1650 &Above**",
+            "",
+            "8.0",
+            "",
+            "6.0",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 14,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Minimum Road and other Side Margins : Residential zone 1, 2 & Residential Zone 3 for GMC"
+        }
+      ],
+      "notes": [
+        "Note:Residential Zone 1 means R1, Residential Zone 2 means R2, & Residential Zone 3 means R3.* P.S. 504 & above category refer for R1 & R3 Zone.** P.S. denotes size for R2 Zone.The End plots in different categories of plots with the area differing from its category the margin applicable shall be of the same category. Road side Margin:Minimum Road Side Margin shall be 6.0 mt. along Town Road in Residential Zone 1 & Residential Zone 3.Minimum Road Side Margin shall be 3.0 mt. along Town Road in Residential Zone 3."
+      ],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.29",
+      "title": "Table 6.29: Road Side Margin (Mts)",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 129,
+      "columnHeaders": [
+        "Sr. no.",
+        "Plot size",
+        "Town road R1",
+        "Town road R2",
+        "Town road R3",
+        "Interior road R1",
+        "Interior road R2",
+        "Interior road R3"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "1",
+            "50 & 70",
+            "6.0",
+            "N.A.",
+            "3.0",
+            "1.5",
+            "N.A.",
+            "1.5"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "2",
+            "81(Row & Twin)",
+            "6.0",
+            "N.A.",
+            "3.0",
+            "-",
+            "N.A.",
+            "-"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "3",
+            "90",
+            "6.0",
+            "N.A.",
+            "3.0",
+            "-",
+            "N.A.",
+            "-"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "4",
+            "135",
+            "6.0",
+            "N.A.",
+            "3.0",
+            "2.5",
+            "N.A.",
+            "2.5"
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        },
+        {
+          "sourceRow": "5",
+          "sourceCells": [
+            "5",
+            "200 & 250",
+            "6.0",
+            "N.A.",
+            "3.0",
+            "3.0",
+            "N.A.",
+            "4.0"
+          ],
+          "sortOrder": 5,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        },
+        {
+          "sourceRow": "6",
+          "sourceCells": [
+            "6",
+            "330",
+            "6.0",
+            "6.0.",
+            "3.0",
+            "3.0",
+            "5.0",
+            "3.0"
+          ],
+          "sortOrder": 6,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        },
+        {
+          "sourceRow": "7",
+          "sourceCells": [
+            "7",
+            "504 & above*",
+            "6.0",
+            "6.0",
+            "3.0",
+            "4.0",
+            "6.0",
+            "4.0"
+          ],
+          "sortOrder": 7,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        },
+        {
+          "sourceRow": "8",
+          "sourceCells": [
+            "8",
+            "750**",
+            "",
+            "",
+            "",
+            "",
+            "7.0",
+            ""
+          ],
+          "sortOrder": 8,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        },
+        {
+          "sourceRow": "9",
+          "sourceCells": [
+            "9",
+            "900**",
+            "",
+            "",
+            "",
+            "",
+            "8.0",
+            ""
+          ],
+          "sortOrder": 9,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        },
+        {
+          "sourceRow": "10",
+          "sourceCells": [
+            "10",
+            "1100**",
+            "",
+            "",
+            "",
+            "",
+            "10.0",
+            ""
+          ],
+          "sortOrder": 10,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        },
+        {
+          "sourceRow": "11",
+          "sourceCells": [
+            "11",
+            "1650 & Above**",
+            "",
+            "",
+            "",
+            "",
+            "12.0",
+            ""
+          ],
+          "sortOrder": 11,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road Side Margin (Mts)"
+        }
+      ],
+      "notes": [
+        "Note:Residential Zone 1 means R1, Residential Zone 2 means R2, & Residential Zone 3 means R3.* P.S. 504 & above category refer for R1 & R3 Zone** P.S. denotes size for R2 Zone.The End plots in different categories of plots, with the area differing from its category, the margin applicable shall be of the same category."
+      ],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.30",
+      "title": "Table 6.30 : Road side, Side and Rear margins for Residential Renewal Zone I (RR -1) for GMC",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 130,
+      "columnHeaders": [
+        "Road-side margin type",
+        "Road width up to 10 m",
+        "Road width over 10 to 18 m",
+        "Road width over 18 m",
+        "Side/rear margin type",
+        "Height up to 15 m",
+        "Height over 15 to 25 m"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Road sideMargins (mts)",
+            "3.0",
+            "4.5",
+            "6.0",
+            "side and rearMargins (mts)",
+            "3.0",
+            "4.0"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road side, Side and Rear margins for Residential Renewal Zone I (RR -1) for GMC"
+        }
+      ],
+      "notes": [],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.31",
+      "title": "Table 6.31: Road side margins For Commercial Zone I (C-1) for GMC",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 131,
+      "columnHeaders": [
+        "Road width",
+        "Front margin"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Less than 12",
+            "4.5"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road side margins For Commercial Zone I (C-1) for GMC"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "12 mts and above",
+            "6.0"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Road side margins For Commercial Zone I (C-1) for GMC"
+        }
+      ],
+      "notes": [],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.32",
+      "title": "Table 6.32: Side and Rear margins for Commercial Zone I (C-1) for GMC",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 132,
+      "columnHeaders": [
+        "Plot size",
+        "Side and rear margin"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Less than 1000",
+            "3.0"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Side and Rear margins for Commercial Zone I (C-1) for GMC"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "1000 and above",
+            "4.5"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Side and Rear margins for Commercial Zone I (C-1) for GMC"
+        }
+      ],
+      "notes": [],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.33",
+      "title": "Table 6.33: Margins for Green Institutional Zone I (GI-1) for GMC",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 133,
+      "columnHeaders": [
+        "Plot size",
+        "Front margin",
+        "Rear margin",
+        "Side margin",
+        "Max ground coverage"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "50 x 50 (2500)",
+            "10.0",
+            "8.0",
+            "8.0",
+            "40.0"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Green Institutional Zone I (GI-1) for GMC"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "25 x 50 (1250)",
+            "8.0",
+            "6.0",
+            "6.0",
+            "40.0"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Green Institutional Zone I (GI-1) for GMC"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "25 X 40 (1000)",
+            "6.0",
+            "6.0",
+            "6.0",
+            "40.0"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Green Institutional Zone I (GI-1) for GMC"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "20 x 30 (600)",
+            "6.0",
+            "4.0",
+            "4.0",
+            "40.0"
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Green Institutional Zone I (GI-1) for GMC"
+        },
+        {
+          "sourceRow": "5",
+          "sourceCells": [
+            "10 x 20 (200)",
+            "5.0",
+            "2.5",
+            "2.0",
+            "40.0"
+          ],
+          "sortOrder": 5,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Green Institutional Zone I (GI-1) for GMC"
+        },
+        {
+          "sourceRow": "6",
+          "sourceCells": [
+            "The end plots in different categories of plot with area differing from its category, the margin applicable shall be of the same category.The plot sizes shall be as per allotment by the government .",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 6,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Green Institutional Zone I (GI-1) for GMC"
+        }
+      ],
+      "notes": [],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.34",
+      "title": "Table 6.34: Margins for Institutional Zone III (I-3) for GMC",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 134,
+      "columnHeaders": [
+        "Road / side condition",
+        "Margin"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Less than 24",
+            "4.5"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Institutional Zone III (I-3) for GMC"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "24 mts and above width",
+            "6.0"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Institutional Zone III (I-3) for GMC"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "Minimum margins on remaining Sides",
+            "4.5"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Institutional Zone III (I-3) for GMC"
+        }
+      ],
+      "notes": [],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.35",
+      "title": "Table 6.35: Margins for Industrial Zone I and II (GIDC-1 and 2) for GMC",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 135,
+      "columnHeaders": [
+        "Road / side condition",
+        "Margin"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Min road side margin for plots abutting 30mt. andabove road",
+            "9.0"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Industrial Zone I and II (GIDC-1 and 2) for GMC"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "Min road side margin for plots abutting less than30mt.",
+            "6.0"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Industrial Zone I and II (GIDC-1 and 2) for GMC"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "All side margins for all plots",
+            "3.0"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Industrial Zone I and II (GIDC-1 and 2) for GMC"
+        }
+      ],
+      "notes": [],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.36",
+      "title": "Table 6.36: Margins for Recreational Zone I (Re-1) for GMC",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 136,
+      "columnHeaders": [
+        "Road / river / side condition",
+        "Margin"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Min road side margin for plots abutting “J” road",
+            "12.0"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Recreational Zone I (Re-1) for GMC"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "Min road side margin for plots other than abutting “J”road.",
+            "9.0"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Recreational Zone I (Re-1) for GMC"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "Minimum margin from river edge",
+            "30.0"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Recreational Zone I (Re-1) for GMC"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "All side margin for all plots",
+            "3.0"
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Recreational Zone I (Re-1) for GMC"
+        }
+      ],
+      "notes": [],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.37",
+      "title": "Table 6.37: Margins for Industrial use for GMC",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 137,
+      "columnHeaders": [
+        "Road width",
+        "Road-side margin",
+        "Side/rear ?1000 sq m",
+        "Side/rear >1000 sq m"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "",
+            "",
+            "Plot Area upto 1000sq.mt.",
+            "Plot Area above 1000sq.mt."
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Industrial use for GMC"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "Upto 12",
+            "As per side margin",
+            "4.5",
+            "6.0"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Industrial use for GMC"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "Above 12 and upto18",
+            "6.0",
+            "4.5",
+            "6.0"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Industrial use for GMC"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "Above 18 and upto30",
+            "7.5",
+            "4.5",
+            "6.0"
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Industrial use for GMC"
+        },
+        {
+          "sourceRow": "5",
+          "sourceCells": [
+            "Above 30",
+            "9.0",
+            "4.5",
+            "6.0"
+          ],
+          "sortOrder": 5,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "Margins for Industrial use for GMC"
+        }
+      ],
+      "notes": [],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.38",
+      "title": "Table 6.38: minimum side and rear margins for all building units upto 500 sq.mts for Dwelling – 1 & 2 for GMC",
+      "categoryCodes": [
+        "D6"
+      ],
+      "sourceTableSequence": 138,
+      "columnHeaders": [
+        "Building unit area / condition",
+        "Required rear margin",
+        "Required side margin"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Upto 150",
+            "2.25 mts",
+            "Not required"
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "minimum side and rear margins for all building units upto 500 sq.mts for Dwelling – 1 & 2 for GMC"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "Above 150 and upto 300",
+            "2.25 mts",
+            "1.5 mts (any one side)"
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "minimum side and rear margins for all building units upto 500 sq.mts for Dwelling – 1 & 2 for GMC"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "Above 300 and upto 500",
+            "2.25 mts",
+            "3.0mts (both sides)"
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "minimum side and rear margins for all building units upto 500 sq.mts for Dwelling – 1 & 2 for GMC"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "building unit area above 500 sq.mts and, the minimum side and rear margin other than DW1,DW2",
+            "",
+            ""
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "minimum side and rear margins for all building units upto 500 sq.mts for Dwelling – 1 & 2 for GMC"
+        },
+        {
+          "sourceRow": "5",
+          "sourceCells": [
+            "Area of building unit (sq.mts)",
+            "Building height",
+            "Required margins (mts)"
+          ],
+          "sortOrder": 5,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "minimum side and rear margins for all building units upto 500 sq.mts for Dwelling – 1 & 2 for GMC"
+        },
+        {
+          "sourceRow": "6",
+          "sourceCells": [
+            "Upto 750 sq.mts",
+            "Upto 25 mts",
+            "3.0"
+          ],
+          "sortOrder": 6,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "minimum side and rear margins for all building units upto 500 sq.mts for Dwelling – 1 & 2 for GMC"
+        },
+        {
+          "sourceRow": "7",
+          "sourceCells": [
+            "More than 750 sq.mts",
+            "Upto 15 mts",
+            "3.0"
+          ],
+          "sortOrder": 7,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "minimum side and rear margins for all building units upto 500 sq.mts for Dwelling – 1 & 2 for GMC"
+        },
+        {
+          "sourceRow": "8",
+          "sourceCells": [
+            "",
+            "Above 15 mts and upto 25 mts",
+            "4.0"
+          ],
+          "sortOrder": 8,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "minimum side and rear margins for all building units upto 500 sq.mts for Dwelling – 1 & 2 for GMC"
+        },
+        {
+          "sourceRow": "9",
+          "sourceCells": [
+            "",
+            "Above 25 mts and upto 45 mts",
+            "6.0"
+          ],
+          "sortOrder": 9,
+          "categoryCodes": [
+            "D6"
+          ],
+          "authorityScope": "minimum side and rear margins for all building units upto 500 sq.mts for Dwelling – 1 & 2 for GMC"
+        }
+      ],
+      "notes": [],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.40",
+      "title": "Table6.40: Minimum Road Side Margins : Category D9",
+      "categoryCodes": [
+        "D9"
+      ],
+      "sourceTableSequence": 140,
+      "columnHeaders": [
+        "Development type / condition",
+        "Road width / plot size",
+        "Front / road-side margin",
+        "Notes"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Width of road (in Mt.)",
+            "Minimum road side margins (In mt.)",
+            "",
+            ""
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "Up to 7.5 mt.",
+            "1.5",
+            "",
+            ""
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "More than 7.5 mt.& upto 12 mt",
+            "3.0",
+            "",
+            ""
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "More than 12 mt.& upto 20 mt.",
+            "4.5",
+            "",
+            ""
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "5",
+          "sourceCells": [
+            "More than 20 mt.& upto 30 mt.",
+            "6.0",
+            "",
+            ""
+          ],
+          "sortOrder": 5,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "6",
+          "sourceCells": [
+            "More than 30 mt.",
+            "7.5",
+            "",
+            ""
+          ],
+          "sortOrder": 6,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "7",
+          "sourceCells": [
+            "Industrial Development and Commercial Development :",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 7,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "8",
+          "sourceCells": [
+            "Plot Size",
+            "Front margin (In Mt.)",
+            "",
+            ""
+          ],
+          "sortOrder": 8,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "9",
+          "sourceCells": [
+            "50 sq. mt. to 100 sq. mt.",
+            "3.0",
+            "",
+            ""
+          ],
+          "sortOrder": 9,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "10",
+          "sourceCells": [
+            "101 sq. mt. to 200 sq. mt.",
+            "4.5",
+            "",
+            ""
+          ],
+          "sortOrder": 10,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "11",
+          "sourceCells": [
+            "201 sq. mt. to 300 sq. mt.",
+            "4.5",
+            "",
+            ""
+          ],
+          "sortOrder": 11,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "12",
+          "sourceCells": [
+            "301 sq. mt. to 500 sq. mt.",
+            "4.5",
+            "",
+            ""
+          ],
+          "sortOrder": 12,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "13",
+          "sourceCells": [
+            "501 sq. mt. to 10,000 sq. mt.",
+            "6.0",
+            "",
+            ""
+          ],
+          "sortOrder": 13,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "14",
+          "sourceCells": [
+            "10,001 sq. mt. to 50,000 sq. mt.",
+            "7.5",
+            "",
+            ""
+          ],
+          "sortOrder": 14,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "15",
+          "sourceCells": [
+            "50,001 sq. mt. and Above",
+            "9.0",
+            "",
+            ""
+          ],
+          "sortOrder": 15,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        },
+        {
+          "sourceRow": "16",
+          "sourceCells": [
+            "Public Uses: There shall be provided minimum margin of 9 mts from road side on any plotdevelopment for public uses.",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 16,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Road Side Margins : Category D9"
+        }
+      ],
+      "notes": [
+        "Note: No road side margin is required for plots admeasuring 25 sq. mt. Provided they aresituated on roads up to 7.5 mt width."
+      ],
+      "requiresSourceReview": false
+    },
+    {
+      "tableNumber": "6.41",
+      "title": "Table 6.41: Minimum Side & Rear Margins for Category D9 of Development Area",
+      "categoryCodes": [
+        "D9"
+      ],
+      "sourceTableSequence": 141,
+      "columnHeaders": [
+        "Development type / condition",
+        "Plot size",
+        "Rear margin",
+        "Side margin",
+        "Other source value / notes"
+      ],
+      "secondaryHeaders": [],
+      "rows": [
+        {
+          "sourceRow": "1",
+          "sourceCells": [
+            "Plot size (sq. mt.)",
+            "Margin (Mts)",
+            "Maximum built up area.",
+            "",
+            ""
+          ],
+          "sortOrder": 1,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "2",
+          "sourceCells": [
+            "Upto 25",
+            "Nil",
+            "75%",
+            "",
+            ""
+          ],
+          "sortOrder": 2,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "3",
+          "sourceCells": [
+            "",
+            "2 (on one side)",
+            "70%",
+            "",
+            ""
+          ],
+          "sortOrder": 3,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "4",
+          "sourceCells": [
+            "More than 50& upto 100",
+            "2 (on one side or in the rear side)",
+            "65%",
+            "",
+            ""
+          ],
+          "sortOrder": 4,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "5",
+          "sourceCells": [
+            "More than 100 & upto 250",
+            "2 (On one side)",
+            "60%",
+            "",
+            ""
+          ],
+          "sortOrder": 5,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "6",
+          "sourceCells": [
+            "More than 250 & and upto 400",
+            "2.50 (on one side)",
+            "50%",
+            "",
+            ""
+          ],
+          "sortOrder": 6,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "7",
+          "sourceCells": [
+            "More Than 400",
+            "3 on 2 side & rear.",
+            "40%",
+            "",
+            ""
+          ],
+          "sortOrder": 7,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "8",
+          "sourceCells": [
+            "Industrial and Commercial Development",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "sortOrder": 8,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "9",
+          "sourceCells": [
+            "Plot size (sq. mt.)",
+            "Rear margin (Mts)",
+            "Side Margin (Mts)",
+            "",
+            ""
+          ],
+          "sortOrder": 9,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "10",
+          "sourceCells": [
+            "",
+            "",
+            "I",
+            "II",
+            ""
+          ],
+          "sortOrder": 10,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "11",
+          "sourceCells": [
+            "Upto 100 sq. mt.",
+            "Nil",
+            "Nil",
+            "Nil",
+            ""
+          ],
+          "sortOrder": 11,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "12",
+          "sourceCells": [
+            "101 to 200 sq. mt.",
+            "1.5",
+            "-",
+            "1.5",
+            ""
+          ],
+          "sortOrder": 12,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "13",
+          "sourceCells": [
+            "201 to 300 sq. intr.",
+            "2.0",
+            "-",
+            "2.5",
+            ""
+          ],
+          "sortOrder": 13,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "14",
+          "sourceCells": [
+            "301 to 500 sq. intr.",
+            "3.0",
+            "-",
+            "3.0",
+            ""
+          ],
+          "sortOrder": 14,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "15",
+          "sourceCells": [
+            "501 to 1000 sq. mt.",
+            "3.0",
+            "3.0",
+            "3.0",
+            ""
+          ],
+          "sortOrder": 15,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "16",
+          "sourceCells": [
+            "1001 to 10,000 sq. mt.",
+            "4.5",
+            "4.5",
+            "4.5",
+            ""
+          ],
+          "sortOrder": 16,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "17",
+          "sourceCells": [
+            "10,001 to 50,000 sq. mt",
+            "9.0",
+            "4.5",
+            "4.5",
+            ""
+          ],
+          "sortOrder": 17,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "18",
+          "sourceCells": [
+            "Plot size (sq. mt.)",
+            "Margin (Mts)",
+            "Maximum built up area.",
+            "",
+            ""
+          ],
+          "sortOrder": 18,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        },
+        {
+          "sourceRow": "19",
+          "sourceCells": [
+            "Above 50,000 sq. mt.",
+            "9.0",
+            "9.0",
+            "9.0",
+            ""
+          ],
+          "sortOrder": 19,
+          "categoryCodes": [
+            "D9"
+          ],
+          "authorityScope": "Minimum Side & Rear Margins for Category D9 of Development Area"
+        }
+      ],
+      "notes": [
+        "In case of VUDA for addition/alteration on an existing Dw1 & DW2 type building approved under pervious GDCR a balcony projecting upto 1.2 mt can be permitted upto slab level subject to the condition that:-"
+      ],
+      "requiresSourceReview": false
+    }
+  ]
+}

@@ -8,7 +8,7 @@ import { db, withTransaction } from '../../config/database.js';
 import { authenticate, requireAdministrator } from '../auth/middleware.js';
 
 const directory = path.dirname(fileURLToPath(import.meta.url));
-const authorityTable = JSON.parse(readFileSync(path.resolve(directory, '../../../../data/development-authorities.json'), 'utf8'));
+const authorityTable = JSON.parse(readFileSync(path.resolve(directory, '../../../data/development-authorities.json'), 'utf8'));
 const categoryCodes = authorityTable.categories.map(({ code }) => code);
 const categoryByCode = new Map(authorityTable.categories.map((category) => [category.code, category]));
 const authorityTypes = ['Development authority', 'Municipality', 'Designated area', 'Industrial area', 'Other area'];

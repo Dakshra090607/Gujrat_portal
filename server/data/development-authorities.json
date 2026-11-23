@@ -1,0 +1,761 @@
+{
+  "tableNumber": "1.1",
+  "title": "Classification of Development Authorities, ULBs and Other Areas",
+  "source": "User-provided CGDCR Table 1.1 images",
+  "categories": [
+    {
+      "code": "D1",
+      "label": "D1 Urban Development Authorities",
+      "description": "Urban Development Authority constituted under Section 22 of the Gujarat Town Planning and Urban Development Act, 1976.",
+      "specialNote": "",
+      "authorities": [
+        {
+          "name": "Ahmedabad Urban Development Authority (AUDA)",
+          "authorityCode": "AUDA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Gandhinagar Urban Development Authority (GUDA)",
+          "authorityCode": "GUDA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Surat Urban Development Authority (SUDA)",
+          "authorityCode": "SUDA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Vadodara Urban Development Authority (VUDA)",
+          "authorityCode": "VUDA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Rajkot Urban Development Authority (RUDA)",
+          "authorityCode": "RUDA",
+          "authorityType": "Development authority"
+        }
+      ],
+      "sourceCount": 5
+    },
+    {
+      "code": "D2",
+      "label": "D2 Urban / Area Development Authorities",
+      "description": "Urban / Area Development Authority constituted under Section 22 or Section 5 of the Gujarat Town Planning and Urban Development Act, 1976.",
+      "specialNote": "",
+      "authorities": [
+        {
+          "name": "Junagadh Urban Development Authority (JuUDA)",
+          "authorityCode": "JuUDA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Jamnagar Area Development Authority (JADA)",
+          "authorityCode": "JADA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Bhavnagar Area Development Authority (BADA)",
+          "authorityCode": "BADA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Bharuch-Ankleshwar Urban Development Authority (BAUDA)",
+          "authorityCode": "BAUDA",
+          "authorityType": "Development authority"
+        }
+      ],
+      "sourceCount": 4
+    },
+    {
+      "code": "D3",
+      "label": "D3 Seismic Zone V authorities / municipality",
+      "description": "Area Development Authority constituted under Section 5 of the Gujarat Town Planning and Urban Development Act, 1976, and municipalities declared under the Gujarat Municipalities Act, 1963 included in Seismic Zone V.",
+      "specialNote": "",
+      "authorities": [
+        {
+          "name": "Bhuj Area Development Authority (BhuADA)",
+          "authorityCode": "BhuADA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Bhachau Area Development Authority (BhaADA)",
+          "authorityCode": "BhaADA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Rapar Area Development Authority (RADA)",
+          "authorityCode": "RADA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Anjar Area Development Authority (AADA)",
+          "authorityCode": "AADA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Mandvi (Kutch) Municipality",
+          "authorityCode": "",
+          "authorityType": "Municipality"
+        }
+      ],
+      "sourceCount": 5
+    },
+    {
+      "code": "D4",
+      "label": "D4 Other Urban / Area Development Authorities",
+      "description": "Urban / Area Development Authority constituted under Section 22 or Section 5 of the Gujarat Town Planning and Urban Development Act, 1976, in areas other than Seismic Zone V.",
+      "specialNote": "",
+      "authorities": [
+        {
+          "name": "Himmatnagar Urban Development Authority (HUDA)",
+          "authorityCode": "HUDA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Surendranagar-Wadhwan Urban Development Authority (SWUDA)",
+          "authorityCode": "SWUDA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Morbi-Wankaner Urban Development Authority (MWUDA)",
+          "authorityCode": "MWUDA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Bardoli Urban Development Authority (BUDA)",
+          "authorityCode": "BUDA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Navsari Urban Development Authority (NUDA)",
+          "authorityCode": "NUDA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Anand-Vidhyanagar-Karmasad Urban Development Authority (AVKUDA)",
+          "authorityCode": "AVKUDA",
+          "authorityType": "Development authority"
+        }
+      ],
+      "sourceCount": 6
+    },
+    {
+      "code": "D5",
+      "label": "D5 Special Project Area Development Authorities",
+      "description": "Area Development Authority constituted under Section 5 of the Gujarat Town Planning and Urban Development Act, 1976 (Special Project Areas).",
+      "specialNote": "",
+      "authorities": [
+        {
+          "name": "Alang Area Development Authority (AlADA)",
+          "authorityCode": "AlADA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Ambaji Area Development Authority (AmADA)",
+          "authorityCode": "AmADA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Shamlaji Area Development Authority (ShADA)",
+          "authorityCode": "ShADA",
+          "authorityType": "Development authority"
+        },
+        {
+          "name": "Khambhaliya Area Development Authority",
+          "authorityCode": "",
+          "authorityType": "Development authority"
+        }
+      ],
+      "sourceCount": 4
+    },
+    {
+      "code": "D6",
+      "label": "D6 Gandhidham Development Authority",
+      "description": "The Gandhidham (Development and Control on Erection of Buildings) Act, 1957 (Bombay Act No. XIX of 1958).",
+      "specialNote": "For Gandhidham Development Authority Area, Schedule 18 applies, except with respect to clauses 1 to 5 of these regulations.",
+      "authorities": [
+        {
+          "name": "Gandhidham Development Authority",
+          "authorityCode": "",
+          "authorityType": "Development authority"
+        }
+      ],
+      "sourceCount": 1
+    },
+    {
+      "code": "D7A",
+      "label": "D7A Designated Area Development Authorities",
+      "description": "Area Development Authority designated under Section 6 of the Gujarat Town Planning and Urban Development Act, 1976.",
+      "specialNote": "",
+      "authorities": [
+        {
+          "name": "Amreli",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Botad",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Godhra",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Jetpur-Navagadh",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Mahesana",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Nadiad",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Palanpur",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Patan",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Porbandar",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Valsad",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Vapi",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Veraval-Patan",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Bilimora",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Borsad",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Dabhoi",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Dahod",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Deesa",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Dhangadhra",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Dholka",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Dhoraji",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Gondal",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Kadi",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Keshod",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Khambhat",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Mahuva",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Mangrol",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Modasa",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Okha",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Palitana",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Petlad",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Savarkundala",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Siddhapur",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Una",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Unjha",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Upleta",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Viramgam",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Visnagar",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        }
+      ],
+      "sourceCount": 37
+    },
+    {
+      "code": "D7B",
+      "label": "D7B Designated Area Development Authorities",
+      "description": "Area Development Authority designated under Section 6 of the Gujarat Town Planning and Urban Development Act, 1976.",
+      "specialNote": "",
+      "authorities": [
+        {
+          "name": "Ahawa (Dang)",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Anklav",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Bagasara",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Balasinor",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Barwara",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Bavla",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Becharaji",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Bhayavdar",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Chansma",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Chhaya",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Chhotaudepur",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Chorwad",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Dakor",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Devgadhbaria",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Dhandhuka",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Dharampur",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Dharmaj",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Dwarka",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Gandevi",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Halol",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Halwad",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Idar",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Jagadiya",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Sultanpura",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Jambusar",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Jamjodhpur",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Kalawad",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Kalol (Godhra)",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Kapadvanj",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Karjan",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Kathor",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Kayavarohan",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Kheda",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Khedbrahma",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Kodinar",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Kosamba",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Limbdi",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Lunawda",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Manavadar",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Mandal",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Mandvi (Surat)",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Mansa",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Matar",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Pardi",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Prantij",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Radhanpur",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Rajpipla",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Ranpur",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Sankheda",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Santarampura",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Savali",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Shihor",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Sojitra",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Talod",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Tarsadi",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Thangadh",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Udwada",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Umargam",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Umreth",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Vadinar",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Vadnagar",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Vaghodia",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Vaso",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Vijapur",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Vyara",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        },
+        {
+          "name": "Waghai (Dang)",
+          "authorityCode": "",
+          "authorityType": "Designated area"
+        }
+      ],
+      "sourceCount": 66
+    },
+    {
+      "code": "D8",
+      "label": "D8 Other municipalities",
+      "description": "Municipalities declared under the Gujarat Municipalities Act, 1963 and not included in D1 to D6, D7(A), D7(B), or D9.",
+      "specialNote": "",
+      "authorities": [
+        {
+          "name": "Municipalities not included in D1?D6, D7A, D7B, or D9",
+          "authorityCode": "",
+          "authorityType": "Municipality"
+        }
+      ],
+      "sourceCount": null
+    },
+    {
+      "code": "D9",
+      "label": "D9 GIDC industrial estates / areas",
+      "description": "All industrial estates or industrial areas under the jurisdiction of Gujarat Industrial Development Corporation under the Gujarat Industrial Development Act, 1962.",
+      "specialNote": "",
+      "authorities": [
+        {
+          "name": "All industrial estates or industrial areas under GIDC",
+          "authorityCode": "",
+          "authorityType": "Industrial area"
+        }
+      ],
+      "sourceCount": null
+    },
+    {
+      "code": "D10",
+      "label": "D10 All other areas",
+      "description": "All areas other than D1 to D6, D7(A), D7(B), D8, and D9.",
+      "specialNote": "",
+      "authorities": [
+        {
+          "name": "All other areas not included in D1?D6, D7A, D7B, D8, or D9",
+          "authorityCode": "",
+          "authorityType": "Other area"
+        }
+      ],
+      "sourceCount": null
+    }
+  ]
+}

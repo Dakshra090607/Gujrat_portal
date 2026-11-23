@@ -8,7 +8,7 @@ import { db, withTransaction } from '../../config/database.js';
 import { authenticate, requireAdministrator } from '../auth/middleware.js';
 
 const directory = path.dirname(fileURLToPath(import.meta.url));
-const zoneTable = JSON.parse(readFileSync(path.resolve(directory, '../../../../data/table-6-2.json'), 'utf8'));
+const zoneTable = JSON.parse(readFileSync(path.resolve(directory, '../../../data/table-6-2.json'), 'utf8'));
 const developmentCategories = ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7A', 'D7B', 'D8', 'D9', 'D10'];
 const router = Router();
 

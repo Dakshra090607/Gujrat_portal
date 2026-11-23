@@ -1,0 +1,260 @@
+{
+  "tableNumber": "6.4",
+  "title": "Use control as per road width",
+  "source": "CGDCR 2017, user-provided Table 6.4 images",
+  "columns": [
+    "Sr. no.",
+    "Road width (m)",
+    "Building uses permitted: Core Wall (CW) & Gamtal (GM)",
+    "Building uses permitted: Other than Core Wall (CW) & Gamtal (GM)",
+    "Restrictions for commercial use (M1 & M2)"
+  ],
+  "notes": [
+    "Uses permissible in Logistic Zone shall be allowed irrespective of road width of TP Scheme.",
+    "Commercial use on ground and first floor shall be permitted on an existing building or otherwise abutting a road which is less than or equal to 12 m, provided a setback of 7.5 m from the road centre line is kept. Land falling in the setback shall be handed over to the competent authority without compensation. For computation of FSI, the area of the building unit prior to setback shall be considered."
+  ],
+  "rangeSemantics": "Road width lower bounds are inclusive; upper bounds are exclusive. Display labels show the tenth-of-a-metre steps appearing in the source table.",
+  "rows": [
+    {
+      "sourceRow": "1",
+      "roadWidthMinMeters": 0,
+      "roadWidthMaxExclusiveMeters": 9,
+      "coreWallGamtalUses": "DW1, DW2, DW3, H1",
+      "coreUseCodes": [
+        "DW1",
+        "DW2",
+        "DW3",
+        "H1"
+      ],
+      "coreInheritedRows": [],
+      "coreConditions": [],
+      "otherGamtalUses": "DW1, DW2, REG, H1",
+      "otherUseCodes": [
+        "DW1",
+        "DW2",
+        "REG",
+        "H1"
+      ],
+      "otherInheritedRows": [],
+      "otherConditions": [],
+      "commercialRestrictionText": "",
+      "commercialRestrictionLevels": [],
+      "commercialRestrictionNotes": "",
+      "sortOrder": 1,
+      "otherConditionalUseCodes": []
+    },
+    {
+      "sourceRow": "2",
+      "roadWidthMinMeters": 9,
+      "roadWidthMaxExclusiveMeters": 12,
+      "coreWallGamtalUses": "All permitted in Sr. No. 1 and M1, M2, HO, H1",
+      "coreUseCodes": [
+        "M1",
+        "M2",
+        "HO",
+        "H1"
+      ],
+      "coreInheritedRows": [
+        "1"
+      ],
+      "coreConditions": [],
+      "otherGamtalUses": "All permitted in Sr. No. 1 and DW3, EDU1, REG, AS1 (G+1), M1 & M2, H1, H2",
+      "otherUseCodes": [
+        "DW3",
+        "EDU1",
+        "REG",
+        "AS1",
+        "M1",
+        "M2",
+        "H1",
+        "H2"
+      ],
+      "otherInheritedRows": [
+        "1"
+      ],
+      "otherConditions": [
+        "AS1 (G+1), as shown in the source"
+      ],
+      "commercialRestrictionText": "Ground Floor Only",
+      "commercialRestrictionLevels": [
+        "GROUND"
+      ],
+      "commercialRestrictionNotes": "",
+      "sortOrder": 2,
+      "otherConditionalUseCodes": [
+        "AS1"
+      ]
+    },
+    {
+      "sourceRow": "3",
+      "roadWidthMinMeters": 12,
+      "roadWidthMaxExclusiveMeters": 18,
+      "coreWallGamtalUses": "All permitted in Sr. No. 2 and REG, PI, H2",
+      "coreUseCodes": [
+        "REG",
+        "PI",
+        "H2"
+      ],
+      "coreInheritedRows": [
+        "2"
+      ],
+      "coreConditions": [],
+      "otherGamtalUses": "All permitted in Sr. No. 2 and AS1, H3, PI, PU, TEMP. In addition for RUDA: M3, HO, INST, SP&L, REC, SE, M2, EDU2, AS3, AS4.",
+      "otherUseCodes": [
+        "AS1",
+        "H3",
+        "PI",
+        "PU",
+        "TEMP"
+      ],
+      "otherInheritedRows": [
+        "2"
+      ],
+      "otherConditions": [
+        "Additional listed uses apply for RUDA."
+      ],
+      "commercialRestrictionText": "Ground and First Floor Only. For RUDA and D2 category, all floors if hollow plinth is kept open for parking, provided such uses are permitted in D2 category on roads less than 15 m wide, after keeping a 7.5 m setback from the centre line of the road.",
+      "commercialRestrictionLevels": [
+        "GROUND",
+        "FIRST"
+      ],
+      "commercialRestrictionNotes": "RUDA and D2 exception: all floors are permitted where the hollow plinth is kept open for parking, subject to D2 uses being permitted on roads under 15 m wide and a 7.5 m setback from the road centre line.",
+      "sortOrder": 3,
+      "otherConditionalUseCodes": [
+        "M3",
+        "HO",
+        "INST",
+        "SP&L",
+        "REC",
+        "SE",
+        "M2",
+        "EDU2",
+        "AS3",
+        "AS4"
+      ]
+    },
+    {
+      "sourceRow": "4",
+      "roadWidthMinMeters": 18,
+      "roadWidthMaxExclusiveMeters": 24,
+      "coreWallGamtalUses": "DW1, DW2, DW3, M1, M2, REG, AS1, HO, PI, H1, H2, H3",
+      "coreUseCodes": [
+        "DW1",
+        "DW2",
+        "DW3",
+        "M1",
+        "M2",
+        "REG",
+        "AS1",
+        "HO",
+        "PI",
+        "H1",
+        "H2",
+        "H3"
+      ],
+      "coreInheritedRows": [],
+      "coreConditions": [],
+      "otherGamtalUses": "DW1, DW2, DW3, M1 (including Multiplex/Cinema theatre up to total combined seating capacity of 3 screens), M2, REG, EDU1, EDU2, INST, HO, AS1, AS4, SE, TEMP, REC, SCK, PI and PU, H1, H2, H3.",
+      "otherUseCodes": [
+        "DW1",
+        "DW2",
+        "DW3",
+        "M1",
+        "M2",
+        "REG",
+        "EDU1",
+        "EDU2",
+        "INST",
+        "HO",
+        "AS1",
+        "AS4",
+        "SE",
+        "TEMP",
+        "REC",
+        "SCK",
+        "PI",
+        "PU",
+        "H1",
+        "H2",
+        "H3"
+      ],
+      "otherInheritedRows": [],
+      "otherConditions": [
+        "M1 includes Multiplex/Cinema theatre up to a total combined seating capacity of 3 screens."
+      ],
+      "commercialRestrictionText": "All Floors",
+      "commercialRestrictionLevels": [
+        "ALL"
+      ],
+      "commercialRestrictionNotes": "",
+      "sortOrder": 4,
+      "otherConditionalUseCodes": [
+        "M1"
+      ]
+    },
+    {
+      "sourceRow": "5",
+      "roadWidthMinMeters": 24,
+      "roadWidthMaxExclusiveMeters": 30,
+      "coreWallGamtalUses": "All permitted in Sr. No. 4",
+      "coreUseCodes": [],
+      "coreInheritedRows": [
+        "4"
+      ],
+      "coreConditions": [],
+      "otherGamtalUses": "All permitted in Sr. No. 4 and M1 (including Multiplex/Cinema theatre up to total combined seating capacity of 5 screens), H4.",
+      "otherUseCodes": [
+        "H4"
+      ],
+      "otherInheritedRows": [
+        "4"
+      ],
+      "otherConditions": [
+        "M1 includes Multiplex/Cinema theatre up to a total combined seating capacity of 5 screens."
+      ],
+      "commercialRestrictionText": "All Floors",
+      "commercialRestrictionLevels": [
+        "ALL"
+      ],
+      "commercialRestrictionNotes": "",
+      "sortOrder": 5,
+      "otherConditionalUseCodes": [
+        "M1"
+      ]
+    },
+    {
+      "sourceRow": "6",
+      "roadWidthMinMeters": 30,
+      "roadWidthMaxExclusiveMeters": null,
+      "coreWallGamtalUses": "All permitted in Sr. No. 5 and EDU1",
+      "coreUseCodes": [
+        "EDU1"
+      ],
+      "coreInheritedRows": [
+        "5"
+      ],
+      "coreConditions": [],
+      "otherGamtalUses": "All permitted in Sr. No. 5 and M3, ST, TR, SP&L, SCK, AS2, AS3.",
+      "otherUseCodes": [
+        "M3",
+        "ST",
+        "TR",
+        "SP&L",
+        "SCK",
+        "AS2",
+        "AS3"
+      ],
+      "otherInheritedRows": [
+        "5"
+      ],
+      "otherConditions": [],
+      "commercialRestrictionText": "All Floors",
+      "commercialRestrictionLevels": [
+        "ALL"
+      ],
+      "commercialRestrictionNotes": "",
+      "sortOrder": 6,
+      "otherConditionalUseCodes": []
+    }
+  ]
+}

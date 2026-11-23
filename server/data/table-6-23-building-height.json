@@ -1,0 +1,742 @@
+{
+  "sourceDocument": "User-provided Table 6.23 images",
+  "regulationVersion": "CGDCR 2017 (as identified in source context)",
+  "scheduleTitle": "Building Height with respect to road width",
+  "analysisRules": [
+    {
+      "id": "building-height-road-width",
+      "text": "Regulation 6.6 says building height is regulated by the width of the road abutting the building unit; maximum permissible height follows Table 6.23, subject to its notes and other applicable provisions."
+    }
+  ],
+  "generalProvisions": [
+    {
+      "title": "6.6 Building Height",
+      "sourceText": [
+        "The height of building shall be regulated according to the width of the road on which it abuts.",
+        "The maximum permissible building height shall be regulated according to the width of the road on which it abuts as shown in Table 6.23.",
+        "If two buildings next to each other have different heights, the required margin for the taller building shall apply. The source example states that where one building is 25 mts and the adjacent building is 45 mts, the minimum margin between them shall be 9.0 mts.",
+        "Where the required margin is not provided, the length of common wall between any two semi-detached buildings shall not be less than 25% of the maximum width of the building parallel to the common wall joining them at every floor.",
+        "Maximum permissible building height is subject to clearance from the Airport Authority."
+      ]
+    }
+  ],
+  "table": {
+    "tableNumber": "6.23",
+    "title": "Table 6.23: Building Height with respect to road width",
+    "categoryCodes": [
+      "D1",
+      "D2",
+      "D3",
+      "D4",
+      "D5",
+      "D6",
+      "D7A",
+      "D7B",
+      "D8",
+      "D10"
+    ],
+    "columnHeaders": [
+      "Category of Authority / ULB",
+      "Road width (source wording)",
+      "Road width (normalized range)",
+      "Building height (mts)"
+    ],
+    "secondaryHeaders": [],
+    "rows": [
+      {
+        "sourceRow": "D1 except GMC* and RUDA AREA | Less than 9.0 mts",
+        "sourceCells": [
+          "D1 except GMC* and RUDA AREA",
+          "Less than 9.0 mts",
+          "0–8.9 m (less than 9 m)",
+          "10**"
+        ],
+        "categoryCodes": [
+          "D1"
+        ],
+        "authorityScope": "D1 excluding GMC and RUDA area",
+        "roadWidthLabel": "0–8.9 m (less than 9 m)",
+        "roadWidthMinMeters": 0,
+        "roadWidthMaxExclusiveMeters": 9,
+        "maximumBuildingHeightText": "10**",
+        "maximumBuildingHeightMeters": 10.0,
+        "footnoteMarkers": [
+          "**"
+        ],
+        "categoryFootnoteMarkers": [
+          "*"
+        ],
+        "sortOrder": 1
+      },
+      {
+        "sourceRow": "D1 except GMC* and RUDA AREA | 9 mts and less than 12.0 mts",
+        "sourceCells": [
+          "D1 except GMC* and RUDA AREA",
+          "9 mts and less than 12.0 mts",
+          "9–11.9 m (9 to less than 12 m)",
+          "16.5"
+        ],
+        "categoryCodes": [
+          "D1"
+        ],
+        "authorityScope": "D1 excluding GMC and RUDA area",
+        "roadWidthLabel": "9–11.9 m (9 to less than 12 m)",
+        "roadWidthMinMeters": 9,
+        "roadWidthMaxExclusiveMeters": 12,
+        "maximumBuildingHeightText": "16.5",
+        "maximumBuildingHeightMeters": 16.5,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [
+          "*"
+        ],
+        "sortOrder": 2
+      },
+      {
+        "sourceRow": "D1 except GMC* and RUDA AREA | 12 mts and less than 18 mts",
+        "sourceCells": [
+          "D1 except GMC* and RUDA AREA",
+          "12 mts and less than 18 mts",
+          "12–17.9 m (12 to less than 18 m)",
+          "30"
+        ],
+        "categoryCodes": [
+          "D1"
+        ],
+        "authorityScope": "D1 excluding GMC and RUDA area",
+        "roadWidthLabel": "12–17.9 m (12 to less than 18 m)",
+        "roadWidthMinMeters": 12,
+        "roadWidthMaxExclusiveMeters": 18,
+        "maximumBuildingHeightText": "30",
+        "maximumBuildingHeightMeters": 30.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [
+          "*"
+        ],
+        "sortOrder": 3
+      },
+      {
+        "sourceRow": "D1 except GMC* and RUDA AREA | 18 mts and less than 36 mts",
+        "sourceCells": [
+          "D1 except GMC* and RUDA AREA",
+          "18 mts and less than 36 mts",
+          "18–35.9 m (18 to less than 36 m)",
+          "45*"
+        ],
+        "categoryCodes": [
+          "D1"
+        ],
+        "authorityScope": "D1 excluding GMC and RUDA area",
+        "roadWidthLabel": "18–35.9 m (18 to less than 36 m)",
+        "roadWidthMinMeters": 18,
+        "roadWidthMaxExclusiveMeters": 36,
+        "maximumBuildingHeightText": "45*",
+        "maximumBuildingHeightMeters": 45.0,
+        "footnoteMarkers": [
+          "*"
+        ],
+        "categoryFootnoteMarkers": [
+          "*"
+        ],
+        "sortOrder": 4
+      },
+      {
+        "sourceRow": "D1 except GMC* and RUDA AREA | 36 mts & above",
+        "sourceCells": [
+          "D1 except GMC* and RUDA AREA",
+          "36 mts & above",
+          "36 m and above",
+          "70"
+        ],
+        "categoryCodes": [
+          "D1"
+        ],
+        "authorityScope": "D1 excluding GMC and RUDA area",
+        "roadWidthLabel": "36 m and above",
+        "roadWidthMinMeters": 36,
+        "roadWidthMaxExclusiveMeters": null,
+        "maximumBuildingHeightText": "70",
+        "maximumBuildingHeightMeters": 70.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [
+          "*"
+        ],
+        "sortOrder": 5
+      },
+      {
+        "sourceRow": "D1-RUDA, D2 | Less than 9.0 mts",
+        "sourceCells": [
+          "D1-RUDA, D2",
+          "Less than 9.0 mts",
+          "0–8.9 m (less than 9 m)",
+          "16.5"
+        ],
+        "categoryCodes": [
+          "D1",
+          "D2"
+        ],
+        "authorityScope": "D1-RUDA area; D2",
+        "roadWidthLabel": "0–8.9 m (less than 9 m)",
+        "roadWidthMinMeters": 0,
+        "roadWidthMaxExclusiveMeters": 9,
+        "maximumBuildingHeightText": "16.5",
+        "maximumBuildingHeightMeters": 16.5,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 6
+      },
+      {
+        "sourceRow": "D1-RUDA, D2 | 9 mts and less than 12.0 mts",
+        "sourceCells": [
+          "D1-RUDA, D2",
+          "9 mts and less than 12.0 mts",
+          "9–11.9 m (9 to less than 12 m)",
+          "16.5"
+        ],
+        "categoryCodes": [
+          "D1",
+          "D2"
+        ],
+        "authorityScope": "D1-RUDA area; D2",
+        "roadWidthLabel": "9–11.9 m (9 to less than 12 m)",
+        "roadWidthMinMeters": 9,
+        "roadWidthMaxExclusiveMeters": 12,
+        "maximumBuildingHeightText": "16.5",
+        "maximumBuildingHeightMeters": 16.5,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 7
+      },
+      {
+        "sourceRow": "D1-RUDA, D2 | 12 mts and less than 18 mts",
+        "sourceCells": [
+          "D1-RUDA, D2",
+          "12 mts and less than 18 mts",
+          "12–17.9 m (12 to less than 18 m)",
+          "30"
+        ],
+        "categoryCodes": [
+          "D1",
+          "D2"
+        ],
+        "authorityScope": "D1-RUDA area; D2",
+        "roadWidthLabel": "12–17.9 m (12 to less than 18 m)",
+        "roadWidthMinMeters": 12,
+        "roadWidthMaxExclusiveMeters": 18,
+        "maximumBuildingHeightText": "30",
+        "maximumBuildingHeightMeters": 30.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 8
+      },
+      {
+        "sourceRow": "D1-RUDA, D2 | 18 mts and less than 36 mts",
+        "sourceCells": [
+          "D1-RUDA, D2",
+          "18 mts and less than 36 mts",
+          "18–35.9 m (18 to less than 36 m)",
+          "45*"
+        ],
+        "categoryCodes": [
+          "D1",
+          "D2"
+        ],
+        "authorityScope": "D1-RUDA area; D2",
+        "roadWidthLabel": "18–35.9 m (18 to less than 36 m)",
+        "roadWidthMinMeters": 18,
+        "roadWidthMaxExclusiveMeters": 36,
+        "maximumBuildingHeightText": "45*",
+        "maximumBuildingHeightMeters": 45.0,
+        "footnoteMarkers": [
+          "*"
+        ],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 9
+      },
+      {
+        "sourceRow": "D1-RUDA, D2 | 36 mts & above",
+        "sourceCells": [
+          "D1-RUDA, D2",
+          "36 mts & above",
+          "36 m and above",
+          "70"
+        ],
+        "categoryCodes": [
+          "D1",
+          "D2"
+        ],
+        "authorityScope": "D1-RUDA area; D2",
+        "roadWidthLabel": "36 m and above",
+        "roadWidthMinMeters": 36,
+        "roadWidthMaxExclusiveMeters": null,
+        "maximumBuildingHeightText": "70",
+        "maximumBuildingHeightMeters": 70.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 10
+      },
+      {
+        "sourceRow": "D3, D6 | Less than 9.0 mts",
+        "sourceCells": [
+          "D3, D6",
+          "Less than 9.0 mts",
+          "0–8.9 m (less than 9 m)",
+          "11"
+        ],
+        "categoryCodes": [
+          "D3",
+          "D6"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "0–8.9 m (less than 9 m)",
+        "roadWidthMinMeters": 0,
+        "roadWidthMaxExclusiveMeters": 9,
+        "maximumBuildingHeightText": "11",
+        "maximumBuildingHeightMeters": 11.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 11
+      },
+      {
+        "sourceRow": "D3, D6 | 9 mts and less than 12.0 mts",
+        "sourceCells": [
+          "D3, D6",
+          "9 mts and less than 12.0 mts",
+          "9–11.9 m (9 to less than 12 m)",
+          "11"
+        ],
+        "categoryCodes": [
+          "D3",
+          "D6"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "9–11.9 m (9 to less than 12 m)",
+        "roadWidthMinMeters": 9,
+        "roadWidthMaxExclusiveMeters": 12,
+        "maximumBuildingHeightText": "11",
+        "maximumBuildingHeightMeters": 11.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 12
+      },
+      {
+        "sourceRow": "D3, D6 | 12 mts and less than 18 mts",
+        "sourceCells": [
+          "D3, D6",
+          "12 mts and less than 18 mts",
+          "12–17.9 m (12 to less than 18 m)",
+          "11"
+        ],
+        "categoryCodes": [
+          "D3",
+          "D6"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "12–17.9 m (12 to less than 18 m)",
+        "roadWidthMinMeters": 12,
+        "roadWidthMaxExclusiveMeters": 18,
+        "maximumBuildingHeightText": "11",
+        "maximumBuildingHeightMeters": 11.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 13
+      },
+      {
+        "sourceRow": "D3, D6 | 18 mts and less than 36 mts",
+        "sourceCells": [
+          "D3, D6",
+          "18 mts and less than 36 mts",
+          "18–35.9 m (18 to less than 36 m)",
+          "11"
+        ],
+        "categoryCodes": [
+          "D3",
+          "D6"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "18–35.9 m (18 to less than 36 m)",
+        "roadWidthMinMeters": 18,
+        "roadWidthMaxExclusiveMeters": 36,
+        "maximumBuildingHeightText": "11",
+        "maximumBuildingHeightMeters": 11.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 14
+      },
+      {
+        "sourceRow": "D3, D6 | 36 mts & above",
+        "sourceCells": [
+          "D3, D6",
+          "36 mts & above",
+          "36 m and above",
+          "11"
+        ],
+        "categoryCodes": [
+          "D3",
+          "D6"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "36 m and above",
+        "roadWidthMinMeters": 36,
+        "roadWidthMaxExclusiveMeters": null,
+        "maximumBuildingHeightText": "11",
+        "maximumBuildingHeightMeters": 11.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 15
+      },
+      {
+        "sourceRow": "D4, D5***, D7(A) | Less than 9.0 mts",
+        "sourceCells": [
+          "D4, D5***, D7(A)",
+          "Less than 9.0 mts",
+          "0–8.9 m (less than 9 m)",
+          "10**"
+        ],
+        "categoryCodes": [
+          "D4",
+          "D5",
+          "D7A"
+        ],
+        "authorityScope": "Shamlaji ADA note applies to D5 Special Zone-5",
+        "roadWidthLabel": "0–8.9 m (less than 9 m)",
+        "roadWidthMinMeters": 0,
+        "roadWidthMaxExclusiveMeters": 9,
+        "maximumBuildingHeightText": "10**",
+        "maximumBuildingHeightMeters": 10.0,
+        "footnoteMarkers": [
+          "**"
+        ],
+        "categoryFootnoteMarkers": [
+          "***"
+        ],
+        "sortOrder": 16
+      },
+      {
+        "sourceRow": "D4, D5***, D7(A) | 9 mts and less than 12.0 mts",
+        "sourceCells": [
+          "D4, D5***, D7(A)",
+          "9 mts and less than 12.0 mts",
+          "9–11.9 m (9 to less than 12 m)",
+          "16.5"
+        ],
+        "categoryCodes": [
+          "D4",
+          "D5",
+          "D7A"
+        ],
+        "authorityScope": "Shamlaji ADA note applies to D5 Special Zone-5",
+        "roadWidthLabel": "9–11.9 m (9 to less than 12 m)",
+        "roadWidthMinMeters": 9,
+        "roadWidthMaxExclusiveMeters": 12,
+        "maximumBuildingHeightText": "16.5",
+        "maximumBuildingHeightMeters": 16.5,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [
+          "***"
+        ],
+        "sortOrder": 17
+      },
+      {
+        "sourceRow": "D4, D5***, D7(A) | 12 mts and less than 18 mts",
+        "sourceCells": [
+          "D4, D5***, D7(A)",
+          "12 mts and less than 18 mts",
+          "12–17.9 m (12 to less than 18 m)",
+          "30"
+        ],
+        "categoryCodes": [
+          "D4",
+          "D5",
+          "D7A"
+        ],
+        "authorityScope": "Shamlaji ADA note applies to D5 Special Zone-5",
+        "roadWidthLabel": "12–17.9 m (12 to less than 18 m)",
+        "roadWidthMinMeters": 12,
+        "roadWidthMaxExclusiveMeters": 18,
+        "maximumBuildingHeightText": "30",
+        "maximumBuildingHeightMeters": 30.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [
+          "***"
+        ],
+        "sortOrder": 18
+      },
+      {
+        "sourceRow": "D4, D5***, D7(A) | 18 mts and less than 36 mts",
+        "sourceCells": [
+          "D4, D5***, D7(A)",
+          "18 mts and less than 36 mts",
+          "18–35.9 m (18 to less than 36 m)",
+          "45"
+        ],
+        "categoryCodes": [
+          "D4",
+          "D5",
+          "D7A"
+        ],
+        "authorityScope": "Shamlaji ADA note applies to D5 Special Zone-5",
+        "roadWidthLabel": "18–35.9 m (18 to less than 36 m)",
+        "roadWidthMinMeters": 18,
+        "roadWidthMaxExclusiveMeters": 36,
+        "maximumBuildingHeightText": "45",
+        "maximumBuildingHeightMeters": 45.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [
+          "***"
+        ],
+        "sortOrder": 19
+      },
+      {
+        "sourceRow": "D4, D5***, D7(A) | 36 mts & above",
+        "sourceCells": [
+          "D4, D5***, D7(A)",
+          "36 mts & above",
+          "36 m and above",
+          "45"
+        ],
+        "categoryCodes": [
+          "D4",
+          "D5",
+          "D7A"
+        ],
+        "authorityScope": "Shamlaji ADA note applies to D5 Special Zone-5",
+        "roadWidthLabel": "36 m and above",
+        "roadWidthMinMeters": 36,
+        "roadWidthMaxExclusiveMeters": null,
+        "maximumBuildingHeightText": "45",
+        "maximumBuildingHeightMeters": 45.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [
+          "***"
+        ],
+        "sortOrder": 20
+      },
+      {
+        "sourceRow": "D7(B), D8 | Less than 9.0 mts",
+        "sourceCells": [
+          "D7(B), D8",
+          "Less than 9.0 mts",
+          "0–8.9 m (less than 9 m)",
+          "10**"
+        ],
+        "categoryCodes": [
+          "D7B",
+          "D8"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "0–8.9 m (less than 9 m)",
+        "roadWidthMinMeters": 0,
+        "roadWidthMaxExclusiveMeters": 9,
+        "maximumBuildingHeightText": "10**",
+        "maximumBuildingHeightMeters": 10.0,
+        "footnoteMarkers": [
+          "**"
+        ],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 21
+      },
+      {
+        "sourceRow": "D7(B), D8 | 9 mts and less than 12.0 mts",
+        "sourceCells": [
+          "D7(B), D8",
+          "9 mts and less than 12.0 mts",
+          "9–11.9 m (9 to less than 12 m)",
+          "16.5"
+        ],
+        "categoryCodes": [
+          "D7B",
+          "D8"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "9–11.9 m (9 to less than 12 m)",
+        "roadWidthMinMeters": 9,
+        "roadWidthMaxExclusiveMeters": 12,
+        "maximumBuildingHeightText": "16.5",
+        "maximumBuildingHeightMeters": 16.5,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 22
+      },
+      {
+        "sourceRow": "D7(B), D8 | 12 mts and less than 18 mts",
+        "sourceCells": [
+          "D7(B), D8",
+          "12 mts and less than 18 mts",
+          "12–17.9 m (12 to less than 18 m)",
+          "25"
+        ],
+        "categoryCodes": [
+          "D7B",
+          "D8"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "12–17.9 m (12 to less than 18 m)",
+        "roadWidthMinMeters": 12,
+        "roadWidthMaxExclusiveMeters": 18,
+        "maximumBuildingHeightText": "25",
+        "maximumBuildingHeightMeters": 25.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 23
+      },
+      {
+        "sourceRow": "D7(B), D8 | 18 mts and less than 36 mts",
+        "sourceCells": [
+          "D7(B), D8",
+          "18 mts and less than 36 mts",
+          "18–35.9 m (18 to less than 36 m)",
+          "25"
+        ],
+        "categoryCodes": [
+          "D7B",
+          "D8"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "18–35.9 m (18 to less than 36 m)",
+        "roadWidthMinMeters": 18,
+        "roadWidthMaxExclusiveMeters": 36,
+        "maximumBuildingHeightText": "25",
+        "maximumBuildingHeightMeters": 25.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 24
+      },
+      {
+        "sourceRow": "D7(B), D8 | 36 mts & above",
+        "sourceCells": [
+          "D7(B), D8",
+          "36 mts & above",
+          "36 m and above",
+          "25"
+        ],
+        "categoryCodes": [
+          "D7B",
+          "D8"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "36 m and above",
+        "roadWidthMinMeters": 36,
+        "roadWidthMaxExclusiveMeters": null,
+        "maximumBuildingHeightText": "25",
+        "maximumBuildingHeightMeters": 25.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 25
+      },
+      {
+        "sourceRow": "D10 | Less than 9.0 mts",
+        "sourceCells": [
+          "D10",
+          "Less than 9.0 mts",
+          "0–8.9 m (less than 9 m)",
+          "10"
+        ],
+        "categoryCodes": [
+          "D10"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "0–8.9 m (less than 9 m)",
+        "roadWidthMinMeters": 0,
+        "roadWidthMaxExclusiveMeters": 9,
+        "maximumBuildingHeightText": "10",
+        "maximumBuildingHeightMeters": 10.0,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 26
+      },
+      {
+        "sourceRow": "D10 | 9 mts and less than 12.0 mts",
+        "sourceCells": [
+          "D10",
+          "9 mts and less than 12.0 mts",
+          "9–11.9 m (9 to less than 12 m)",
+          "16.5"
+        ],
+        "categoryCodes": [
+          "D10"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "9–11.9 m (9 to less than 12 m)",
+        "roadWidthMinMeters": 9,
+        "roadWidthMaxExclusiveMeters": 12,
+        "maximumBuildingHeightText": "16.5",
+        "maximumBuildingHeightMeters": 16.5,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 27
+      },
+      {
+        "sourceRow": "D10 | 12 mts and less than 18 mts",
+        "sourceCells": [
+          "D10",
+          "12 mts and less than 18 mts",
+          "12–17.9 m (12 to less than 18 m)",
+          "16.5"
+        ],
+        "categoryCodes": [
+          "D10"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "12–17.9 m (12 to less than 18 m)",
+        "roadWidthMinMeters": 12,
+        "roadWidthMaxExclusiveMeters": 18,
+        "maximumBuildingHeightText": "16.5",
+        "maximumBuildingHeightMeters": 16.5,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 28
+      },
+      {
+        "sourceRow": "D10 | 18 mts and less than 36 mts",
+        "sourceCells": [
+          "D10",
+          "18 mts and less than 36 mts",
+          "18–35.9 m (18 to less than 36 m)",
+          "16.5"
+        ],
+        "categoryCodes": [
+          "D10"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "18–35.9 m (18 to less than 36 m)",
+        "roadWidthMinMeters": 18,
+        "roadWidthMaxExclusiveMeters": 36,
+        "maximumBuildingHeightText": "16.5",
+        "maximumBuildingHeightMeters": 16.5,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 29
+      },
+      {
+        "sourceRow": "D10 | 36 mts & above",
+        "sourceCells": [
+          "D10",
+          "36 mts & above",
+          "36 m and above",
+          "16.5"
+        ],
+        "categoryCodes": [
+          "D10"
+        ],
+        "authorityScope": "",
+        "roadWidthLabel": "36 m and above",
+        "roadWidthMinMeters": 36,
+        "roadWidthMaxExclusiveMeters": null,
+        "maximumBuildingHeightText": "16.5",
+        "maximumBuildingHeightMeters": 16.5,
+        "footnoteMarkers": [],
+        "categoryFootnoteMarkers": [],
+        "sortOrder": 30
+      }
+    ],
+    "notes": [
+      "This table is from the user-provided images of Table 6.23: Building Height with respect to road width.",
+      "* 70 mts height may be permitted on 18 mts and wider road within High Density Development area, i.e. 200 mts from the outer boundary of the road. High Density Development means an area where maximum permissible FSI is more than 3.5 in D1 except GMC and D2.",
+      "** For DW1 and DW2 type residential buildings, maximum permissible building height shall be 12.0 mts.",
+      "*** Note for Shamlaji Area Development Authority: (a) In Commercial-1 zone proposed around Shamlaji Vishnu Temple within TP Scheme-1 in Shamlaji Village, maximum permissible building height shall not exceed 10.0 mts (Ground + 2 floors). (b) In Special Zone-5 proposed around Shamlaji Vishnu Temple within TP Scheme-1 in Shamlaji Village, maximum permissible building height shall not exceed 13.0 mts (Ground + 3 floors)."
+    ],
+    "sourceTableSequence": 21,
+    "sourceLocator": "User-provided Table 6.23 images",
+    "requiresSourceReview": false
+  }
+}

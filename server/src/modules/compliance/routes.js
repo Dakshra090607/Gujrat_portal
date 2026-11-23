@@ -11,9 +11,9 @@ import { loadCalculatorRoadWidthRows } from '../admin/calculator-road-width.js';
 
 const router = Router();
 const directory = path.dirname(fileURLToPath(import.meta.url));
-const authorityTable = JSON.parse(readFileSync(path.resolve(directory, '../../../../data/development-authorities.json'), 'utf8'));
-const useCodeTable = JSON.parse(readFileSync(path.resolve(directory, '../../../../data/table-6-3.json'), 'utf8'));
-const zoneTable = JSON.parse(readFileSync(path.resolve(directory, '../../../../data/table-6-2.json'), 'utf8'));
+const authorityTable = JSON.parse(readFileSync(path.resolve(directory, '../../../data/development-authorities.json'), 'utf8'));
+const useCodeTable = JSON.parse(readFileSync(path.resolve(directory, '../../../data/table-6-3.json'), 'utf8'));
+const zoneTable = JSON.parse(readFileSync(path.resolve(directory, '../../../data/table-6-2.json'), 'utf8'));
 const positiveNumber = z.coerce.number().finite().positive();
 const fsiSchema = z.object({
   developmentCategory: z.enum(['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7A', 'D7B', 'D8', 'D9', 'D10']).optional(),
