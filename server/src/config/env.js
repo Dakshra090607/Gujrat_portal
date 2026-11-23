@@ -12,5 +12,7 @@ export const projectRoot = path.resolve(directory, '../../..');
 if (process.env.BUILDRULE_SKIP_DOTENV !== '1') {
   dotenv.config({ path: path.join(projectRoot, '.env.local'), override: false });
   dotenv.config({ path: path.join(projectRoot, '.env'), override: false });
+  // A user-provided Neon CLI export may be named `env` without a dot prefix.
+  dotenv.config({ path: path.join(projectRoot, 'env'), override: false });
   dotenv.config({ path: path.join(projectRoot, 'server', '.env'), override: false });
 }

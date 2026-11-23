@@ -17,6 +17,13 @@ import {
 import { Link } from 'react-router-dom';
 import { api, getApiErrorMessage } from '../../lib/api.js';
 import { authClient } from '../../lib/auth.js';
+import CalculatorTablesPanel from './CalculatorTablesPanel.jsx';
+import CalculatorAuthoritiesPanel from './CalculatorAuthoritiesPanel.jsx';
+import CalculatorZonesPanel from './CalculatorZonesPanel.jsx';
+import CalculatorUseCodesPanel from './CalculatorUseCodesPanel.jsx';
+import CalculatorRoadWidthPanel from './CalculatorRoadWidthPanel.jsx';
+import CalculatorFsiSchedulesPanel from './CalculatorFsiSchedulesPanel.jsx';
+import CalculatorBuildingHeightPanel from './CalculatorBuildingHeightPanel.jsx';
 import './admin.css';
 
 const workflow = [
@@ -334,6 +341,15 @@ function AdminOverview({ overview, overviewError, refreshing, user, users, users
             </ul>
           </aside>
         </section>
+
+        <CalculatorZonesPanel />
+        <CalculatorUseCodesPanel />
+        <CalculatorRoadWidthPanel />
+        <CalculatorFsiSchedulesPanel />
+        <CalculatorBuildingHeightPanel />
+        <CalculatorFsiSchedulesPanel mode="margins" />
+        <CalculatorAuthoritiesPanel />
+        <CalculatorTablesPanel />
 
         <section className="admin-users-panel">
           <div className="admin-users-heading"><div><span className="admin-section-label">ACCOUNT ADMINISTRATION</span><h2>Users and access</h2><p>{count(usersPagination?.total)} accounts · manage roles, sign-in access, and account removal.</p></div><span className="admin-panel-icon"><LockKeyhole size={18} /></span></div>

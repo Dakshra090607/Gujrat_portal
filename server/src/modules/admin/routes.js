@@ -3,14 +3,83 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { db, withTransaction } from '../../config/database.js';
 import { authenticate, requireAdministrator } from '../auth/middleware.js';
+import { getBuiltInFsiRows, getFsiRowKey } from '../compliance/fsi-calculation.js';
+import calculatorAuthoritiesRouter from './calculator-authorities.js';
+import calculatorZonesRouter from './calculator-zones.js';
+import calculatorUseCodesRouter from './calculator-use-codes.js';
+import calculatorRoadWidthRouter from './calculator-road-width.js';
+import calculatorFsiSchedulesRouter from './calculator-fsi-schedules.js';
 
 const router = Router();
+router.use(calculatorAuthoritiesRouter);
+router.use(calculatorZonesRouter);
+router.use(calculatorUseCodesRouter);
+router.use(calculatorRoadWidthRouter);
+router.use(calculatorFsiSchedulesRouter);
 const workflowStatuses = ['QUEUED', 'IN_REVIEW', 'RETURNED_FOR_CORRECTION', 'REJECTED', 'APPROVED'];
 const userRoles = ['GENERAL_USER', 'PROFESSIONAL_USER', 'REVIEWER', 'ADMIN'];
 const canonicalModels = ['Chapter', 'Regulation', 'RegulatoryNode', 'RegulatoryTable', 'Definition', 'RegulatoryParameter', 'RegulatoryCrossReference'];
+const developmentCategories = ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7A', 'D7B', 'D8', 'D9', 'D10'];
+const fsiUseConditions = ['ALL', 'RESIDENTIAL_COMMERCIAL', 'INDUSTRIAL', 'AGRICULTURAL'];
+const calculatorFsiRowSchema = z.object({
+  categoryCode: z.enum(developmentCategories),
+  authorityScope: z.string().trim().regex(/^[A-Z0-9][A-Z0-9_-]{0,49}$/),
+  tableNumber: z.string().trim().regex(/^\d{1,2}\.\d{1,2}[A-Z]?$/),
+  zoneCode: z.string().trim().regex(/^(?:\*|[A-Z0-9][A-Z0-9_-]{0,19})$/),
+  useCondition: z.enum(fsiUseConditions).default('ALL'),
+  baseFsi: z.number().finite().min(0).max(100),
+  chargeableFsi: z.number().finite().min(0).max(100),
+  maximumFsi: z.number().finite().min(0).max(100),
+  notes: z.array(z.string().trim().min(1).max(1000)).max(30).default([]),
+}).strict();
+const calculatorTableNoteSchema = z.string().trim().min(1).max(1000);
 
 async function lockAdminChanges(client) {
   await db.query("SELECT pg_advisory_xact_lock(hashtext('buildrule-admin-account-changes'))", [], client);
+}
+
+async function lockCalculatorTableChanges(client) {
+  await db.query("SELECT pg_advisory_xact_lock(hashtext('buildrule-admin-calculator-fsi'))", [], client);
+}
+
+async function loadCalculatorOverrides(client = null) {
+  const result = await db.query('SELECT row_key, row_data, is_deleted, updated_at FROM calculator_fsi_overrides', [], client);
+  const builtInKeys = new Set(getBuiltInFsiRows().map((row) => row.key));
+  return result.rows.map(({ row_key: key, row_data: data, is_deleted: isDeleted, updated_at: updatedAt }) => ({ ...data, key, isDeleted, updatedAt, isBuiltIn: builtInKeys.has(key) }));
+}
+
+async function loadCalculatorTableRows(client = null) {
+  const rows = new Map(getBuiltInFsiRows().map((row) => [row.key, row]));
+  for (const override of await loadCalculatorOverrides(client)) {
+    const original = rows.get(override.key);
+    rows.set(override.key, { ...original, ...override, isBuiltIn: Boolean(original) });
+  }
+  return [...rows.values()];
+}
+
+function calculatorRowData(row) {
+  return {
+    categoryCode: row.categoryCode,
+    authorityScope: row.authorityScope,
+    tableNumber: row.tableNumber,
+    zoneCode: row.zoneCode,
+    useCondition: row.useCondition ?? 'ALL',
+    baseFsi: row.baseFsi,
+    chargeableFsi: row.chargeableFsi,
+    maximumFsi: row.maximumFsi,
+    notes: row.notes ?? [],
+  };
+}
+
+async function writeCalculatorOverride(client, { row, isDeleted, actorId, note, action, oldData, newData }) {
+  await db.query(`INSERT INTO calculator_fsi_overrides (row_key, row_data, is_deleted, updated_by, update_note)
+    VALUES ($1, $2::jsonb, $3, $4, $5)
+    ON CONFLICT (row_key) DO UPDATE SET row_data = EXCLUDED.row_data, is_deleted = EXCLUDED.is_deleted,
+      updated_by = EXCLUDED.updated_by, update_note = EXCLUDED.update_note, updated_at = now()`,
+  [row.key, JSON.stringify(calculatorRowData(row)), isDeleted, actorId, note], client);
+  await db.query(`INSERT INTO calculator_fsi_table_audit (id, row_key, actor_user_id, action, old_data, new_data, note)
+    VALUES ($1, $2, $3, $4, $5::jsonb, $6::jsonb, $7)`,
+  [randomUUID(), row.key, actorId, action, oldData ? JSON.stringify(oldData) : null, newData ? JSON.stringify(newData) : null, note], client);
 }
 
 router.get('/overview', authenticate, requireAdministrator, async (_req, res) => {
@@ -40,6 +109,93 @@ router.get('/overview', authenticate, requireAdministrator, async (_req, res) =>
     review: { workflow, pendingCount, totalCount, backfillRequired: source.candidates > 0 && totalCount === 0 },
     verified: { recordCount: verifiedRecords, parameterCount: verifiedByModel.RegulatoryParameter ?? 0 },
   } });
+});
+
+router.get('/calculator-tables', authenticate, requireAdministrator, async (_req, res) => {
+  const rows = await loadCalculatorTableRows();
+  res.set('Cache-Control', 'no-store');
+  res.json({ data: rows, total: rows.length });
+});
+
+router.post('/calculator-tables', authenticate, requireAdministrator, async (req, res) => {
+  const parsed = calculatorFsiRowSchema.extend({ note: calculatorTableNoteSchema }).strict().safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: { code: 'INVALID_CALCULATOR_TABLE_ROW', message: 'Enter a valid category, authority scope, source table, zone code, FSI values, and audit note.' } });
+  const { note, ...data } = parsed.data;
+  const key = getFsiRowKey(data);
+  const row = { ...data, key, isBuiltIn: false, isDeleted: false };
+  const saved = await withTransaction(async (client) => {
+    await lockCalculatorTableChanges(client);
+    const current = (await loadCalculatorTableRows(client)).find((item) => item.key === key);
+    if (current && !current.isDeleted) throw Object.assign(new Error('A table row already exists for this category, authority, zone, and use.'), { status: 409, code: 'CALCULATOR_TABLE_ROW_EXISTS' });
+    const action = current?.isDeleted ? 'RESTORED' : 'CREATED';
+    await writeCalculatorOverride(client, { row, isDeleted: false, actorId: req.user._id, note, action, oldData: current ? calculatorRowData(current) : null, newData: data });
+    return { ...row, isBuiltIn: Boolean(current?.isBuiltIn) };
+  });
+  res.status(201).json({ data: saved });
+});
+
+router.patch('/calculator-tables/:key', authenticate, requireAdministrator, async (req, res) => {
+  const key = z.string().min(1).max(180).safeParse(req.params.key);
+  const editableFields = calculatorFsiRowSchema.pick({ tableNumber: true, baseFsi: true, chargeableFsi: true, maximumFsi: true, notes: true });
+  const parsed = editableFields.extend({ note: calculatorTableNoteSchema }).strict().safeParse(req.body);
+  if (!key.success) return res.status(400).json({ error: { code: 'INVALID_CALCULATOR_TABLE_KEY', message: 'The table row identifier is invalid.' } });
+  if (!parsed.success) return res.status(400).json({ error: { code: 'INVALID_CALCULATOR_TABLE_ROW', message: 'Enter valid table values and an audit note.' } });
+  const { note, ...changes } = parsed.data;
+  const updated = await withTransaction(async (client) => {
+    await lockCalculatorTableChanges(client);
+    const current = (await loadCalculatorTableRows(client)).find((item) => item.key === key.data);
+    if (!current || current.isDeleted) return null;
+    const row = { ...current, ...changes };
+    await writeCalculatorOverride(client, { row, isDeleted: false, actorId: req.user._id, note, action: 'UPDATED', oldData: calculatorRowData(current), newData: calculatorRowData(row) });
+    return { ...row, updatedAt: new Date().toISOString() };
+  });
+  if (!updated) return res.status(404).json({ error: { code: 'CALCULATOR_TABLE_ROW_NOT_FOUND', message: 'The calculator table row was not found.' } });
+  res.json({ data: updated });
+});
+
+router.delete('/calculator-tables/:key', authenticate, requireAdministrator, async (req, res) => {
+  const key = z.string().min(1).max(180).safeParse(req.params.key);
+  const body = z.object({ note: calculatorTableNoteSchema }).strict().safeParse(req.body);
+  if (!key.success) return res.status(400).json({ error: { code: 'INVALID_CALCULATOR_TABLE_KEY', message: 'The table row identifier is invalid.' } });
+  if (!body.success) return res.status(400).json({ error: { code: 'AUDIT_NOTE_REQUIRED', message: 'Add an audit note to remove a calculator table row.' } });
+  const removed = await withTransaction(async (client) => {
+    await lockCalculatorTableChanges(client);
+    const current = (await loadCalculatorTableRows(client)).find((item) => item.key === key.data);
+    if (!current || current.isDeleted) return null;
+    const row = { ...current, isDeleted: true };
+    await writeCalculatorOverride(client, { row, isDeleted: true, actorId: req.user._id, note: body.data.note, action: 'DELETED', oldData: calculatorRowData(current), newData: null });
+    return row;
+  });
+  if (!removed) return res.status(404).json({ error: { code: 'CALCULATOR_TABLE_ROW_NOT_FOUND', message: 'The calculator table row was not found.' } });
+  res.json({ data: removed });
+});
+
+router.post('/calculator-tables/:key/restore', authenticate, requireAdministrator, async (req, res) => {
+  const key = z.string().min(1).max(180).safeParse(req.params.key);
+  const body = z.object({ note: calculatorTableNoteSchema }).strict().safeParse(req.body);
+  if (!key.success) return res.status(400).json({ error: { code: 'INVALID_CALCULATOR_TABLE_KEY', message: 'The table row identifier is invalid.' } });
+  if (!body.success) return res.status(400).json({ error: { code: 'AUDIT_NOTE_REQUIRED', message: 'Add an audit note to restore a calculator table row.' } });
+  const restored = await withTransaction(async (client) => {
+    await lockCalculatorTableChanges(client);
+    const current = (await loadCalculatorTableRows(client)).find((item) => item.key === key.data);
+    if (!current || !current.isDeleted) return null;
+    const row = { ...current, isDeleted: false };
+    await writeCalculatorOverride(client, { row, isDeleted: false, actorId: req.user._id, note: body.data.note, action: 'RESTORED', oldData: null, newData: calculatorRowData(row) });
+    return row;
+  });
+  if (!restored) return res.status(404).json({ error: { code: 'DELETED_CALCULATOR_TABLE_ROW_NOT_FOUND', message: 'No deleted calculator table row was found.' } });
+  res.json({ data: restored });
+});
+
+router.get('/calculator-tables/:key/audit', authenticate, requireAdministrator, async (req, res) => {
+  const key = z.string().min(1).max(180).safeParse(req.params.key);
+  if (!key.success) return res.status(400).json({ error: { code: 'INVALID_CALCULATOR_TABLE_KEY', message: 'The table row identifier is invalid.' } });
+  const result = await db.query(`SELECT a.id, a.action, a.old_data, a.new_data, a.note, a.created_at,
+      COALESCE(actor.name, '') AS actor_name, actor.email AS actor_email
+    FROM calculator_fsi_table_audit a LEFT JOIN app_users actor ON actor.id = a.actor_user_id
+    WHERE a.row_key = $1 ORDER BY a.created_at DESC LIMIT 100`, [key.data]);
+  res.set('Cache-Control', 'no-store');
+  res.json({ data: result.rows });
 });
 
 router.get('/users', authenticate, requireAdministrator, async (req, res) => {

@@ -19,7 +19,14 @@ export function createApp() {
     // Same-origin requests, mobile apps, or curl don't send an Origin header
     if (!origin) return true;
     if (configuredOrigin && (origin === configuredOrigin || configuredOrigin === '*')) return true;
-    if (origin === 'http://localhost:5173' || origin === 'http://127.0.0.1:5173') return true;
+    if ([
+      'http://localhost:5173',
+      'http://127.0.0.1:5173',
+      'http://localhost:5174',
+      'http://127.0.0.1:5174',
+      'http://localhost:5175',
+      'http://127.0.0.1:5175',
+    ].includes(origin)) return true;
     if (origin.endsWith('.vercel.app')) return true;
     return false;
   };

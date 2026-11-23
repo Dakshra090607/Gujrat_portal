@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { api, getApiErrorMessage, setAccessToken } from './lib/api.js';
 import ReviewWorkbench from './features/review/ReviewWorkbench.jsx';
@@ -6,6 +6,8 @@ import AdminDashboard from './features/admin/AdminDashboard.jsx';
 import AuthPage from './features/auth/AuthPage.jsx';
 import ProfilePage from './features/auth/ProfilePage.jsx';
 import { authClient } from './lib/auth.js';
+import buildingHeightSource from '../../data/table-6-23-building-height.json';
+import zoneTableFallback from '../../data/table-6-2.json';
 import {
   ArrowDownRight, ArrowRight, BookOpen, Building2, Calculator, CheckCircle2, LogOut,
   ChevronDown, CircleHelp, Compass, FileCheck2, FileText, Layers3, Menu,
@@ -16,7 +18,7 @@ const navItems = [
   { label: 'Overview', to: '/app', icon: Compass },
   { label: 'Regulation explorer', to: '/regulations', icon: BookOpen },
   { label: 'Search regulations', to: '/search', icon: Search },
-  { label: 'FSI calculator', to: '/fsi-calculator', icon: Calculator },
+  { label: 'Calculator', to: '/fsi-calculator', icon: Calculator },
   { label: 'Compliance checker', to: '/compliance', icon: FileCheck2 },
   { label: 'Permission guide', to: '/permission-guide', icon: Layers3 },
   { label: 'Admin console', to: '/admin', icon: ShieldCheck },
@@ -138,7 +140,7 @@ function EmptyWorkspace({ title, description, icon: Icon = Sparkles, eyebrow = '
   return <div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> {eyebrow}</div><div className="empty-hero"><div className="empty-icon"><Icon size={23} /></div><h1>{title}</h1><p>{description}</p><div className="progress-note"><span className="progress-mark"><CheckCircle2 size={16} /></span><span><b>Source documents loaded</b><small>292 of 292 pages have selectable text. Extracted material is still awaiting regulatory review.</small></span></div><div className="empty-actions"><Link className="button button-primary" to="/search">Search extracted text <ArrowRight size={16} /></Link><Link className="button button-outline" to="/regulations">Open source explorer</Link></div></div><div className="source-cards"><div><span className="source-part">PART I</span><b>Procedure Regulations</b><small>166 pages · extracted, not verified</small></div><div><span className="source-part">PART II</span><b>Planning Regulations</b><small>76 pages · extracted, not verified</small></div><div><span className="source-part">PART III</span><b>Performance Regulation</b><small>50 pages · extracted, not verified</small></div></div></div>;
 }
 
-function Dashboard() { return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> OVERVIEW</div><div className="dashboard-title"><div><h1>Good afternoon.</h1><p>Your Gujarat regulatory workspace is ready to explore.</p></div><span className="date-chip">CGDCR · 2017</span></div><div className="dash-banner"><div><div className="eyebrow">REGULATORY DATA STATUS</div><h2>Source text extracted. Review is in progress.</h2><p>All three supplied documents are available. Configured numeric CGDCR rows provide preliminary FSI estimates; unsupported cases and compliance findings remain unresolved pending review.</p><Link to="/regulations" className="banner-link">View extraction status <ArrowRight size={15} /></Link></div><div className="banner-stat"><b>292</b><span>PDF pages</span><small>across 3 source documents</small></div></div><div className="quick-grid">{navItems.slice(1).map(({label,to,icon:Icon},i)=><Link key={to} to={to} className="quick-card"><span className={`quick-icon quick-${i}`}><Icon size={19}/></span><span className="quick-overline">{['SOURCE PORTAL','REGULATORY SEARCH','DEVELOPMENT TOOL','PRELIMINARY CHECK','PROCEDURE','ADMINISTRATION'][i]}</span><b>{label}</b><small>{['Explore parts and extracted pages','Search page-linked source text','Preliminary table-based FSI estimates','Checks require reviewed rules','Source-linked stages pending review','Review candidates and verify source-backed records'][i]}</small><ArrowRight size={16} className="quick-arrow"/></Link>)}</div><div className="dashboard-bottom"><div className="panel-card"><div className="panel-head"><div><span className="panel-label">RECENT ACTIVITY</span><h3>Pick up where you left off</h3></div><span className="soft-badge">LOCAL WORKSPACE</span></div><div className="activity-empty"><div className="activity-icon"><BookOpen size={18}/></div><div><b>Your activity will appear here</b><p>Browse source pages or start a project to build your workspace history.</p></div></div></div><div className="panel-card integrity-card"><span className="panel-label">DATA INTEGRITY</span><h3>Trace every provision.</h3><p>Original source, page reference, and review status stay visible as regulatory records are prepared.</p><div className="integrity-row"><ShieldCheck size={16}/><span>Unsupported FSI cases remain unresolved</span></div></div></div></div></AppShell>; }
+function Dashboard() { return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> OVERVIEW</div><div className="dashboard-title"><div><h1>Good afternoon.</h1><p>Your Gujarat regulatory workspace is ready to explore.</p></div><span className="date-chip">CGDCR · 2017</span></div><div className="dash-banner"><div><div className="eyebrow">REGULATORY DATA STATUS</div><h2>Source text extracted. Review is in progress.</h2><p>All three supplied documents are available. Configured CGDCR values provide preliminary FSI estimates; unsupported cases and compliance findings remain unresolved pending review.</p><Link to="/regulations" className="banner-link">View extraction status <ArrowRight size={15} /></Link></div><div className="banner-stat"><b>292</b><span>PDF pages</span><small>across 3 source documents</small></div></div><div className="quick-grid">{navItems.slice(1).map(({label,to,icon:Icon},i)=><Link key={to} to={to} className="quick-card"><span className={`quick-icon quick-${i}`}><Icon size={19}/></span><span className="quick-overline">{['SOURCE PORTAL','REGULATORY SEARCH','DEVELOPMENT TOOL','PRELIMINARY CHECK','PROCEDURE','ADMINISTRATION'][i]}</span><b>{label}</b><small>{['Explore parts and extracted pages','Search page-linked source text','Preliminary FSI estimates','Checks require reviewed rules','Source-linked stages pending review','Review candidates and verify source-backed records'][i]}</small><ArrowRight size={16} className="quick-arrow"/></Link>)}</div><div className="dashboard-bottom"><div className="panel-card"><div className="panel-head"><div><span className="panel-label">RECENT ACTIVITY</span><h3>Pick up where you left off</h3></div><span className="soft-badge">LOCAL WORKSPACE</span></div><div className="activity-empty"><div className="activity-icon"><BookOpen size={18}/></div><div><b>Your activity will appear here</b><p>Browse source pages or start a project to build your workspace history.</p></div></div></div><div className="panel-card integrity-card"><span className="panel-label">DATA INTEGRITY</span><h3>Trace every provision.</h3><p>Original source, page reference, and review status stay visible as regulatory records are prepared.</p><div className="integrity-row"><ShieldCheck size={16}/><span>Unsupported FSI cases remain unresolved</span></div></div></div></div></AppShell>; }
 
 function PlaceholderPage({ title, description, icon }) { return <AppShell><EmptyWorkspace title={title} description={description} icon={icon} /></AppShell>; }
 
@@ -240,19 +242,72 @@ function RegulationSearch() {
   </div></AppShell>;
 }
 
-const DEVELOPMENT_CATEGORIES = [
-  { code: 'D1', label: 'D1 — Urban Development Authorities', authorities: ['Ahmedabad Urban Development Authority (AUDA)', 'Gandhinagar Urban Development Authority (GUDA)', 'Surat Urban Development Authority (SUDA)', 'Vadodara Urban Development Authority (VUDA)', 'Rajkot Urban Development Authority (RUDA)'] },
-  { code: 'D2', label: 'D2 — Urban / Area Development Authorities', authorities: ['Junagadh Urban Development Authority (JuUDA)', 'Jamnagar Area Development Authority (JADA)', 'Bhavnagar Area Development Authority (BADA)', 'Bharuch-Ankleshwar Urban Development Authority (BAUDA)'] },
-  { code: 'D3', label: 'D3 — Seismic Zone V authorities / municipality', authorities: ['Bhuj Area Development Authority (BhuADA)', 'Bhachau Area Development Authority (BhaADA)', 'Rapar Area Development Authority (RADA)', 'Anjar Area Development Authority (AADA)', 'Mandvi (Kutch) Municipality'] },
-  { code: 'D4', label: 'D4 — Other Urban / Area Development Authorities', authorities: ['Himmatnagar Urban Development Authority (HUDA)', 'Surendranagar-Wadhwan Urban Development Authority (SWUDA)', 'Morbi-Wankaner Urban Development Authority (MWUDA)', 'Bardoli Urban Development Authority (BUDA)', 'Navsari Urban Development Authority (NUDA)', 'Anand-Vidhyanagar-Karmasad Urban Development Authority (AVKUDA)'] },
-  { code: 'D5', label: 'D5 — Special Project Area Development Authorities', authorities: ['Alang Area Development Authority (AlADA)', 'Ambaji Area Development Authority (AmADA)', 'Shamlaji Area Development Authority (ShADA)', 'Khambhaliya Area Development Authority'] },
-  { code: 'D6', label: 'D6 — Gandhidham Development Authority', authorities: ['Gandhidham Development Authority'] },
-  { code: 'D7A', label: 'D7A — Designated Area Development Authorities', authorities: ['Amreli', 'Botad', 'Godhra', 'Jetpur-Navagadh', 'Mahesana', 'Nadiad', 'Palanpur', 'Patan', 'Porbandar', 'Valsad', 'Vapi', 'Veraval-Patan', 'Bilimora', 'Borsad', 'Dabhoi', 'Dahod', 'Deesa', 'Dhangadhra', 'Dholka', 'Dhoraji', 'Gondal', 'Kadi', 'Keshod', 'Khambhat', 'Mahuva', 'Mangrol', 'Modasa', 'Okha', 'Palitana', 'Petlad', 'Savarkundala', 'Siddhapur', 'Una', 'Unjha', 'Upleta', 'Viramgam', 'Visnagar'] },
-  { code: 'D7B', label: 'D7B — Designated Area Development Authorities', authorities: ['Ahawa (Dang)', 'Anklav', 'Bagasara', 'Balasinor', 'Barwara', 'Bavla', 'Becharaji', 'Bhayavdar', 'Chansma', 'Chhaya', 'Chhotaudepur', 'Chorwad', 'Dakor', 'Devgadhbaria', 'Dhandhuka', 'Dharampur', 'Dharmaj', 'Dwarka', 'Gandevi', 'Halol', 'Halwad', 'Idar', 'Jagadiya-Sultanpura', 'Jambusar', 'Jamjodhpur', 'Kalawad', 'Kalol (Godhra)', 'Kapadvanj', 'Karjan', 'Kathor', 'Kayavarohan', 'Kheda', 'Khedbrahma', 'Kodinar', 'Kosamba', 'Limbdi', 'Lunawda', 'Manavadar', 'Mandal', 'Mandvi (Surat)', 'Mansa', 'Matar', 'Pardi', 'Prantij', 'Radhanpur', 'Rajpipla', 'Ranpur', 'Sankheda', 'Santarampura', 'Savali', 'Shihor', 'Sojitra', 'Talod', 'Tarsadi', 'Thangadh', 'Udwada', 'Umargam', 'Umreth', 'Vadinar', 'Vadnagar', 'Vaghodia', 'Vaso', 'Vijapur', 'Vyara', 'Waghai (Dang)'] },
-  { code: 'D8', label: 'D8 — Other municipalities', authorities: ['Other municipality (enter name in Development area)'] },
-  { code: 'D9', label: 'D9 — GIDC industrial estates / areas', authorities: ['GIDC industrial estate / area (enter name in Development area)'] },
-  { code: 'D10', label: 'D10 — All other areas', authorities: ['Other area (enter name in Development area)'] },
-];
+function AuthoritySearchSelect({ categories, categoryCode, value, query, onQueryChange, onSelect, disabled = false }) {
+  const [open, setOpen] = useState(false);
+  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const options = categories
+    .filter((category) => !categoryCode || category.code === categoryCode)
+    .flatMap((category) => category.authorities.map((authorityRow) => ({
+      authority: typeof authorityRow === 'string' ? authorityRow : authorityRow.name,
+      authorityCode: typeof authorityRow === 'string' ? '' : authorityRow.authorityCode,
+      authorityType: typeof authorityRow === 'string' ? '' : authorityRow.authorityType,
+      categoryCode: category.code,
+      categoryLabel: category.label,
+    })))
+    .filter(({ authority, authorityCode: code, authorityType, categoryCode: optionCode, categoryLabel }) =>
+      !normalizedQuery || `${authority} ${code} ${authorityType} ${optionCode} ${categoryLabel}`.toLocaleLowerCase().includes(normalizedQuery)
+    );
+  const visibleOptions = options;
+
+  return <div className="authority-search-select" onBlur={(event) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+  }}>
+    <input
+      role="combobox"
+      aria-label="Search development authority or ULB"
+      aria-autocomplete="list"
+      aria-expanded={open}
+      aria-controls="authority-options"
+      autoComplete="off"
+      required
+      disabled={disabled}
+      value={query}
+      placeholder={categoryCode ? 'Search or select an authority / ULB' : 'Search or select any authority / ULB'}
+      onFocus={() => setOpen(true)}
+      onChange={(event) => { onQueryChange(event.target.value); setOpen(true); }}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape') setOpen(false);
+        if (event.key === 'ArrowDown' && open && visibleOptions.length) {
+          event.preventDefault();
+          document.querySelector('#authority-options button')?.focus();
+        }
+        if (event.key === 'Enter' && open) {
+          event.preventDefault();
+          if (visibleOptions.length === 1) {
+            onSelect(visibleOptions[0]);
+            setOpen(false);
+          }
+        }
+      }}
+    />
+    {open && <div className="authority-options" id="authority-options" role="listbox" aria-label="Development authorities">
+      {visibleOptions.length ? visibleOptions.map((option) => (
+        <button
+          className="authority-option"
+          type="button"
+          role="option"
+          aria-selected={option.authority === value && option.categoryCode === categoryCode}
+          key={`${option.categoryCode}-${option.authority}`}
+          onClick={() => { onSelect(option); setOpen(false); }}
+        >
+          <span>{option.authority}</span>
+          <small>{option.categoryCode} - {option.categoryLabel.slice(option.categoryCode.length).trim().replace(/^[-\u2013\u2014]\s*/, '')}</small>
+        </button>
+      )) : <div className="authority-no-results">No matching authority. Try a shorter search.</div>}
+      {options.length > 0 && <div className="authority-result-count">{options.length} results. Type to narrow the list.</div>}
+    </div>}
+  </div>;
+}
 
 const DESIGNATED_ZONES = [
   { zone: 'Core Walled City', conceptualisedZone: 'Core Walled Area', code: 'CW', permissibleUse: 'AS1, DW1, DW2, DW3, EDU1, H1, H2, HO, INST, M1, M2, PI, PU, REG, REC, SP&L, TEMP.' },
@@ -340,120 +395,177 @@ const DESIGNATED_ZONES = [
   { zone: 'GIDC', conceptualisedZone: 'GIDC', code: 'GIDC', permissibleUse: 'As specified by GIDC.' },
 ];
 
-const TABLE_6_3_USES = {
-  DW1: { classification: 'Dwelling-1', details: 'Detached dwelling unit, Clinic not having indoor treatment facility.' },
-  DW2: { classification: 'Dwelling-2', details: 'Semi-detached dwelling unit, Row House, Tenement, Chawls, Farm House, Clinic not having indoor treatment facility, Cottage Industry (not involving use or installation of any kind which may create noise, vibration, fume or dust). Home occupant and cottage industry shall not be permitted in tenement dwelling/flats. Part of a residential building may be used for professional requirements, as office, by advocate, doctors, architects, engineers and chartered accountants and Jari Industry.' },
-  DW3: { classification: 'Dwelling-3', details: 'Apartment, Hostel, Dharamshala, Pre-school and Affordable Housing.' },
-  M1: { classification: 'Mercantile-1', details: 'Shop, Business, Restaurant, Shopping Centre, Light Home Workshop, LPG Cylinder Godown, Service Establishment, Clinic, Fitness Centre.' },
-  M2: { classification: 'Mercantile-2', details: 'Shopping Mall, Laboratory, Nursing Home, Maternity Home, Kerosene Depot, Corporate Offices, Call Centres, Training Centres, CinePlex (maximum seating capacity of 40 seats).' },
-  M3: { classification: 'Mercantile-3', details: 'Wholesale Market, Indoor Hospital, Diamond Industry, Wholesale Market and their ancillary uses, Activity Related to I.T.' },
-  EDU1: { classification: 'Educational-1', details: 'Primary Schools, Secondary Schools, Higher Secondary Schools.' },
-  EDU2: { classification: 'Educational-2', details: 'College, Polytechnic, University and ancillary use.' },
-  AS1: { classification: 'Assembly-1', details: 'Community Hall, Banquet Hall, Town Hall.' },
-  AS2: { classification: 'Assembly-2', details: 'Convention Centre, Exhibition Hall, Auditorium, Planetarium, Stadium, Museum, Exhibition Halls, Wadi.' },
-  AS3: { classification: 'Assembly-3', details: 'Theatre, Cinema, Multiplex, Drive-in Cinema, Clubs, Golf Course.' },
-  AS4: { classification: 'Assembly-4', details: 'Party Plot, Garden Restaurants.' },
-  INST: { classification: 'Institutional', details: 'Research Centres. Dwelling-1, 2 and 3, Retail Shop and Restaurants as a part of Educational Institute up to 20% of Utilised FSI.' },
-  REG: { classification: 'Religious', details: 'Temples, Church, Mosque, Gurudwara, Synagogue, Upashraya, Sant Niwas or any Religious Structure.' },
-  HO: { classification: 'Hospitality', details: 'Bed and Breakfast, Guest House, Lodging and Boarding, Hotel, Motel, Serviced Apartment.' },
-  SE: { classification: 'Service Establishment', details: 'Auto Repair, Workshop, Wood Workshop, Fabrication, Public-Garage.' },
-  IN1: { classification: 'Industrial-1', details: 'All type of Light, Service Industries, Small Factories, Warehouses, Newspaper Printing Press, Concrete Batching Plant, stone cutting and polishing; Poultry Farm, Dairy, Assembly Plant, Shipping Recycling Unit, Scrap Processing/Cutting Unit, Scrap Sorting Yard, Industrial Row House.' },
-  IN1A: { classification: 'Industrial-1A', details: 'All industries manufacturing tiles, feeting for bathroom and sanitary wares, ceramic, ceramic store, clay, glass and also ancillary industries related to manufacture of tiles, clay bricks, concrete blocks for paving and other materials and their utensils.' },
-  IN2: { classification: 'Industrial-2', details: 'All Industries except Obnoxious and Hazardous Industries, Junk Yard, Textile Units, Ice Factory, Quarrying of Stone, Quarrying of Gravel, Quarrying of Clay, Dumping of Solid Waste, Steel re-rolling, Metal Manufacturing/Sorting etc., Oil Processing/Storage.' },
-  IN3: { classification: 'Industrial-3', details: 'Slaughter House, Meat Processing Units, Leather Processing Units, Cold Storage, Oxygen Plant, Agro Industries, Packaging, Mechanical Engineering, Fly Ash.' },
-  IN4: { classification: 'Industrial-4', details: 'Fuel Storage, Storage of inflammable materials, Thermal Power Plant, Power Plant, Gas Plant, Storage of Hazardous Materials, Obnoxious and Hazardous Industries, Chemical Industries, Obnoxious and Hazardous Uses, Dying House.' },
-  ST: { classification: 'Storage', details: 'Warehouse, Godown, Cold Storage, Timber Mart, Steel Stockyard, Ice Factory.' },
-  SCK: { classification: 'Small Center (Kothar)', details: 'Building related to agricultural activities, small godowns/storage, having building dimensions not exceeding 30 m × 12 m.' },
-  TR: { classification: 'Transport', details: 'Truck Terminal, Bus Terminal (by private enterprise), Transport Terminal for Goods and Passengers.' },
-  AG1: { classification: 'Agriculture-1', details: 'Horticulture, Repair and Sale of agricultural equipment, Saw Mill, Brick Kiln, Dairy Development, Fisheries, Animal Rearing and Breeding, Natural Resource and Sanctuary, Tannery, Concrete Batching Plant, Cemetery, Burial Ground, Regional Park, Way-side Shop, Agricultural Vocational Training Centre, Panjarapole, Roofing Tiles and Cement Pipes, Studio, Animal Shed, Agro Based Storage, Farm House.' },
-  AG2: { classification: 'Agriculture-2', details: 'Agricultural Vocational Training, Mining and Quarrying, Dumping of Solid Waste, Shooting Range, Drive-in Cinema, Golf Course, Ship Building or Ship Breaking, Fishing, Aqua culture Processing of fish and industry based on it port, Harbour ferry hovercraft service marine transport, Telephone microwave or other means of communication facilities, salt pans and non-polluting salt processing activity. Any type of activity permissible as per the Environment Protection Act, 1968 and Environment (Protection) Rules, 1968.' },
-  AG3: { classification: 'Agriculture-3', details: 'Poultry Farm, Agro-based Godowns.' },
-  TEMP: { classification: 'Temporary Use', details: 'Fair, Circus, Exhibition, Mela, Pandal, Fisheries related activities.' },
-  PU: { classification: 'Public Utility', details: 'Sub-station, Bus Station and Terminals, Fuelling and eV Station and Storage with and without Service Station, Parking, Multi-level Parking; infrastructure for Water Supply, Purification Plant, Pumping Station, Electricity Sub-station; Drainage, Sanitation, Domestic Garbage Disposal Collection, Solid Waste Transfer Station; Electricity, Fire Stations, Solar Power Plant or any development activity carried out by appropriate authority for public purpose.' },
-  PI: { classification: 'Public-Institutional', details: 'Any offices for appropriate authority, government and semi-government, Public assembly, Public facilities and amenities like Health, Transport and Communication, public security, social welfare, recreation of any type, Post Office, Police-Chowki, ward office.' },
-  H1: { classification: 'Health-1', details: 'PHC, Clinic, Dispensary.' },
-  H2: { classification: 'Health-2', details: 'Indoor Hospital up to 20 Bed, Surgical Hospital, Nursing Home.' },
-  H3: { classification: 'Health-3', details: 'Civil Hospital, Medical College and Research Centre, Hospital of more than 20 Bed.' },
-  H4: { classification: 'Health-4', details: 'Hospital for infectious diseases, Mental Hospital.' },
-  TO: { classification: 'Tourism Services', details: 'Tourism Sponsored activity.' },
-  REC: { classification: 'Recreation Use', details: 'Natural Reserve and Sanctuary, Race Track, Shooting Range, Zoo, Gardens, Recreation, Nursery, Botanical Garden, Green House, Play Fields, Forest.' },
-  'SP&L': { classification: 'Sports and Leisure', details: 'Sports Complex, Swimming Pool, Playfield, Camping Ground, Facility for water sports, Theme/Amusement Park, Aquarium, Zoo, Botanical Garden, Exhibition and Mela, Motion Picture Hall.' },
-};
-
-const TABLE_6_3_CODES = Object.keys(TABLE_6_3_USES).sort((left, right) => right.length - left.length);
 const TABLE_6_2_ZONE_CODES = [...new Set(DESIGNATED_ZONES.map(({ code }) => code))].sort((left, right) => right.length - left.length);
 
-function getPermissibleUseCodes(zone, visited = new Set()) {
+function cleanRuleReference(value = '') {
+  return String(value)
+    .replace(/\bTables?\s+\d+(?:\.\d+)?[A-Z]?(?:\s*(?:[–—/-]\s*\d+(?:\.\d+)?[A-Z]?))*\b/gi, '')
+    .replace(/\b(?:table|tables)\b/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([,.;:])/g, '$1')
+    .trim();
+}
+
+function getPermissibleUseCodes(zone, useCodeRows, zones, visited = new Set()) {
   if (!zone || visited.has(zone.code)) return [];
   const nextVisited = new Set(visited).add(zone.code);
+  const tableCodes = useCodeRows.map(({ code }) => code).filter(Boolean);
   const codes = new Set();
-  for (const useCode of TABLE_6_3_CODES) {
+  for (const useCode of tableCodes) {
     const escaped = useCode.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     if (new RegExp(`(^|[^A-Z0-9&])${escaped}($|[^A-Z0-9])`).test(zone.permissibleUse)) codes.add(useCode);
   }
-  for (const zoneCode of TABLE_6_2_ZONE_CODES) {
+  for (const zoneCode of [...new Set(zones.map(({ code }) => code))]) {
     const escaped = zoneCode.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     if (zoneCode !== zone.code && new RegExp(`\\b${escaped}\\b`).test(zone.permissibleUse)) {
-      DESIGNATED_ZONES.filter((candidate) => candidate.code === zoneCode).forEach((candidate) => {
-        getPermissibleUseCodes(candidate, nextVisited).forEach((useCode) => codes.add(useCode));
+      zones.filter((candidate) => candidate.code === zoneCode).forEach((candidate) => {
+        getPermissibleUseCodes(candidate, useCodeRows, zones, nextVisited).forEach((useCode) => codes.add(useCode));
       });
     }
   }
-  return TABLE_6_3_CODES.filter((code) => codes.has(code));
+  return tableCodes.filter((code) => codes.has(code));
 }
 
-const ROAD_SIDE_MARGIN_COLUMNS = {
-  D1: [2.5, 2.5, 3, 3, 4.5, 6, 7.5, 9],
-  D2: [2, 2.5, 2.5, 3, 3, 6, 7.5, 9],
-  D3: [2, 2.5, 2.5, 3, 3, 6, 6, 6],
-  D4: [2, 2.5, 2.5, 3, 3, 6, 6, 6],
-  D5: [2, 2.5, 2.5, 3, 3, 6, 6, 6],
-  D7A: [2, 2.5, 2.5, 3, 3, 6, 6, 6],
-  D7B: [2, 2.5, 2.5, 3, 3, 4.5, 4.5, 4.5],
-  D8: [2, 2.5, 2.5, 3, 3, 4.5, 4.5, 4.5],
-  D10: [2, 2.5, 2.5, 3, 3, 4.5, 4.5, 4.5],
-};
-
-function getRoadSideMargin({ category, authority, area, roadWidth, plotArea, buildingUse }) {
+function getRoadSideMargin({ category, authority, area, zoneCode, roadWidth, plotArea, buildingUse, side, buildingUnitArea, buildingHeight, schedules }) {
   if (!roadWidth) return null;
   const authorityCode = authority.match(/\(([^)]+)\)$/)?.[1] ?? authority;
-  if (category === 'D6' || (category === 'D1' && authorityCode === 'GUDA' && /\bGMC\b/i.test(area))) return null;
+  if (category === 'D1' && authorityCode === 'GUDA' && (!/non[\s-]?gmc/i.test(area) || (/\bGMC\b/i.test(area) && !/non[\s-]?gmc/i.test(area)))) return null;
+  if (category === 'D6') {
+    const zone = String(zoneCode ?? '').toUpperCase();
+    const rowsFor = (table) => schedules.filter((row) => row.tableNumber === table && (row.categoryCodes ?? []).includes('D6'));
+    const value = (text) => { const raw = String(text ?? '').trim(); if (!raw || /n\.?a\.?|not applicable|not required|^\s*-\s*$/i.test(raw)) return null; const match = raw.match(/[\d.]+/); return match ? Number(match[0]) : null; };
+    const matchesArea = (label, amount) => {
+      const numbers = [...String(label ?? '').matchAll(/[\d,]+(?:\.\d+)?/g)].map(([n]) => Number(n.replaceAll(',', '')));
+      const text = String(label ?? '').toLowerCase();
+      if (!numbers.length || !amount) return false;
+      const parentheticalArea = text.match(/\(\s*([\d,]+(?:\.\d+)?)\s*\)/)?.[1];
+      if (parentheticalArea) return amount === Number(parentheticalArea.replaceAll(',', ''));
+      if (/upto|up to|less than/.test(text)) return amount <= numbers.at(-1);
+      if (/above|more than/.test(text)) return amount > numbers[0] && (numbers.length === 1 || amount <= numbers.at(-1));
+      if (/[&,]/.test(text) || /row|twin/.test(text)) return numbers.includes(amount);
+      return numbers.length === 1 ? amount === numbers[0] : amount >= numbers[0] && amount <= numbers.at(-1);
+    };
+    if (zone === 'C1') {
+      const row = rowsFor('6.31').find((item) => /less than 12/i.test(item.sourceCells?.[0] ?? '') ? roadWidth < 12 : roadWidth >= 12);
+      return row ? { margin: value(row.sourceCells?.[1]) } : null;
+    }
+    if (zone === 'I3') {
+      const row = rowsFor('6.34').find((item) => /less than 24/i.test(item.sourceCells?.[0] ?? '') ? roadWidth < 24 : /24 mts and above/i.test(item.sourceCells?.[0] ?? '') && roadWidth >= 24);
+      return row ? { margin: value(row.sourceCells?.[1]) } : null;
+    }
+    if (zone === 'GIDC-1' || zone === 'GIDC-2') {
+      const row = rowsFor('6.35').find((item) => /30mt.*above/i.test(item.sourceCells?.[0] ?? '') ? roadWidth >= 30 : /less than.?30mt/i.test(item.sourceCells?.[0] ?? '') && roadWidth < 30);
+      return row ? { margin: value(row.sourceCells?.[1]) } : null;
+    }
+    if (zone === 'RR1' || zone === 'RR-1') {
+      const row = rowsFor('6.30')[0];
+      if (!row) return null;
+      const roadColumn = roadWidth <= 10 ? 1 : roadWidth <= 18 ? 2 : 3;
+      const margin = value(row.sourceCells?.[roadColumn]);
+      const height = Number(buildingHeight);
+      return { margin, note: !height ? 'Enter building height to check the linked rear and side value.' : '' };
+    }
+    if (zone === 'RE1' || zone === 'RE-1') {
+      const rows = rowsFor('6.36');
+      const isJRoad = /\bJ\s*road\b/i.test(area ?? '');
+      const row = rows.find((item) => /abutting.*j.*road/i.test(item.sourceCells?.[0] ?? '') === isJRoad && /road/i.test(item.sourceCells?.[0] ?? ''));
+      return row ? { margin: value(row.sourceCells?.[1]), note: 'The 30 m river-edge requirement applies separately where a plot adjoins a river.' } : { margin: null, note: 'Confirm whether the site abuts the designated J road to resolve its road-side margin.' };
+    }
+    if (zone === 'GI1' || zone === 'GI-1') {
+      const row = rowsFor('6.33').find((item) => matchesArea(item.sourceCells?.[0], Number(plotArea)));
+      return row ? { margin: value(row.sourceCells?.[1]) } : { margin: null, note: 'Table 6.33 lists specific plot sizes; no exact plot-size row matches the entered plot area.' };
+    }
+    if (/^IN/.test(String(buildingUse ?? '').toUpperCase()) || /industrial/i.test(buildingUse ?? '')) {
+      const row = rowsFor('6.37').find((item) => matchesArea(item.sourceCells?.[0], roadWidth));
+      if (!row) return null;
+      const unitArea = Number(buildingUnitArea);
+      if (!unitArea) return { margin: null, note: 'Enter building-unit area to resolve the industrial road-side margin in Table 6.37.' };
+      const sideValue = value(unitArea <= 1000 ? row.sourceCells?.[2] : row.sourceCells?.[3]);
+      const roadLabel = String(row.sourceCells?.[1] ?? '');
+      return { margin: /as per side margin/i.test(roadLabel) ? sideValue : value(roadLabel) };
+    }
+    if (['R1', 'R2', 'R3'].includes(zone)) {
+      const row = rowsFor('6.29').find((item) => matchesArea(item.sourceCells?.[1], Number(plotArea)));
+      if (!row) return { margin: null, note: 'Table 6.29 requires a listed residential plot-size row.' };
+      const roadType = /town/i.test(area ?? '') ? 'town' : /interior/i.test(area ?? '') ? 'interior' : '';
+      if (!roadType) return { margin: null, note: 'Enter whether this residential road is a town road or an interior road.' };
+      const column = roadType === 'town' ? ({ R1: 2, R2: 3, R3: 4 }[zone]) : ({ R1: 5, R2: 6, R3: 7 }[zone]);
+      const margin = value(row.sourceCells?.[column]);
+      return { margin, note: margin == null ? 'The selected residential plot size and road type have no numeric margin in the active schedule.' : '' };
+    }
+    return { margin: null, note: 'No unique D6 road-side rule matches this zone and the available site details.' };
+  }
   if (category === 'D9') {
     const use = (buildingUse ?? '').toLowerCase();
+    const d9Rows = schedules.filter((row) => row.tableNumber === '6.40' && !row.isDeleted);
+    const industrialStart = d9Rows.findIndex((row) => /industrial development and commercial development/i.test(row.sourceCells?.[0] ?? ''));
+    const inRange = (label, value) => {
+      const numbers = [...String(label).matchAll(/[\d,]+(?:\.\d+)?/g)].map(([number]) => Number(number.replaceAll(',', '')));
+      const text = String(label).toLowerCase();
+      if (!numbers.length) return false;
+      if (/up to|upto|less than/.test(text)) return value <= numbers[numbers.length - 1];
+      if (/and above|above \d|more than/.test(text)) return value > numbers[0] && (numbers.length < 2 || value <= numbers[1]);
+      return numbers.length > 1 && value >= numbers[0] && value <= numbers[1];
+    };
     if (/residential/.test(use)) {
-      if (plotArea <= 25 && roadWidth <= 7.5) return { margin: 0, table: 'Table 6.40', note: 'No road-side margin is required for a residential D9 plot up to 25 m² on a road up to 7.5 m wide.' };
-      const margin = roadWidth <= 7.5 ? 1.5 : roadWidth <= 12 ? 3 : roadWidth <= 20 ? 4.5 : roadWidth <= 30 ? 6 : 7.5;
-      return { margin, table: 'Table 6.40' };
+      const row = d9Rows.slice(0, industrialStart < 0 ? d9Rows.length : industrialStart).find((item) => inRange(item.sourceCells?.[0], roadWidth));
+      const margin = Number(row?.sourceCells?.[1]);
+      return row ? { margin: Number.isFinite(margin) ? margin : 0 } : null;
     }
-    if (/public/.test(use)) return { margin: 9, table: 'Table 6.40' };
+    if (/public/.test(use)) {
+      const publicRow = d9Rows.find((item) => /public uses/i.test(item.sourceCells?.[0] ?? ''));
+      const margin = Number(String(publicRow?.sourceCells?.[0] ?? '').match(/[\d.]+/)?.[0]);
+      return Number.isFinite(margin) ? { margin } : null;
+    }
     if (/industrial|commercial/.test(use)) {
-      if (plotArea < 50) return null;
-      const margin = plotArea <= 100 ? 3 : plotArea <= 500 ? 4.5 : plotArea <= 10000 ? 6 : plotArea <= 50000 ? 7.5 : 9;
-      return { margin, table: 'Table 6.40' };
+      if (side !== 'front') return { margin: null, note: 'The listed industrial and commercial margin applies to the front side.' };
+      const publicStart = d9Rows.findIndex((item) => /public uses/i.test(item.sourceCells?.[0] ?? ''));
+      const row = d9Rows.slice(Math.max(0, industrialStart + 1), publicStart < 0 ? d9Rows.length : publicStart).find((item) => inRange(item.sourceCells?.[0], plotArea));
+      const margin = Number(row?.sourceCells?.[1]);
+      return row ? { margin } : { margin: null, note: 'No industrial or commercial front margin is listed for this plot size.' };
     }
     return null;
   }
-  const values = ROAD_SIDE_MARGIN_COLUMNS[category];
-  if (!values) return null;
+  const scheduleRow = schedules.find((row) => row.tableNumber === '6.24' && !row.isDeleted && (row.categoryCodes ?? []).includes(category));
+  if (!scheduleRow) return null;
   const column = roadWidth <= 7.5 ? 0 : roadWidth <= 9 ? 1 : roadWidth <= 12 ? 2 : roadWidth <= 15 ? 3 : roadWidth < 18 ? 4 : roadWidth < 30 ? 5 : roadWidth < 45 ? 6 : 7;
-  let margin = values[column];
+  // Some source cells carry footnote markers (for example, "7.5*"). Read
+  // the numeric margin while leaving the original dashboard value intact.
+  const marginText = String(scheduleRow.sourceCells?.[column + 2] ?? '');
+  let margin = Number(marginText.match(/-?[\d.]+/)?.[0]);
+  if (!Number.isFinite(margin)) return null;
   let note = '';
   if (/special\s+building/i.test(buildingUse)) margin = 12;
-  if (category === 'D1' && authorityCode === 'RUDA' && roadWidth > 30 && roadWidth < 45) {
-    if (plotArea <= 1000) { margin = 6; note = 'D1-RUDA Table 6.24 note: 6 m applies for plots up to 1,000 m²; building-height conditions may also affect this exception.'; }
-    else note = 'D1-RUDA may allow a 6 m margin for buildings up to 25 m high; building height is not an input, so the Table 6.24 value is shown.';
+  if (!/special\s+building/i.test(buildingUse) && category === 'D1' && authorityCode === 'RUDA' && roadWidth > 30 && roadWidth < 45) {
+    const unitArea = Number(buildingUnitArea);
+    const height = Number(buildingHeight);
+    if ((unitArea > 0 && unitArea <= 1000) || (height > 0 && height <= 25)) { margin = 6; note = 'A 6 m minimum applies when the building-unit area is up to 1,000 m² or the building height is up to 25 m.'; }
+    else if (!buildingUnitArea || !buildingHeight) note = 'Enter building-unit area and building height to check whether the 6 m exception applies.';
   }
-  return { margin, table: 'Table 6.24', note };
+  return { margin, note };
 }
 
-function RoadMarginDiagram({ category, authority, area, roadWidths, plotArea, buildingUse }) {
-  const sides = Object.entries(roadWidths).filter(([, value]) => value !== '');
-  if (!sides.length) return null;
-  const marginInfo = Object.fromEntries(sides.map(([side, value]) => [side, getRoadSideMargin({ category, authority, area, roadWidth: Number(value), plotArea: Number(plotArea) || 0, buildingUse })]));
-  const marginsAvailable = sides.every(([side]) => marginInfo[side]);
-  const marginTables = [...new Set(sides.map(([side]) => marginInfo[side]?.table).filter(Boolean))];
+function RoadMarginDiagram({ category, authority, area, zoneCode, roadWidths, plotArea, buildingUse, buildingUnitArea, buildingHeight, rearSideAssessment, schedules }) {
+  const sides = ['rear', 'left', 'right', 'front'];
+  const roadSides = sides.filter((side) => roadWidths[side] !== '');
+  const marginInfo = Object.fromEntries(roadSides.map((side) => [side, getRoadSideMargin({ category, authority, area, zoneCode, roadWidth: Number(roadWidths[side]), plotArea: Number(plotArea) || 0, buildingUse, side, buildingUnitArea, buildingHeight, schedules })]));
+  const edgeMargins = { ...(rearSideAssessment?.status === 'available' ? rearSideAssessment.edgeMargins : {}) };
+  if (rearSideAssessment?.status === 'available' && rearSideAssessment.allocation) {
+    const { count, value, sides: eligibleSides } = rearSideAssessment.allocation;
+    const withoutRoad = eligibleSides.filter((side) => !roadSides.includes(side));
+    const withRoad = eligibleSides.filter((side) => roadSides.includes(side));
+    [...withoutRoad, ...withRoad].slice(0, count).forEach((side) => { edgeMargins[side] = value; });
+  }
+  const marginValues = Object.fromEntries(sides.map((side) => {
+    const roadMargin = roadSides.includes(side) ? marginInfo[side]?.margin : null;
+    const sideMargin = edgeMargins[side];
+    if (roadSides.includes(side)) {
+      const value = category === 'D9' ? (roadMargin ?? sideMargin) : roadMargin != null && sideMargin != null ? Math.max(roadMargin, sideMargin) : roadMargin;
+      return [side, { road: true, value, message: marginInfo[side]?.note ?? '' }];
+    }
+    return [side, { road: false, value: sideMargin ?? null, message: '' }];
+  }));
   const plot = { x: 150, y: 48, width: 200, height: 150 };
-  const hatch = <defs><pattern id="fsi-margin-hatch" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#f5e1d9"/><line x1="0" y1="0" x2="0" y2="8" stroke="#c97e69" strokeWidth="2"/></pattern></defs>;
   const roadRects = {
     rear: <rect x="135" y="12" width="230" height="30" rx="2" fill="#e8ebef"/>,
     left: <rect x="70" y="33" width="74" height="180" rx="2" fill="#e8ebef"/>,
@@ -461,52 +573,431 @@ function RoadMarginDiagram({ category, authority, area, roadWidths, plotArea, bu
     front: <rect x="135" y="204" width="230" height="30" rx="2" fill="#e8ebef"/>,
   };
   const marginRects = {
-    rear: <rect x={plot.x} y={plot.y} width={plot.width} height="22" fill="url(#fsi-margin-hatch)"/>,
-    left: <rect x={plot.x} y={plot.y} width="22" height={plot.height} fill="url(#fsi-margin-hatch)"/>,
-    right: <rect x={plot.x + plot.width - 22} y={plot.y} width="22" height={plot.height} fill="url(#fsi-margin-hatch)"/>,
-    front: <rect x={plot.x} y={plot.y + plot.height - 22} width={plot.width} height="22" fill="url(#fsi-margin-hatch)"/>,
+    rear: <rect x={plot.x} y={plot.y} width={plot.width} height="22" fill="#f8efec" stroke="#e8c9be" strokeWidth="0.8"/>,
+    left: <rect x={plot.x} y={plot.y} width="22" height={plot.height} fill="#f8efec" stroke="#e8c9be" strokeWidth="0.8"/>,
+    right: <rect x={plot.x + plot.width - 22} y={plot.y} width="22" height={plot.height} fill="#f8efec" stroke="#e8c9be" strokeWidth="0.8"/>,
+    front: <rect x={plot.x} y={plot.y + plot.height - 22} width={plot.width} height="22" fill="#f8efec" stroke="#e8c9be" strokeWidth="0.8"/>,
   };
-  const roadLabels = { front: 'Front', rear: 'Rear', left: 'Left', right: 'Right' };
-  return <section className="road-margin-card" aria-label="Road-side margin diagram"><div className="road-margin-heading"><b>Road-side margin diagram</b><small>Schematic · not to scale{marginTables.length ? ` · ${marginTables.join(', ')}` : ''}</small></div><svg viewBox="0 0 500 250" role="img" aria-label="Plot with hatching on each entered road-side margin">{hatch}{sides.map(([side]) => <g key={`road-${side}`}>{roadRects[side]}</g>)}<rect x={plot.x} y={plot.y} width={plot.width} height={plot.height} fill="#fff" stroke="#7c8998" strokeWidth="1.5"/>{sides.map(([side]) => <g key={`margin-${side}`}>{marginRects[side]}<text x={side === 'left' ? 134 : side === 'right' ? 352 : plot.x + plot.width / 2} y={side === 'front' ? 193 : side === 'rear' ? 65 : plot.y + plot.height / 2} textAnchor={side === 'left' ? 'end' : side === 'right' ? 'start' : 'middle'} fontSize="8" fill="#75483d">{marginInfo[side] ? `${marginInfo[side].margin} m` : 'margin per special table'}</text></g>)}<text x="250" y="127" textAnchor="middle" fontSize="11" fontWeight="700" fill="#43546a">Building unit</text>{sides.map(([side, width]) => <text key={`label-${side}`} x={side === 'left' ? 108 : side === 'right' ? 393 : 250} y={side === 'front' ? 226 : side === 'rear' ? 31 : 128} textAnchor="middle" fontSize="9" fill="#59697d">{roadLabels[side]} road · {width} m</text>)}</svg><div className="road-margin-legend">{sides.map(([side, width]) => <span key={side}><i/> {roadLabels[side]}: {width} m road → {marginInfo[side] ? `${marginInfo[side].margin} m margin` : 'special schedule required'}</span>)}</div>{!marginsAvailable && <small className="road-margin-note">The selected category uses a separate margin schedule; the road-side margin is not estimated here.</small>}{sides.map(([side]) => marginInfo[side]?.note && <small className="road-margin-note" key={`note-${side}`}>{marginInfo[side].note}</small>)}<small className="road-margin-note">Building height or special-building rules may require a larger road-side margin. Rear and side margins are not included in this diagram.</small></section>;
+  const marginValue = (side) => {
+    const value = marginValues[side].value;
+    if (value == null) return '';
+    const location = side === 'front' ? 'Front' : side === 'rear' ? 'Rear' : 'Side';
+    const roadQualifier = marginValues[side].road && side !== 'front' ? ' road' : '';
+    const amount = value === 0 ? 'Nil' : `${value} m`;
+    return `${location}${roadQualifier} margin · ${amount}`;
+  };
+  const notes = [...new Set([
+    ...(rearSideAssessment?.status !== 'available' && rearSideAssessment?.message ? [rearSideAssessment.message] : []),
+    ...(rearSideAssessment?.status === 'available' ? [rearSideAssessment.note, rearSideAssessment.maximumBuiltUpArea ? `Maximum built-up area: ${rearSideAssessment.maximumBuiltUpArea}.` : '', rearSideAssessment.allocation ? 'One representative placement is shown for requirements that allow a choice of side.' : ''] : []),
+    ...Object.values(marginInfo).map((info) => info?.note ?? ''),
+  ].filter(Boolean))];
+  return <section className="road-margin-card" aria-label="Road, rear, and side margin diagram"><div className="road-margin-heading"><b>Road, rear, and side margin diagram</b><small>Schematic · not to scale</small></div><svg viewBox="0 0 500 250" role="img" aria-label="Plot diagram showing front, side, and rear margins, with road-facing margins where roads adjoin">{roadSides.map((side) => <g key={`road-${side}`}>{roadRects[side]}</g>)}<rect x={plot.x} y={plot.y} width={plot.width} height={plot.height} fill="#fff" stroke="#7c8997" strokeWidth="1.5"/>{sides.map((side) => {const x = side === 'left' ? plot.x + 11 : side === 'right' ? plot.x + plot.width - 11 : plot.x + plot.width / 2; const y = side === 'rear' ? plot.y + 12 : side === 'front' ? plot.y + plot.height - 10 : plot.y + plot.height / 2; const sideMargin = side === 'left' || side === 'right'; return <g key={`margin-${side}`}>{marginValues[side].value > 0 && marginRects[side]}<text x={x} y={y} textAnchor="middle" dominantBaseline="middle" transform={sideMargin ? `rotate(-90 ${x} ${y})` : undefined} fontSize={sideMargin ? '7' : '8'} fontWeight="700" fill="#75483d">{marginValue(side)}</text></g>;})}<text x="250" y="127" textAnchor="middle" fontSize="11" fontWeight="700" fill="#43546a">Building unit</text>{roadSides.map((side) => <text key={`label-${side}`} x={side === 'left' ? 107 : side === 'right' ? 393 : 250} y={side === 'front' ? 226 : side === 'rear' ? 31 : 128} textAnchor="middle" dominantBaseline="middle" fontSize="8" fontWeight="700" fill="#59697d">Road · {roadWidths[side]} m</text>)}</svg>{notes.map((note) => <small className="road-margin-note" key={note}>{cleanRuleReference(note)}</small>)}</section>;
+}
+
+function getRearSideMarginAssessment({ category, authorityCode, developmentArea, zoneCode, plotArea, buildingUnitArea, buildingHeight, buildingUse, buildingUseCode, specialBuilding, schedules }) {
+  const plot = Number(plotArea);
+  const unit = Number(buildingUnitArea);
+  const height = Number(buildingHeight);
+  const needs = (...fields) => ({ status: 'input', message: `Enter ${fields.join(' and ')} to determine the rear and side margins.` });
+  const result = (rear, side, note = '', maximumBuiltUpArea = '', edgeMargins = {}, allocation = null) => ({ status: 'available', rear, side, note, maximumBuiltUpArea, edgeMargins, allocation });
+  const review = (message) => ({ status: 'review', message });
+  if (!category || !Number.isFinite(plot) || plot <= 0 || !buildingUse) return needs('plot area and building use');
+
+  if (category === 'D9') {
+    const use = buildingUse.toLowerCase();
+    const d9Rows = schedules.filter((row) => row.tableNumber === '6.41' && !row.isDeleted);
+    const industrialStart = d9Rows.findIndex((row) => /industrial and commercial development/i.test(row.sourceCells?.[0] ?? ''));
+    const inPlotRange = (label) => {
+      const numbers = [...String(label).matchAll(/[\d,]+(?:\.\d+)?/g)].map(([number]) => Number(number.replaceAll(',', '')));
+      const text = String(label).toLowerCase();
+      if (!numbers.length) return false;
+      if (/upto|up to/.test(text)) return plot <= numbers[numbers.length - 1];
+      if (/above|more than/.test(text)) return plot > numbers[0] && (numbers.length < 2 || plot <= numbers[1]);
+      return numbers.length > 1 && plot >= numbers[0] && plot <= numbers[1];
+    };
+    const numericMargin = (value) => /nil|not required/i.test(String(value)) ? 0 : Number(String(value).match(/[\d.]+/)?.[0]);
+    if (/residential/.test(use)) {
+      const row = d9Rows.slice(0, industrialStart < 0 ? d9Rows.length : industrialStart).find((item) => inPlotRange(item.sourceCells?.[0]));
+      if (!row) return review('The active residential margin rows do not identify a value for this plot size.');
+      const text = row.sourceCells?.[1] ?? '';
+      if (/two outcomes|75%|70%/.test(text) || (plot <= 25 && d9Rows.some((item) => /70%/.test(item.sourceCells?.[2] ?? '')))) return review('The active schedule lists multiple outcomes for this residential plot size without a condition to distinguish them.');
+      const value = numericMargin(text);
+      if (!Number.isFinite(value)) return review('The active residential margin row needs a numeric margin value before a result can be shown.');
+      const coverage = row.sourceCells?.[2] ?? '';
+      const isTwoSides = /2\s*side|two sides/i.test(text);
+      const isRear = /rear/i.test(text);
+      return result(`${value ? `${value} m` : 'Nil'}`, isTwoSides ? `Two sides: ${value} m each` : `One location: ${value} m`, '', coverage, isTwoSides ? { rear: value, left: value, right: value } : {}, { count: isTwoSides ? 2 : 1, value, sides: isRear ? ['rear', 'left', 'right'] : ['left', 'right'] });
+    }
+    if (/industrial|commercial/.test(use)) {
+      const dataStart = d9Rows.findIndex((item, index) => index > industrialStart && /plot size/i.test(item.sourceCells?.[0] ?? ''));
+      const row = d9Rows.slice(Math.max(0, dataStart + 2)).find((item) => inPlotRange(item.sourceCells?.[0]));
+      if (!row) return review('The active industrial and commercial margin rows do not identify a value for this plot size.');
+      const rear = numericMargin(row.sourceCells?.[1]);
+      const sideI = numericMargin(row.sourceCells?.[2]);
+      const sideII = numericMargin(row.sourceCells?.[3]);
+      if (![rear, sideI, sideII].some(Number.isFinite)) return review('The active margin row needs numeric rear and side values before a result can be shown.');
+      return result(Number.isFinite(rear) ? `${rear} m` : 'Not specified', `Side I: ${Number.isFinite(sideI) ? `${sideI} m` : 'not specified'} · Side II: ${Number.isFinite(sideII) ? `${sideII} m` : 'not specified'}`, '', '', { rear, left: sideI, right: sideII });
+    }
+    return review('The source does not specify rear and side margins for this D9 building use.');
+  }
+
+  const isGmc = authorityCode === 'GMC' || (authorityCode === 'GUDA' && !/non[\s-]?gmc/i.test(developmentArea));
+  if (category === 'D6') {
+    const zone = String(zoneCode ?? '').toUpperCase();
+    const rowsFor = (table) => schedules.filter((item) => item.tableNumber === table && (item.categoryCodes ?? []).includes('D6'));
+    const numberOrNull = (text) => { const raw = String(text ?? '').trim(); if (!raw) return null; if (/not required|nil/i.test(raw)) return 0; const match = raw.match(/[\d.]+/); return match ? Number(match[0]) : null; };
+    const inRange = (label, amount) => {
+      const values = [...String(label ?? '').matchAll(/[\d,]+(?:\.\d+)?/g)].map(([n]) => Number(n.replaceAll(',', '')));
+      const text = String(label ?? '').toLowerCase();
+      if (!values.length || !amount) return false;
+      const parentheticalArea = text.match(/\(\s*([\d,]+(?:\.\d+)?)\s*\)/)?.[1];
+      if (parentheticalArea) return amount === Number(parentheticalArea.replaceAll(',', ''));
+      if (/upto|up to|less than/.test(text)) return amount <= values.at(-1);
+      if (/above|more than/.test(text)) return amount > values[0] && (values.length === 1 || amount <= values.at(-1));
+      if (/[&,]/.test(text) || /row|twin/.test(text)) return values.includes(amount);
+      return values.length === 1 ? amount === values[0] : amount >= values[0] && amount <= values.at(-1);
+    };
+    if (zone === 'C1') {
+      const row = rowsFor('6.32').find((item) => /less than 1000/i.test(item.sourceCells?.[0] ?? '') ? plot < 1000 : plot >= 1000);
+      const margin = numberOrNull(row?.sourceCells?.[1]);
+      return Number.isFinite(margin) ? result(`${margin} m`, `${margin} m`, '', '', { rear: margin, left: margin, right: margin }) : review('No active commercial side and rear row matches this plot area.');
+    }
+    if (zone === 'GI1' || zone === 'GI-1') {
+      const row = rowsFor('6.33').find((item) => inRange(item.sourceCells?.[0], plot));
+      const rear = numberOrNull(row?.sourceCells?.[2]);
+      const side = numberOrNull(row?.sourceCells?.[3]);
+      return Number.isFinite(rear) && Number.isFinite(side) ? result(`${rear} m`, `${side} m`, '', '', { rear, left: side, right: side }) : review('Table 6.33 requires a listed Green Institutional plot size.');
+    }
+    if (zone === 'GIDC-1' || zone === 'GIDC-2') {
+      const row = rowsFor('6.35').find((item) => /all side margins/i.test(item.sourceCells?.[0] ?? ''));
+      const margin = numberOrNull(row?.sourceCells?.[1]);
+      return Number.isFinite(margin) ? result(`${margin} m`, `${margin} m`, '', '', { rear: margin, left: margin, right: margin }) : review('The active GIDC schedule does not provide a numeric all-side margin.');
+    }
+    if (zone === 'RE1' || zone === 'RE-1') {
+      const row = rowsFor('6.36').find((item) => /all side margin/i.test(item.sourceCells?.[0] ?? ''));
+      const margin = numberOrNull(row?.sourceCells?.[1]);
+      return Number.isFinite(margin) ? result(`${margin} m`, `${margin} m`, 'A separate 30 m margin applies from a river edge where the plot adjoins one.', '', { rear: margin, left: margin, right: margin }) : review('The active recreational schedule does not provide a numeric all-side margin.');
+    }
+    if (zone === 'I3') {
+      const row = rowsFor('6.34').find((item) => /remaining sides/i.test(item.sourceCells?.[0] ?? ''));
+      const margin = numberOrNull(row?.sourceCells?.[1]);
+      return Number.isFinite(margin) ? result(`${margin} m`, `${margin} m`, '', '', { rear: margin, left: margin, right: margin }) : review('The active institutional schedule does not provide a numeric remaining-side margin.');
+    }
+    if (/^IN/.test(String(buildingUseCode ?? '').toUpperCase()) || /industrial/i.test(buildingUse ?? '')) {
+      if (!unit) return needs('building-unit area');
+      const row = rowsFor('6.37').find((item) => /upto 12/i.test(item.sourceCells?.[0] ?? '')) ?? rowsFor('6.37')[0];
+      const side = numberOrNull(unit <= 1000 ? row?.sourceCells?.[2] : row?.sourceCells?.[3]);
+      return Number.isFinite(side) ? result(`${side} m`, `${side} m`, '', '', { rear: side, left: side, right: side }) : review('The active industrial schedule does not give a numeric side and rear margin for this building-unit area.');
+    }
+    if (zone === 'RR1' || zone === 'RR-1') {
+      const row = rowsFor('6.30')[0];
+      if (!row) return review('The active renewal-zone schedule has no row.');
+      if (!height) return needs('building height');
+      const margin = numberOrNull(height <= 15 ? row.sourceCells?.[5] : height <= 25 ? row.sourceCells?.[6] : null);
+      return Number.isFinite(margin) ? result(`${margin} m`, `${margin} m`, '', '', { rear: margin, left: margin, right: margin }) : review('Table 6.30 does not list a rear and side margin for this building height.');
+    }
+    if ((buildingUseCode === 'DW1' || buildingUseCode === 'DW2') && unit > 0) {
+      const row = rowsFor('6.38').find((item) => inRange(item.sourceCells?.[0], unit));
+      if (row) {
+        const rear = numberOrNull(row.sourceCells?.[1]);
+        const sideText = row.sourceCells?.[2] ?? '';
+        const side = numberOrNull(sideText);
+        if (Number.isFinite(rear) && Number.isFinite(side)) {
+          const count = /both sides/i.test(sideText) ? 2 : /any one side/i.test(sideText) ? 1 : 0;
+          return result(`${rear} m`, count ? `${count === 2 ? 'Two sides' : 'One side'}: ${side} m` : 'Not required', '', '', { rear, ...(count === 2 ? { left: side, right: side } : {}) }, count ? { count, value: side, sides: ['left', 'right'] } : null);
+        }
+      }
+    }
+    if (['R1', 'R2', 'R3'].includes(zone) && plot <= 500) {
+      const row = rowsFor('6.28').find((item) => inRange(item.sourceCells?.[1], plot));
+      if (!row) return review('Table 6.28 has no listed residential plot-size row for this plot area.');
+      const rearText = row.sourceCells?.[zone === 'R2' ? 3 : 2] ?? '';
+      const sideText = row.sourceCells?.[zone === 'R2' ? 5 : 4] ?? '';
+      const rear = numberOrNull(rearText); const side = numberOrNull(sideText);
+      if (!Number.isFinite(rear) && !Number.isFinite(side)) return review('The matching Table 6.28 row does not specify numeric rear or side margins.');
+      const count = /both sides/i.test(sideText) ? 2 : /one side/i.test(sideText) ? 1 : 0;
+      return result(Number.isFinite(rear) ? `${rear} m` : 'Not specified', count ? `${count === 2 ? 'Two sides' : 'One side'}: ${side} m` : Number.isFinite(side) ? `${side} m` : 'Not specified', '', '', { ...(Number.isFinite(rear) ? { rear } : {}), ...(count === 2 ? { left: side, right: side } : Number.isFinite(side) && !count ? { left: side, right: side } : {}) }, count ? { count, value: side, sides: ['left', 'right'] } : null);
+    }
+    return review('No unique D6 rear and side rule matches the selected zone and supplied plot details.');
+  }
+  if (isGmc) return review('The supplied rear and side margin schedule does not cover this authority.');
+  if (specialBuilding) {
+    if (!buildingHeight || height <= 0) return needs('building height');
+    const margin = height <= 25 ? 6 : 8;
+    return result(`${margin} m`, `${margin} m`, '', '', { rear: margin, left: margin, right: margin });
+  }
+
+  const useCode = (buildingUseCode ?? '').toUpperCase();
+  const isDwelling12 = /^DW[12]$/.test(useCode);
+  const isDwelling3 = useCode === 'DW3';
+  const isIndustrial = /^IN/.test(useCode) || /industrial/.test(buildingUse.toLowerCase());
+  const applicableRows = schedules.filter((row) => !row.isDeleted && (row.categoryCodes ?? []).includes(category));
+  const parseRange = (label, value) => {
+    const numbers = [...String(label).matchAll(/[\d,]+(?:\.\d+)?/g)].map(([number]) => Number(number.replaceAll(',', '')));
+    const text = String(label).toLowerCase();
+    if (!numbers.length) return false;
+    if (/above|more than|>\s*\d/.test(text)) return value > numbers[0] && (numbers.length < 2 || value <= numbers[numbers.length - 1]);
+    if (/≤\s*\d|<=\s*\d|up to|upto/.test(text)) return value <= numbers[numbers.length - 1];
+    return numbers.length > 1 && value >= numbers[0] && value <= numbers[1];
+  };
+  const numberOrNull = (text) => /nil|not required/i.test(String(text)) ? 0 : Number(String(text ?? '').match(/[\d.]+/)?.[0]);
+  if (category === 'D1' && authorityCode === 'RUDA' && isDwelling3 && (!unit || !height)) return needs(...(!unit && !height ? ['building-unit area', 'building height'] : !unit ? ['building-unit area'] : ['building height']));
+  if (category === 'D1' && authorityCode === 'RUDA' && isDwelling3 && unit > 0 && height > 0 && unit <= 500 && height <= 16.5) {
+    const row = applicableRows.filter((item) => item.tableNumber === '6.27').find((item) => parseRange(item.sourceCells?.[1], unit));
+    if (!row) return review('No active building-unit size row matches the special RUDA dwelling condition.');
+    const margin = numberOrNull(row.sourceCells?.[2]);
+    if (!Number.isFinite(margin)) return review('The active RUDA row has no numeric margin value.');
+    const count = /two/i.test(row.sourceCells?.[2] ?? '') ? 2 : 1;
+    const allSides = /all sides/i.test(row.sourceCells?.[2] ?? '');
+    return result(`${margin} m`, allSides ? `All sides: ${margin} m` : `${count === 2 ? 'Two sides' : 'One location'}: ${margin} m`, '', '', allSides ? { rear: margin, left: margin, right: margin } : {}, { count, value: margin, sides: ['rear', 'left', 'right'] });
+  }
+  const rows = applicableRows.filter((item) => item.tableNumber === '6.26');
+  const row = rows.filter((item) => {
+    const condition = item.sourceCells?.[2] ?? '';
+    if (isDwelling12) return /dwelling 1-2/i.test(item.sourceCells?.[1] ?? '') || (!item.sourceCells?.[1] && /PS\s*[≤>]/i.test(condition));
+    if (isIndustrial) return /industrial use/i.test(item.sourceCells?.[1] ?? '') || (!item.sourceCells?.[1] && Number(item.sourceRow) >= 12);
+    return /other than dwelling/i.test(item.sourceCells?.[1] ?? '') || (!item.sourceCells?.[1] && /B\.H\./i.test(condition));
+  }).find((item) => {
+    const condition = item.sourceCells?.[2] ?? '';
+    return /B\.H\./i.test(condition) ? height > 0 && parseRange(condition, height) : parseRange(condition, plot);
+  });
+  if (!row) return review('No active rear and side margin row matches this category, use, and site size.');
+  const rowText = row.sourceCells ?? [];
+  const continuation = rows.find((item) => Number(item.sourceRow) === Number(row.sourceRow) + 1 && !(item.sourceCells?.[2] ?? '').trim());
+  const remark = [...rowText.slice(3), ...(continuation?.sourceCells?.slice(3) ?? [])].join(' ');
+  if (isDwelling12 && plot <= 25) return result('Not required', 'Not required', remark, '', { rear: 0, left: 0, right: 0 });
+  const rear = numberOrNull(rowText[3]);
+  const side = numberOrNull(rowText[4]);
+  const flexibleText = `${rowText[4] ?? ''} ${rowText[5] ?? ''} ${continuation?.sourceCells?.[5] ?? ''}`;
+  if (/any one side|any two sides/i.test(flexibleText) && Number.isFinite(numberOrNull(flexibleText))) {
+    const value = numberOrNull(flexibleText);
+    const count = /any two sides/i.test(flexibleText) ? 2 : 1;
+    const fixedRear = Number.isFinite(rear) ? { rear } : {};
+    return result(Number.isFinite(rear) ? `${rear} m` : `${value} m`, `${count === 2 ? 'Two sides' : 'One location'}: ${value} m`, remark, '', fixedRear, { count, value, sides: /including rear/i.test(flexibleText) ? ['rear', 'left', 'right'] : ['left', 'right'] });
+  }
+  if (![rear, side].some(Number.isFinite)) return review('The active margin row has no numeric rear or side values.');
+  return result(Number.isFinite(rear) ? `${rear} m` : 'Not specified', Number.isFinite(side) ? `${side} m` : 'Not specified', remark, '', { rear, left: side, right: side });
+}
+
+function heightRuleFor(category, authorityCode, developmentArea, roadWidth, buildingUse, schedules) {
+  if (category === 'D9') {
+    const useLabel = /residential/i.test(buildingUse ?? '') ? 'Residential'
+      : /commercial/i.test(buildingUse ?? '') ? 'Commercial'
+        : /industrial/i.test(buildingUse ?? '') ? 'Industrial' : null;
+    const row = useLabel && schedules.find((item) => item.tableNumber === '6.19' && !item.isDeleted && (item.parsedData?.useText ?? item.sourceCells?.[1]) === useLabel);
+    return row ? {
+      tableNumber: row.tableNumber,
+      sourceCells: row.sourceCells,
+      maximumBuildingHeightText: String(row.sourceCells?.[4] ?? row.parsedData?.maximumHeightM ?? row.parsedData?.maximumHeightText ?? '').match(/[\d.]+/)?.[0] ?? '',
+      roadWidthLabel: useLabel,
+      industrialNote: row.parsedData?.additionalHeightNote ?? '',
+    } : null;
+  }
+  const rows = schedules.filter((item) => item.tableNumber === '6.23' && !item.isDeleted).map((item) => ({ ...item, ...(item.parsedData ?? {}), roadWidthLabel: item.sourceCells?.[2] ?? item.roadWidthLabel, maximumBuildingHeightText: item.sourceCells?.[3] ?? item.maximumBuildingHeightText }));
+  let categoryRow;
+  if (category === 'D1') {
+    const isRuda = authorityCode === 'RUDA' || /\bRUDA\b/i.test(developmentArea);
+    if (authorityCode === 'GMC' || (authorityCode === 'GUDA' && !/non[\s-]?gmc/i.test(developmentArea)) || (/\bGMC\b/i.test(developmentArea) && !/non[\s-]?gmc/i.test(developmentArea))) return null;
+    categoryRow = rows.find((row) => isRuda ? /D1-RUDA/i.test(row.sourceCells[0]) : /D1 except GMC/i.test(row.sourceCells[0]));
+  } else categoryRow = rows.find((row) => row.categoryCodes.includes(category));
+  if (!categoryRow) return null;
+  return rows.find((row) => {
+    if (!(row.sourceCells?.[0] === categoryRow.sourceCells?.[0] || row.authorityScope === categoryRow.authorityScope)) return false;
+    const label = row.sourceCells?.[2] ?? row.sourceCells?.[1] ?? '';
+    const values = [...String(label).matchAll(/[\d.]+/g)].map(([value]) => Number(value));
+    const min = values[0] ?? Number(row.roadWidthMinMeters ?? 0);
+    const max = /less than|below|under/i.test(label) ? values.at(-1) : values.length > 1 ? values.at(-1) + 0.1 : row.roadWidthMaxExclusiveMeters != null ? Number(row.roadWidthMaxExclusiveMeters) : null;
+    return roadWidth >= min && (max == null || roadWidth < max);
+  }) ?? null;
 }
 
 function FsiCalculator() {
-  const [form, setForm] = useState({ developmentCategory: '', developmentAuthority: '', developmentArea: '', zone: '', plotArea: '', buildingUse: '' });
+  const [calculatorConfig, setCalculatorConfig] = useState({ zones: zoneTableFallback.rows, roadWidths: [], schedules: [], fsiRows: [] });
+  const [zoneDataSource, setZoneDataSource] = useState('loading');
+  const [developmentCategories, setDevelopmentCategories] = useState([]);
+  const [authorityDataState, setAuthorityDataState] = useState({ loading: true, error: '' });
+  const [useCodeRows, setUseCodeRows] = useState([]);
+  const [useCodeDataState, setUseCodeDataState] = useState({ loading: true, error: '' });
+  const [form, setForm] = useState({ developmentCategory: '', developmentAuthority: '', developmentArea: '', zone: '', plotArea: '', buildingUse: '', buildingUseCode: '' });
   const [roadWidths, setRoadWidths] = useState({ front: '', left: '', right: '', rear: '' });
+  const [marginInputs, setMarginInputs] = useState({ buildingUnitArea: '', buildingHeight: '', specialBuilding: false });
+  const [distanceFromWideRoad, setDistanceFromWideRoad] = useState('');
   const [state, setState] = useState({ loading: false, result: null, error: '' });
   const [permissibleUseCode, setPermissibleUseCode] = useState('');
-  const set = (key) => (event) => setForm((current) => ({ ...current, [key]: event.target.value }));
-  const setRoadWidth = (side) => (event) => setRoadWidths((current) => ({ ...current, [side]: event.target.value }));
-  const selectedCategory = DEVELOPMENT_CATEGORIES.find(({ code }) => code === form.developmentCategory);
-  const authorityCode = form.developmentAuthority.match(/\(([^)]+)\)$/)?.[1] ?? form.developmentAuthority;
-  const categoryZones = ['D8', 'D10'].includes(form.developmentCategory)
-    ? DESIGNATED_ZONES.filter(({ code }) => ['GMD8', 'RMD8', 'RMD9'].includes(code))
-    : form.developmentCategory === 'D9'
-      ? DESIGNATED_ZONES.filter(({ code }) => code === 'GIDC')
-      : DESIGNATED_ZONES.filter(({ code }) => !['GMD8', 'RMD8', 'RMD9'].includes(code));
-  const selectedZones = categoryZones.filter(({ onlyAuthorities, excludedAuthorities, zone }) =>
-    (!onlyAuthorities || onlyAuthorities.includes(authorityCode)) && (!excludedAuthorities || !excludedAuthorities.includes(authorityCode)) &&
-    !(authorityCode === 'GUDA' && /non[\s-]?gmc/i.test(form.developmentArea) && ['Residential Zones 2–5 (GUDA)', 'Residential Zone R1 (GUDA)', 'Residential Renewal Zone (GUDA)', 'Commercial Zone I (GUDA – GMC)'].includes(zone)) &&
-    !(authorityCode === 'GUDA' && !/non[\s-]?gmc/i.test(form.developmentArea) && zone === 'Commercial Zone II (GUDA – Non-GMC)')
-  );
-  const selectedZone = selectedZones.find(({ zone }) => zone === form.zone);
-  const selectedUseCodes = selectedZone ? getPermissibleUseCodes(selectedZone) : [];
-  const activeUseCode = selectedUseCodes.includes(permissibleUseCode) ? permissibleUseCode : (selectedUseCodes[0] ?? '');
-  const setCategory = (event) => { setForm((current) => ({ ...current, developmentCategory: event.target.value, developmentAuthority: '', developmentArea: '', zone: '' })); setRoadWidths({ front: '', left: '', right: '', rear: '' }); setPermissibleUseCode(''); };
-  const setAuthority = (event) => { setForm((current) => ({ ...current, developmentAuthority: event.target.value, zone: '' })); setPermissibleUseCode(''); };
-  const setZone = (event) => { setForm((current) => ({ ...current, zone: event.target.value })); setPermissibleUseCode(''); };
-  const roadWidthValues = Object.fromEntries(Object.entries(roadWidths).filter(([, value]) => value !== '').map(([side, value]) => [side, Number(value)]));
-  const requiredRoadWidth = Object.keys(roadWidthValues).length === 0;
-  const effectiveRoadWidth = Math.max(0, ...Object.values(roadWidthValues));
-  const submit = async (event) => {
-    event.preventDefault(); setState({ loading: true, result: null, error: '' });
-    try { const response = await api.post('/calculations/fsi', { ...form, conceptualisedZone: selectedZone?.conceptualisedZone ?? '', zoneCode: selectedZone?.code ?? '', permissibleUse: selectedZone?.permissibleUse ?? '', permissibleUseCode: activeUseCode, buildingUse: form.buildingUse || undefined, plotArea: Number(form.plotArea), roadWidth: effectiveRoadWidth, roadWidths: roadWidthValues }); setState({ loading: false, result: response.data, error: '' }); }
-    catch (error) { setState({ loading: false, result: null, error: getApiErrorMessage(error) }); }
+  const [authorityQuery, setAuthorityQuery] = useState('');
+  const [activePart, setActivePart] = useState('fsi');
+  const lastFsiRequest = useRef(null);
+  const configSignature = useRef('');
+  const fsiSignature = useRef('');
+  const authoritySignature = useRef('');
+  const useCodeSignature = useRef('');
+  useEffect(() => {
+    let active = true;
+    let loading = false;
+    const refreshConfig = async () => {
+      if (loading) return;
+      loading = true;
+      try {
+        const [configResult, authoritiesResult, usesResult] = await Promise.allSettled([
+          api.get('/calculator-configuration'), api.get('/development-authorities'), api.get('/calculator-use-codes'),
+        ]);
+        if (!active) return;
+        if (configResult.status === 'fulfilled' && configResult.value.data?.data) {
+          const nextConfig = configResult.value.data.data;
+          const nextSignature = JSON.stringify({ fsiRows: nextConfig.fsiRows ?? [], schedules: nextConfig.schedules ?? [], zones: nextConfig.zones ?? [], roadWidths: nextConfig.roadWidths ?? [] });
+          if (JSON.stringify(nextConfig) !== configSignature.current) setCalculatorConfig(nextConfig);
+          setZoneDataSource(configResult.value.data.zoneSource ?? 'dashboard');
+          if (fsiSignature.current && fsiSignature.current !== nextSignature && lastFsiRequest.current) {
+            api.post('/calculations/fsi', lastFsiRequest.current).then((response) => {
+              if (active && lastFsiRequest.current) setState({ loading: false, result: response.data, error: '' });
+            }).catch(() => {});
+          }
+          configSignature.current = JSON.stringify(nextConfig);
+          fsiSignature.current = nextSignature;
+        }
+        if (authoritiesResult.status === 'fulfilled' && Array.isArray(authoritiesResult.value.data?.data)) {
+          const categories = authoritiesResult.value.data.data;
+          const signature = JSON.stringify(categories);
+          if (signature !== authoritySignature.current) {
+            setDevelopmentCategories(categories);
+            authoritySignature.current = signature;
+          }
+          setAuthorityDataState((current) => current.loading || current.error ? { loading: false, error: '' } : current);
+        } else setAuthorityDataState((current) => current.loading ? { loading: false, error: 'Authority data could not be loaded.' } : current);
+        if (usesResult.status === 'fulfilled' && Array.isArray(usesResult.value.data?.data)) {
+          const rows = usesResult.value.data.data;
+          const signature = JSON.stringify(rows);
+          if (signature !== useCodeSignature.current) { setUseCodeRows(rows); useCodeSignature.current = signature; }
+          setUseCodeDataState((current) => current.loading || current.error ? { loading: false, error: '' } : current);
+        } else setUseCodeDataState((current) => current.loading ? { loading: false, error: 'Building use data could not be loaded.' } : current);
+      } catch {
+        if (!configSignature.current) {
+          setCalculatorConfig((current) => ({ ...current, zones: zoneTableFallback.rows }));
+          setZoneDataSource('fallback');
+        }
+      }
+      finally { loading = false; }
+    };
+    refreshConfig();
+    const interval = window.setInterval(refreshConfig, 5000);
+    window.addEventListener('focus', refreshConfig);
+    return () => { active = false; window.clearInterval(interval); window.removeEventListener('focus', refreshConfig); };
+  }, []);
+  const clearResult = () => { lastFsiRequest.current = null; setState({ loading: false, result: null, error: '' }); };
+  const set = (key) => (event) => { setForm((current) => ({ ...current, [key]: event.target.value })); clearResult(); };
+  const setDevelopmentArea = (event) => {
+    const value = event.target.value;
+    setForm((current) => ({ ...current, developmentArea: value, ...(authorityCode === 'GUDA' ? { zone: '' } : {}) }));
+    clearResult();
   };
-  return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> FSI CALCULATOR</div><div className="page-title-row"><div><h1>FSI calculator</h1><p>Enter the site context. The calculator uses available CGDCR FSI tables and keeps special or unsupported cases unresolved.</p></div><span className="source-status-tag"><ShieldCheck size={14}/> DETERMINISTIC</span></div><div className="tool-layout"><form className="form-panel" onSubmit={submit}><div className="panel-label">SITE AND DEVELOPMENT CONTEXT</div><label>Development authority &amp; development area category<select required value={form.developmentCategory} onChange={setCategory}><option value="">Select category from Table 1.1</option>{DEVELOPMENT_CATEGORIES.map(({ code, label }) => <option key={code} value={code}>{label}</option>)}</select></label><label>Development authority / ULB<select required value={form.developmentAuthority} onChange={setAuthority} disabled={!selectedCategory}><option value="">{selectedCategory ? 'Select authority or area' : 'Select a category first'}</option>{selectedCategory?.authorities.map((authority) => <option key={authority} value={authority}>{authority}</option>)}</select></label><label>Development area <span className="optional-label">IF APPLICABLE</span><input maxLength="160" value={form.developmentArea} onChange={set('developmentArea')} required={['D8', 'D9', 'D10'].includes(form.developmentCategory) || form.developmentAuthority.includes('(GUDA)')} placeholder={form.developmentAuthority.includes('(GUDA)') ? 'Enter GMC or Non-GMC' : 'Plan area, industrial estate, or other area name'}/></label><label>Use Zone (Designation in Development Plan) or general land use<select required value={form.zone} onChange={setZone} disabled={!form.developmentAuthority}><option value="">{form.developmentAuthority ? 'Select a zone from Table 6.2' : 'Select an authority first'}</option>{selectedZones.map(({ zone, code }) => <option key={`${code}-${zone}`} value={zone}>{zone}</option>)}</select></label>{selectedZone && <><label>Conceptualised Zone<input readOnly value={selectedZone.conceptualisedZone}/></label><label>Code<input readOnly value={selectedZone.code}/></label><label>Permissible Use<textarea readOnly rows={selectedZone.code === 'RAH1' ? 8 : 4} value={selectedZone.permissibleUse}/></label><label>Permissible Use referred as code>{selectedUseCodes.length ? <><select value={activeUseCode} onChange={(event) => setPermissibleUseCode(event.target.value)}>{selectedUseCodes.map((useCode) => <option key={useCode} value={useCode}>{useCode}</option>)}</select>{activeUseCode && <div className="use-code-details"><b>{activeUseCode} — {TABLE_6_3_USES[activeUseCode].classification}</b><span>{TABLE_6_3_USES[activeUseCode].details}</span></div>}</> : <textarea readOnly rows="4" value={selectedZone.permissibleUse}/>}</label></>}<label>Plot area <span>(m²)</span><input type="number" required min="0.01" step="any" value={form.plotArea} onChange={set('plotArea')} placeholder="e.g. 500"/></label><div className="road-width-grid">{[['front', 'Front'], ['left', 'Left'], ['right', 'Right'], ['rear', 'Rear']].map(([side, label]) => <label key={side}>{label} road width <span>(m)</span><input type="number" min="0.01" step="any" required={requiredRoadWidth} value={roadWidths[side]} onChange={setRoadWidth(side)} placeholder={side === 'front' ? 'e.g. 12' : ''}/></label>)}</div><label>Building use <span className="optional-label">OPTIONAL</span><input maxLength="120" value={form.buildingUse} onChange={set('buildingUse')} placeholder="Residential, commercial, mixed…"/></label><button className="button button-primary form-submit" type="submit" disabled={state.loading}>{state.loading ? 'Checking applicable data…' : 'Establish applicable FSI'} <ArrowRight size={15}/></button><small className="form-disclaimer">This is a preliminary table-based estimate. Special conditions and Jantri charges may require authority review.</small></form>
-    <div className="result-panel"><div className="panel-label">CALCULATION RESULT</div><RoadMarginDiagram category={form.developmentCategory} authority={form.developmentAuthority} area={form.developmentArea} roadWidths={roadWidths} plotArea={form.plotArea} buildingUse={form.buildingUse}/>{state.error ? <StateNotice tone="error">{state.error}</StateNotice> : state.loading ? <div className="panel-state">Resolving version, authority, zone, and applicable parameters…</div> : state.result?.status === 'CALCULATED' ? <><div className="fsi-result-summary"><small>Maximum permissible FSI · {state.result.calculation.table}</small><b>{state.result.calculation.maximumFsi.toFixed(2)}</b></div><div className="fsi-result-breakdown"><span>Base (free) FSI <b>{state.result.calculation.baseFsi == null ? 'See table' : state.result.calculation.baseFsi.toFixed(2)}</b></span><span>Chargeable FSI <b>{state.result.calculation.chargeableFsi == null ? 'See table' : state.result.calculation.chargeableFsi.toFixed(2)}</b></span><span>Base built-up area <b>{state.result.calculation.baseBuiltUpArea == null ? 'Not specified' : `${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.baseBuiltUpArea)} m²`}</b></span><span>Chargeable built-up area <b>{state.result.calculation.chargeableBuiltUpArea == null ? 'Not specified' : `${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.chargeableBuiltUpArea)} m²`}</b></span><span>Maximum built-up area <b>{new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.maximumBuiltUpArea)} m²</b></span></div>{state.result.calculation.notes.map((note) => <p className="fsi-result-note" key={note}>{note}</p>)}<p className="fsi-result-note">{state.result.calculation.chargeableBasis}</p>{state.result.sources.map((source) => <div className="result-reference" key={source.table}><FileText size={15}/><span>{source.document}, {source.table}</span></div>)}</> : state.result ? <><div className="result-unresolved"><span className="warning-symbol">!</span><div><b>Verified result unavailable</b><small>{state.result.message}</small></div></div><div className="missing-list"><b>What remains unresolved</b>{state.result.missingInformation.map((item) => <p key={item}><span>•</span>{item}</p>)}</div><div className="result-reference"><FileText size={15}/><span>No verified regulation or source-page references are available for these inputs.</span></div></> : <div className="result-empty"><Calculator size={22}/><b>Your FSI breakdown will appear here</b><p>No universal FSI value is assumed. The calculator waits for a table row that matches the authority, zone, and road widths.</p></div>}</div></div></div></AppShell>;
+  const setRoadWidth = (side) => (event) => { setRoadWidths((current) => ({ ...current, [side]: event.target.value })); clearResult(); };
+  const setMarginInput = (key) => (event) => { setMarginInputs((current) => ({ ...current, [key]: key === 'specialBuilding' ? event.target.checked : event.target.value })); };
+  const authorityCode = form.developmentAuthority.match(/\(([^)]+)\)$/)?.[1] ?? form.developmentAuthority;
+  const activeZones = calculatorConfig.zones.map((row) => ({ ...row, zone: row.useZone ?? row.zone }));
+  const selectedZones = activeZones.filter((zone) => (zone.appliesToCategories ?? []).includes(form.developmentCategory));
+  const selectedZone = selectedZones.find(({ zone }) => zone === form.zone);
+  const selectedZoneUseCodes = selectedZone ? getPermissibleUseCodes(selectedZone, useCodeRows, activeZones) : [];
+  const selectedRoadWidth = Number(roadWidths.front) || 0;
+  const widthControl = selectedRoadWidth > 0
+    ? calculatorConfig.roadWidths.find((row) => !row.isDeleted && selectedRoadWidth >= Number(row.roadWidthMinMeters) && (row.roadWidthMaxExclusiveMeters == null || selectedRoadWidth < Number(row.roadWidthMaxExclusiveMeters)))
+    : null;
+  const roadWidthUseCodes = selectedZone && ['CW', 'GM'].includes(selectedZone.code)
+    ? widthControl?.coreEffectiveUseCodes
+    : widthControl ? [...(widthControl.otherEffectiveUseCodes ?? []), ...(widthControl.otherConditionalUseCodes ?? [])] : null;
+  const selectedUseCodes = roadWidthUseCodes ? selectedZoneUseCodes.filter((code) => roadWidthUseCodes.includes(code)) : selectedZoneUseCodes;
+  const availableBuildingUses = selectedZone ? useCodeRows.filter(({ code }) => selectedUseCodes.includes(code)) : useCodeRows;
+  const activeUseCode = selectedUseCodes.includes(permissibleUseCode) ? permissibleUseCode : (selectedUseCodes[0] ?? '');
+  const activeUseDetails = useCodeRows.find(({ code }) => code === activeUseCode);
+  const selectedBuildingUse = useCodeRows.find(({ code }) => code === form.buildingUseCode);
+  const selectedCategory = developmentCategories.find(({ code }) => code === form.developmentCategory);
+  const setCategory = (event) => {
+    setForm((current) => ({ ...current, developmentCategory: event.target.value, developmentAuthority: '', developmentArea: '', zone: '', buildingUse: '', buildingUseCode: '' }));
+    setAuthorityQuery(''); setRoadWidths({ front: '', left: '', right: '', rear: '' }); setPermissibleUseCode(''); clearResult();
+  };
+  const searchAuthorities = (query) => { setAuthorityQuery(query); setForm((current) => ({ ...current, developmentAuthority: '', zone: '' })); setPermissibleUseCode(''); clearResult(); };
+  const selectAuthority = ({ authority, categoryCode }) => {
+    const categoryChanged = categoryCode !== form.developmentCategory;
+    setForm((current) => ({ ...current, developmentCategory: categoryCode, developmentAuthority: authority, developmentArea: categoryChanged ? '' : current.developmentArea, zone: '' }));
+    setAuthorityQuery(authority);
+    if (categoryChanged) setRoadWidths({ front: '', left: '', right: '', rear: '' });
+    setPermissibleUseCode(''); clearResult();
+  };
+  const setZone = (event) => { setForm((current) => ({ ...current, zone: event.target.value })); setPermissibleUseCode(''); clearResult(); };
+  const setBuildingUseCode = (event) => {
+    const code = event.target.value;
+    const use = useCodeRows.find((row) => row.code === code);
+    const normalizedUse = code.startsWith('DW') ? 'Residential' : code.startsWith('M') ? 'Commercial' : code.startsWith('IN') ? 'Industrial' : code.startsWith('AG') ? 'Agricultural' : use?.classification ?? '';
+    setForm((current) => ({ ...current, buildingUseCode: code, buildingUse: normalizedUse }));
+    clearResult();
+  };
+  const buildingUseField = form.developmentCategory === 'D9'
+    ? <label><span>Building use <span className="required-asterisk" aria-hidden="true">*</span></span><select required value={form.buildingUse} onChange={set('buildingUse')}><option value="">Choose a building use</option><option value="Residential">Residential</option><option value="Commercial">Commercial</option><option value="Industrial">Industrial</option><option value="Public">Public use</option></select></label>
+    : <label><span>Building use <span className="required-asterisk" aria-hidden="true">*</span></span><select required value={form.buildingUseCode} onChange={setBuildingUseCode} disabled={useCodeDataState.loading || Boolean(useCodeDataState.error)}><option value="">{useCodeDataState.loading ? 'Loading building uses…' : 'Choose a building use'}</option>{availableBuildingUses.map(({ code, classification }) => <option key={code} value={code}>{code} — {classification}</option>)}</select>{selectedBuildingUse&&<small className="field-hint"><b>{selectedBuildingUse.classification} ({selectedBuildingUse.code}):</b> {cleanRuleReference(selectedBuildingUse.permittedUses)}</small>}</label>;
+  const roadWidthValues = Object.fromEntries(Object.entries(roadWidths).filter(([, value]) => value !== '').map(([side, value]) => [side, Number(value)]));
+  const rearSideMarginAssessment = getRearSideMarginAssessment({ category: form.developmentCategory, authorityCode, developmentArea: form.developmentArea, zoneCode: selectedZone?.code, plotArea: form.plotArea, buildingUnitArea: marginInputs.buildingUnitArea, buildingHeight: marginInputs.buildingHeight, buildingUse: form.buildingUse, buildingUseCode: form.buildingUseCode, specialBuilding: marginInputs.specialBuilding, schedules: calculatorConfig.schedules });
+  const effectiveRoadWidth = Math.max(0, ...Object.values(roadWidthValues));
+  const heightRows = form.developmentCategory === 'D9'
+    ? [{ side: 'D9', width: null, rule: heightRuleFor(form.developmentCategory, authorityCode, form.developmentArea, 0, form.buildingUse, calculatorConfig.schedules) }]
+    : Object.entries(roadWidthValues).map(([side, width]) => ({ side, width, rule: heightRuleFor(form.developmentCategory, authorityCode, form.developmentArea, width, form.buildingUse, calculatorConfig.schedules) }));
+  const submit = async () => {
+    setState({ loading: true, result: null, error: '' });
+    if (!form.developmentCategory) { setState({ loading: false, result: null, error: 'Choose a development authority and area category.' }); return; }
+    if (!form.developmentAuthority) { setState({ loading: false, result: null, error: 'Choose a development authority / ULB from the search results.' }); return; }
+    if (!selectedCategory?.authorities.some((authority) => (typeof authority === 'string' ? authority : authority.name) === form.developmentAuthority)) { setState({ loading: false, result: null, error: 'Choose an authority or area from the search results.' }); return; }
+    if (authorityCode === 'GUDA' && !/^(?:GMC|Non[\s-]?GMC)$/i.test(form.developmentArea.trim())) { setState({ loading: false, result: null, error: 'For GUDA, enter exactly “GMC” or “Non-GMC” in Development area before choosing the zone.' }); return; }
+    if (!selectedZone) { setState({ loading: false, result: null, error: 'Choose a use zone before calculating FSI.' }); return; }
+    if (form.developmentCategory === 'D9' && !form.buildingUse) { setState({ loading: false, result: null, error: 'Select a building use: Residential, Commercial, Industrial, or Public.' }); return; }
+    if (form.developmentCategory !== 'D9' && !form.buildingUseCode) { setState({ loading: false, result: null, error: 'Select a building use.' }); return; }
+    if (form.developmentCategory !== 'D9' && !selectedUseCodes.includes(form.buildingUseCode)) { setState({ loading: false, result: null, error: 'Choose a building use permitted for the selected zone and road width.' }); return; }
+    if (!form.plotArea || Number(form.plotArea) <= 0) { setState({ loading: false, result: null, error: 'Enter the plot area.' }); return; }
+    if (!roadWidths.front || Number(roadWidths.front) <= 0) { setState({ loading: false, result: null, error: 'Enter the front road width.' }); return; }
+    try {
+      const payload = { ...form, conceptualisedZone: selectedZone?.conceptualisedZone ?? '', zoneCode: selectedZone?.code ?? '', permissibleUse: selectedZone?.permissibleUse ?? '', permissibleUseCode: activeUseCode, buildingUse: form.buildingUse || undefined, buildingUseCode: form.buildingUseCode || undefined, plotArea: Number(form.plotArea), roadWidth: effectiveRoadWidth, roadWidths: roadWidthValues, ...(distanceFromWideRoad !== '' ? { distanceFromWideRoad: Number(distanceFromWideRoad) } : {}) };
+      lastFsiRequest.current = payload;
+      const response = await api.post('/calculations/fsi', payload);
+      setState({ loading: false, result: response.data, error: '' });
+    } catch (error) { setState({ loading: false, result: null, error: getApiErrorMessage(error) }); }
+  };
+  const parts = [
+    { id: 'fsi', number: '01', title: 'FSI', subtitle: 'Base, chargeable and maximum permissible floor area' },
+    { id: 'margins', number: '02', title: 'Margins', subtitle: 'Road-side, rear and side margin checks' },
+    { id: 'height', number: '03', title: 'Height', subtitle: 'Maximum height for each abutting road' },
+  ];
+  const activePartInfo = parts.find((part) => part.id === activePart);
+  const renderFsiResult = () => state.error ? <StateNotice tone="error">{cleanRuleReference(state.error)}</StateNotice> : state.loading ? <div className="panel-state">Resolving authority, zone, plot size, and applicable FSI parameters…</div> : state.result?.status === 'CALCULATED' ? <><div className="fsi-result-summary"><small>Maximum permissible FSI</small><b>{state.result.calculation.maximumFsi.toFixed(2)}</b></div><div className="fsi-result-breakdown"><span>Base (free) FSI <b>{state.result.calculation.baseFsi == null ? 'Not specified' : state.result.calculation.baseFsi.toFixed(2)}</b></span><span>Chargeable FSI <b>{state.result.calculation.chargeableFsi == null ? 'Not specified' : state.result.calculation.chargeableFsi.toFixed(2)}</b></span><span>Base built-up area <b>{state.result.calculation.baseBuiltUpArea == null ? 'Not specified' : `${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.baseBuiltUpArea)} m²`}</b></span><span>Chargeable built-up area <b>{state.result.calculation.chargeableBuiltUpArea == null ? 'Not specified' : `${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.chargeableBuiltUpArea)} m²`}</b></span><span>Maximum built-up area <b>{new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.maximumBuiltUpArea)} m²</b></span></div>{state.result.calculation.notes.map((note) => <p className="fsi-result-note" key={note}>{cleanRuleReference(note)}</p>)}<p className="fsi-result-note">{cleanRuleReference(state.result.calculation.chargeableBasis)}</p>{state.result.sources.map((source) => <div className="result-reference" key={source.document}><FileText size={15}/><span>{cleanRuleReference(source.document)}</span></div>)}</> : state.result ? <><div className="result-unresolved"><span className="warning-symbol">!</span><div><b>Verified result unavailable</b><small>{cleanRuleReference(state.result.message)}</small></div></div><div className="missing-list"><b>What remains unresolved</b>{state.result.missingInformation.map((item) => <p key={item}><span>•</span>{cleanRuleReference(item)}</p>)}</div><div className="result-reference"><FileText size={15}/><span>No verified regulation or source-page references are available for these inputs.</span></div></> : <div className="result-empty"><Calculator size={22}/><b>FSI calculation is ready</b><p>Complete the shared site details, then calculate to match the authority, zone, permitted use, and road widths to a verified schedule.</p></div>;
+  return <AppShell><div className="workspace-page plot-feasibility-page">
+    <div className="page-kicker">BUILD RULE GUJARAT <span>/</span> PLOT FEASIBILITY</div>
+    <div className="page-title-row"><div><h1>Land/Plot Feasibility Calculator</h1><p>Enter the site details once, then review FSI, margins, and height in separate checks.</p></div><span className="source-status-tag"><ShieldCheck size={14}/> SOURCE-LINKED</span></div>
+    <section className="site-context-card"><div className="site-context-heading"><div><span className="panel-label">SHARED SITE INPUTS</span><h2>Site and development context</h2><p>These details are shared across all three checks.</p></div><span className="site-context-badge">{form.developmentCategory || 'CATEGORY'}{selectedZone ? ` · ${selectedZone.code}` : ''}</span></div>
+      <div className="site-context-grid">
+        <label><span>Development authority &amp; area category <span className="required-asterisk" aria-hidden="true">*</span></span><select required value={form.developmentCategory} onChange={setCategory} disabled={authorityDataState.loading || Boolean(authorityDataState.error)}><option value="">{authorityDataState.loading ? 'Loading categories…' : developmentCategories.length ? 'Choose a category' : 'No active categories'}</option>{developmentCategories.map(({ code, label }) => <option key={code} value={code}>{label}</option>)}</select></label>
+        <label><span>Development authority / ULB <span className="required-asterisk" aria-hidden="true">*</span></span><AuthoritySearchSelect categories={developmentCategories} categoryCode={form.developmentCategory} value={form.developmentAuthority} query={authorityQuery} onQueryChange={searchAuthorities} onSelect={selectAuthority} disabled={authorityDataState.loading || Boolean(authorityDataState.error)}/></label>
+        <label>Development area {authorityCode === 'GUDA' && <span className="required-label">REQUIRED · GMC OR NON-GMC</span>}<input maxLength="160" value={form.developmentArea} onChange={setDevelopmentArea} placeholder={authorityCode === 'GUDA' ? 'Enter exactly GMC or Non-GMC' : 'Plan area, industrial estate, or other area name'}/>{authorityCode === 'GUDA'&&<small className="field-hint">GUDA zones and applicable FSI, margin, and height rules depend on this selection. Set it before choosing a zone.</small>}</label>
+        <label><span>Use zone / general land use <span className="required-asterisk" aria-hidden="true">*</span></span><select required value={form.zone} onChange={setZone} disabled={!form.developmentAuthority}><option value="">{form.developmentAuthority ? 'Select a Zone' : 'Select an authority first'}</option>{selectedZones.map(({ zone, code }) => <option key={`${code}-${zone}`} value={zone}>{zone}</option>)}</select>{zoneDataSource === 'dashboard'&&<small className="field-hint">Loaded from active dashboard rows.</small>}{zoneDataSource === 'fallback'&&<small className="field-hint">Dashboard zone data is unavailable; showing the built-in zone list.</small>}</label>
+        <label><span>Plot area (m²) <span className="required-asterisk" aria-hidden="true">*</span></span><input required type="number" min="0.01" step="any" value={form.plotArea} onChange={set('plotArea')} placeholder="e.g. 500"/></label>
+        {buildingUseField}
+      </div>
+      {authorityDataState.error&&<StateNotice tone="error">Could not load categories and authorities: {authorityDataState.error}</StateNotice>}
+      {useCodeDataState.error&&<StateNotice tone="error">Could not load building uses: {useCodeDataState.error}</StateNotice>}
+      {selectedZone&&<details className="site-zone-details"><summary>Selected zone details · {selectedZone.code}</summary><div className="site-zone-summary"><span><b>Conceptualised zone</b>{selectedZone.conceptualisedZone}</span><span><b>Zone code</b>{selectedZone.code}</span><span className="site-permissible-use"><b>Permissible uses</b>{cleanRuleReference(selectedZone.permissibleUse)}</span>{selectedUseCodes.length>0&&<><label>Permitted use code<select value={activeUseCode} onChange={(event)=>{setPermissibleUseCode(event.target.value);clearResult();}}>{selectedUseCodes.map((code)=><option key={code} value={code}>{code}{useCodeRows.find((row)=>row.code===code)?` — ${useCodeRows.find((row)=>row.code===code).classification}`:''}</option>)}</select></label><div className="site-selected-use-detail" aria-live="polite"><b>Building use details{activeUseCode?` · ${activeUseCode}`:''}</b>{activeUseDetails?<><strong>{activeUseDetails.classification}</strong><p>{cleanRuleReference(activeUseDetails.permittedUses)}</p></>:<p>Detailed description for this code is not available.</p>}</div></>}</div></details>}
+      <div className="site-road-widths"><div><b>Abutting road widths</b><small>Enter every road adjoining the plot; leave other sides blank.</small></div><div className="road-width-grid">{[['front','Front'],['left','Left'],['right','Right'],['rear','Rear']].map(([side,label])=><label key={side}><span>{label} road (m){side==='front'&&<> <span className="required-asterisk" aria-hidden="true">*</span></>}</span><input required={side==='front'} type="number" min="0.01" step="any" value={roadWidths[side]} onChange={setRoadWidth(side)} placeholder={side==='front'?'e.g. 12':'Not abutting'}/></label>)}</div></div>
+      <label className="wide-road-distance-field">Distance from the edge of the qualifying 36 m+ road (m)<input type="number" min="0" step="any" value={distanceFromWideRoad} onChange={(event)=>{setDistanceFromWideRoad(event.target.value);clearResult();}} placeholder="Enter only if within or near 200 m"/><small className="field-hint">For D1, D2, D4, and D7A sites with base FSI ≥ 1.5 and a 36 m+ road, enter the distance from the road edge. This provision applies within 200 m, subject to its listed exceptions.</small></label>
+    </section>
+    <nav className="feasibility-part-tabs" aria-label="Plot feasibility checks" role="tablist">{parts.map((part)=><button key={part.id} className={`feasibility-part-tab${activePart===part.id?' is-active':''}`} type="button" role="tab" aria-selected={activePart===part.id} aria-controls={`feasibility-${part.id}`} onClick={()=>setActivePart(part.id)}><span>{part.number}</span><b>{part.title}</b><small>{part.subtitle}</small></button>)}</nav>
+    <section id={`feasibility-${activePart}`} className="feasibility-part-panel" role="tabpanel"><div className="feasibility-part-heading"><div><span className="panel-label">PART {activePartInfo.number}</span><h2>{activePartInfo.title}</h2><p>{activePartInfo.subtitle}</p></div>{activePart==='fsi'&&<button className="button button-primary feasibility-action" type="button" onClick={submit} disabled={state.loading}>{state.loading?'Calculating…':'Calculate FSI'} <ArrowRight size={15}/></button>}</div>
+      {activePart==='fsi'&&<div className="feasibility-result-body">{renderFsiResult()}<small className="form-disclaimer">Preliminary estimate. Special conditions and Jantri charges may require authority review.</small></div>}
+      {activePart==='margins'&&<div className="feasibility-result-body">
+        <div className="margin-input-grid">
+          {(form.developmentCategory === 'D6' || (form.developmentCategory === 'D1' && authorityCode === 'RUDA' && (form.buildingUseCode === 'DW3' || (Number(roadWidths.front) > 30 && Number(roadWidths.front) < 45)))) && <label>Building-unit area (m²)<input type="number" min="0.01" step="any" value={marginInputs.buildingUnitArea} onChange={setMarginInput('buildingUnitArea')} placeholder="Enter building-unit area"/></label>}
+          {form.developmentCategory !== 'D9' && <label>Building height (m)<input type="number" min="0.01" step="any" value={marginInputs.buildingHeight} onChange={setMarginInput('buildingHeight')} placeholder="Enter proposed height"/><small>Used where rear and side margins depend on building height.</small></label>}
+          {form.developmentCategory !== 'D9' && <label className="margin-special-toggle"><input type="checkbox" checked={marginInputs.specialBuilding} onChange={setMarginInput('specialBuilding')}/> Special building</label>}
+        </div>
+        <RoadMarginDiagram category={form.developmentCategory} authority={form.developmentAuthority} area={form.developmentArea} zoneCode={selectedZone?.code} roadWidths={roadWidths} plotArea={form.plotArea} buildingUse={form.buildingUse} buildingUnitArea={marginInputs.buildingUnitArea} buildingHeight={marginInputs.buildingHeight} rearSideAssessment={rearSideMarginAssessment} schedules={calculatorConfig.schedules}/>
+      </div>}
+      {activePart==='height'&&<div className="feasibility-result-body"><div className="height-result-list">{heightRows.length?heightRows.map(({side,width,rule})=><article className="height-result-row" key={side}><div><small>{form.developmentCategory === 'D9' ? 'CATEGORY D9' : `${side.toUpperCase()} ROAD`}</small><b>{form.developmentCategory === 'D9' ? (form.buildingUse || 'Select building use') : `${width} m`}</b></div><span className="height-result-arrow">→</span><div className="height-result-value">{rule?<><small>{rule.tableNumber === '6.19' ? 'MAXIMUM HEIGHT' : 'MAXIMUM HEIGHT'}</small><b>{rule.maximumBuildingHeightText} m</b><span>{rule.tableNumber === '6.19' ? `${rule.roadWidthLabel} use` : `${rule.sourceCells[0]} · ${rule.roadWidthLabel}`}</span>{rule.industrialNote&&<span>{cleanRuleReference(rule.industrialNote)}</span>}</>:<><small>{form.developmentCategory === 'D9' ? 'BUILDING USE REQUIRED' : 'NO MATCHING ROW'}</small><b>{form.developmentCategory === 'D9' ? (form.buildingUse ? 'Height result unavailable' : 'Choose a building use') : 'Unresolved'}</b><span>{form.developmentCategory === 'D9' ? 'Available height values cover Residential, Commercial, and Industrial uses.' : 'This category or authority scope is not covered by the supplied height schedule.'}</span></>}</div></article>):<div className="result-empty"><Calculator size={22}/><b>Enter a road width and category</b><p>Height is matched to each abutting road separately.</p></div>}</div>{form.developmentCategory === 'D9' ? <details className="height-source-notes" open={Boolean(form.buildingUse?.toLowerCase().includes('industrial'))}><summary>Notes and provisions</summary><p>A maximum height of 13.00 m for Residential, Commercial, and Industrial use. Additional height for industrial purposes requires approval by the Factory Inspector.</p></details> : <details className="height-source-notes"><summary>Notes and provisions</summary><ul>{buildingHeightSource.table.notes.map((note,index)=><li key={`note-${index}`}>{cleanRuleReference(note)}</li>)}{buildingHeightSource.generalProvisions[0].sourceText.map((note,index)=><li key={`rule-${index}`}>{cleanRuleReference(note)}</li>)}</ul></details>}</div>}
+    </section>
+  </div></AppShell>;
 }
-
 function ComplianceChecker() {
   const [form, setForm] = useState({ projectName: '', developmentAuthority: '', zone: '', plotArea: '', roadWidth: '', landUse: '', buildingUse: '', buildingHeight: '', numberOfFloors: '', proposedBuiltUpArea: '', groundCoverage: '', parkingDetails: '' });
   const [state, setState] = useState({ loading: false, result: null, error: '' });
@@ -518,7 +1009,7 @@ function ComplianceChecker() {
     catch (error) { setState({ loading: false, result: null, error: getApiErrorMessage(error) }); }
   };
   return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> PRELIMINARY ASSESSMENT</div><div className="page-title-row"><div><h1>Building compliance checker</h1><p>Capture project and site details. Each check requires an applicable, verified provision.</p></div><span className="source-status-tag"><ShieldCheck size={14}/> PRELIMINARY ONLY</span></div><div className="tool-layout compliance-layout"><form className="form-panel" onSubmit={submit}><div className="panel-label">PROJECT AND SITE DETAILS</div><label>Project name<input maxLength="160" value={form.projectName} onChange={set('projectName')} placeholder="Project name"/></label><div className="field-pair"><label>Development authority<input maxLength="160" value={form.developmentAuthority} onChange={set('developmentAuthority')} placeholder="Authority"/></label><label>Zone<input maxLength="120" value={form.zone} onChange={set('zone')} placeholder="Zone"/></label></div><div className="field-pair"><label>Plot area <span>(m²)</span><input type="number" min="0.01" step="any" value={form.plotArea} onChange={set('plotArea')}/></label><label>Road width <span>(m)</span><input type="number" min="0.01" step="any" value={form.roadWidth} onChange={set('roadWidth')}/></label></div><div className="panel-label form-subsection">BUILDING DETAILS</div><div className="field-pair"><label>Land use<input maxLength="120" value={form.landUse} onChange={set('landUse')} placeholder="Designation"/></label><label>Building use<input maxLength="120" value={form.buildingUse} onChange={set('buildingUse')} placeholder="Occupancy or use"/></label></div><div className="field-pair"><label>Building height <span>(m)</span><input type="number" min="0.01" step="any" value={form.buildingHeight} onChange={set('buildingHeight')}/></label><label>Number of floors<input type="number" min="1" step="1" value={form.numberOfFloors} onChange={set('numberOfFloors')}/></label></div><div className="field-pair"><label>Proposed built-up area <span>(m²)</span><input type="number" min="0.01" step="any" value={form.proposedBuiltUpArea} onChange={set('proposedBuiltUpArea')}/></label><label>Ground coverage <span>(m²)</span><input type="number" min="0.01" step="any" value={form.groundCoverage} onChange={set('groundCoverage')}/></label></div><label>Parking details<input maxLength="500" value={form.parkingDetails} onChange={set('parkingDetails')} placeholder="Optional details"/></label><button className="button button-primary form-submit" type="submit" disabled={state.loading}>{state.loading ? 'Checking available rules…' : 'Run preliminary assessment'} <ArrowRight size={15}/></button></form>
-    <div className="result-panel assessment-result"><div className="panel-label">ASSESSMENT STATUS</div>{state.error ? <StateNotice tone="error">{state.error}</StateNotice> : state.loading ? <div className="panel-state">Checking source availability and applicability…</div> : state.result ? <><div className="assessment-status"><span className="warning-symbol">!</span><div><b>Insufficient information</b><small>No compliance or non-compliance finding has been established.</small></div></div><div className="missing-list"><b>Why this assessment is unresolved</b>{state.result.missingInformation.map((item) => <p key={item}><span>•</span>{item}</p>)}</div><div className="result-reference"><FileText size={15}/><span>0 findings · no source provisions have been verified for this assessment.</span></div></> : <div className="result-empty"><FileCheck2 size={22}/><b>Findings will be listed here</b><p>Each finding will include the supplied value, applicable requirement, result, and source PDF page. Missing information will stay unresolved.</p></div>}</div></div></div></AppShell>;
+    <div className="result-panel assessment-result"><div className="panel-label">ASSESSMENT STATUS</div>{state.error ? <StateNotice tone="error">{cleanRuleReference(state.error)}</StateNotice> : state.loading ? <div className="panel-state">Checking source availability and applicability…</div> : state.result ? <><div className="assessment-status"><span className="warning-symbol">!</span><div><b>Insufficient information</b><small>No compliance or non-compliance finding has been established.</small></div></div><div className="missing-list"><b>Why this assessment is unresolved</b>{state.result.missingInformation.map((item) => <p key={item}><span>•</span>{cleanRuleReference(item)}</p>)}</div><div className="result-reference"><FileText size={15}/><span>0 findings · no source provisions have been verified for this assessment.</span></div></> : <div className="result-empty"><FileCheck2 size={22}/><b>Findings will be listed here</b><p>Each finding will include the supplied value, applicable requirement, result, and source PDF page. Missing information will stay unresolved.</p></div>}</div></div></div></AppShell>;
 }
 
 function PermissionGuide() {
