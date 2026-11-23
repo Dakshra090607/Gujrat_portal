@@ -6,8 +6,8 @@ import AdminDashboard from './features/admin/AdminDashboard.jsx';
 import AuthPage from './features/auth/AuthPage.jsx';
 import ProfilePage from './features/auth/ProfilePage.jsx';
 import { authClient } from './lib/auth.js';
-import buildingHeightSource from '../../data/table-6-23-building-height.json';
-import zoneTableFallback from '../../data/table-6-2.json';
+import buildingHeightSource from './data/table-6-23-building-height.json';
+import zoneTableFallback from './data/table-6-2.json';
 import {
   ArrowDownRight, ArrowRight, BookOpen, Building2, Calculator, CheckCircle2, LogOut,
   ChevronDown, CircleHelp, Compass, FileCheck2, FileText, Layers3, Menu,
