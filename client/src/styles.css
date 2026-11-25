@@ -56,6 +56,7 @@
   .plot-feasibility-page .site-zone-summary select,
   .plot-feasibility-page .wide-road-distance-field select,
   .plot-feasibility-page .authority-search-select>input{height:48px;min-height:48px;padding-inline:12px;font-size:16px}
+  .plot-feasibility-page .wide-road-distance-field{grid-template-columns:minmax(0,1fr);max-width:none;gap:12px}
   .plot-feasibility-page .authority-options{max-height:min(260px,40vh);border-radius:8px}
   .plot-feasibility-page .authority-option{min-height:50px;padding:10px 12px}
   .plot-feasibility-page .authority-option span{font-size:14px}

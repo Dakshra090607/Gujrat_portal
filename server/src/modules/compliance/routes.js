@@ -20,6 +20,7 @@ const fsiSchema = z.object({
   developmentAuthority: z.string().trim().min(1).max(160),
   developmentArea: z.string().trim().max(160).optional(),
   zone: z.string().trim().min(1).max(500),
+  scheduleRowKey: z.string().trim().max(180).optional(),
   conceptualisedZone: z.string().trim().max(120).optional(),
   zoneCode: z.string().trim().max(20).optional(),
   permissibleUse: z.string().trim().max(2000).optional(),
@@ -32,6 +33,7 @@ const fsiSchema = z.object({
   }).optional(),
   plotArea: positiveNumber,
   roadWidth: positiveNumber,
+  qualifyingWideRoadWidth: z.coerce.number().finite().min(0).optional(),
   distanceFromWideRoad: z.coerce.number().finite().min(0).optional(),
   buildingUse: z.string().trim().max(120).optional(),
   buildingUseCode: z.string().trim().max(40).optional(),
@@ -180,3 +182,4 @@ router.get('/permission-guide', (_req, res) => {
 });
 
 export default router;
+
