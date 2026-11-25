@@ -184,8 +184,8 @@ function RegulationExplorer() {
   const choose = (doc) => setParams({ document: doc._id, page: '1' });
   return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> SOURCE EXPLORER</div><div className="page-title-row"><div><h1>CGDCR source explorer</h1><p>Browse the supplied regulation parts and review extracted text against the original PDF.</p></div><span className="source-status-tag"><CheckCircle2 size={14}/> SOURCE TEXT EXTRACTED</span></div>
     {catalog.loading ? <div className="panel-state">Loading source document inventory…</div> : catalog.error ? <StateNotice tone="error">{catalog.error} Check the Neon connection and run the source import to open the page explorer.</StateNotice> : <>
-      <div className="part-grid">{catalog.parts.map((part) => { const doc = catalog.documents.find((item) => item.part === part.part); return <button key={part.part} className={`part-card ${selected?.part === part.part ? 'part-card-active' : ''}`} disabled={!doc} onClick={() => doc && choose(doc)}><span className="part-index">{part.part.toUpperCase()}</span><b>{part.partTitle}</b><small>{doc ? `${doc.pageCount} PDF pages · ${part.chapterCount} reviewed chapters` : 'Source document not indexed'}</small><span className="review-pill">{doc?.extractionStatus ?? 'UNAVAILABLE'}</span></button>; })}</div>
-      {selected ? <SourcePageReader key={selected._id} document={selected} pageNumber={pageNumber} onPageChange={(next) => setParams({ document: selected._id, page: String(next) })}/> : <div className="hierarchy-pending"><Layers3 size={18}/><div><b>Chapter and regulation hierarchy is awaiting source review.</b><p>Part and page counts come from the source PDFs. No chapter title or regulation number is shown as canonical until it is verified.</p></div></div>}
+      <div className="part-grid">{catalog.parts.map((part) => { const doc = catalog.documents.find((item) => item.part === part.part); return <button key={part.part} className={`part-card ${selected?.part === part.part ? 'part-card-active' : ''}`} disabled={!doc} onClick={() => doc && choose(doc)}><span className="part-index">{part.part.toUpperCase()}</span><b>{part.partTitle}</b><small>{doc ? `${doc.pageCount} PDF pages` : 'Source document not indexed'}</small><span className="review-pill">{doc?.extractionStatus ?? 'UNAVAILABLE'}</span></button>; })}</div>
+      {selected ? <SourcePageReader key={selected._id} document={selected} pageNumber={pageNumber} onPageChange={(next) => setParams({ document: selected._id, page: String(next) })}/> : <div className="hierarchy-pending"><Layers3 size={18}/><div><b>Source structure is awaiting review.</b><p>Part and page counts come from the source PDFs. Unverified source labels are not presented as confirmed guidance.</p></div></div>}
     </>}</div></AppShell>;
 }
 
@@ -403,8 +403,13 @@ const TABLE_6_2_ZONE_CODES = [...new Set(DESIGNATED_ZONES.map(({ code }) => code
 
 function cleanRuleReference(value = '') {
   return String(value)
-    .replace(/\bTables?\s+\d+(?:\.\d+)?[A-Z]?(?:\s*(?:[–—/-]\s*\d+(?:\.\d+)?[A-Z]?))*\b/gi, '')
-    .replace(/\b(?:table|tables)\b/gi, '')
+    .replace(/CGDCR\s+Chapter\s+12\s*[·•-]?\s*Regulation\s+12\.4\.\d+/gi, 'Tall Building policy')
+    .replace(/\b(?:CGDCR\s+)?Chapter\s+\d+(?:\.\d+)*\b/gi, '')
+    .replace(/\bRegulation\s+\d+(?:\.\d+)*\b/gi, '')
+    .replace(/\bclause\s+\d+(?:\.\d+)*(?:\(\d+\))?\b/gi, '')
+    .replace(/\b\d+\.\d+\(\d+\):?\s*/g, '')
+    .replace(/\bTables?\s+\d+(?:\.\d+)?[A-Z]?(?:\s*(?:[–—/-]\s*\d+(?:\.\d+)?[A-Z]?))*\b/gi, 'the applicable schedule')
+    .replace(/\b(?:table|tables)\b/gi, 'schedule')
     .replace(/\s{2,}/g, ' ')
     .replace(/\s+([,.;:])/g, '$1')
     .trim();
@@ -479,11 +484,11 @@ function getTable64UseAllowance({ code, category, zoneCode, widthControl, widthU
   const zone = String(zoneCode ?? '').toUpperCase();
   if (zone === 'LZ' || /^IN/.test(useCode) || useCode === 'PU') return { allowed: true, reason: 'Industrial uses, Public Utility structures, and Logistic Zone uses are exempt from road-width use control.' };
   if (['M1', 'M2'].includes(useCode) && table64CommercialCategories.has(category) && commercialZoneCodes.has(zone)) {
-    return { allowed: true, reason: 'Commercial Zones C1 to C4 are excluded from the M1/M2 road-width restriction in clause 6.2(3).' };
+    return { allowed: true, reason: 'Commercial Zones C1 to C4 are excluded from the M1/M2 road-width restriction.' };
   }
   if (!widthControl) return { allowed: true, reason: '' };
   const allowed = (widthUseCodes ?? []).includes(useCode);
-  return { allowed, reason: allowed ? '' : `This use is not listed for the selected Table 6.4 road-width band (${widthControl.roadWidthLabel}).` };
+  return { allowed, reason: allowed ? '' : `This use is not listed for the selected road-width band (${widthControl.roadWidthLabel}).` };
 }
 
 function Table64ProvisionNotes({ category, zoneCode, zoneLabel, buildingUseCode, buildingUse, widthControl, widthUseCodes }) {
@@ -496,20 +501,20 @@ function Table64ProvisionNotes({ category, zoneCode, zoneLabel, buildingUseCode,
   const commercialException = commercialInScope && commercialZoneCodes.has(String(zoneCode ?? '').toUpperCase());
   const allowance = getTable64UseAllowance({ code, category, zoneCode, widthControl, widthUseCodes });
   const notes = [
-    '6.2(1): Subject to the other regulations, Table 6.4 regulates building-unit uses by the width of the road the use abuts.',
-    '6.2(2): Industrial uses and Public Utility structures are not regulated on the basis of road width.',
-    '6.2(3): M1/M2 commercial use in D1–D7(A) and D7(B) is regulated by abutting road width, except in Commercial Zones C1–C4.',
-    '6.2(4): A permissible non-residential use in a residential zone may be on the ground floor, or another floor in a residential dwelling only when separate access/staircase is provided.',
-    '6.2(5): A professional office may occupy part of a residential building up to 50 m² with parking and is regulated on a commercial basis.',
+    'Building-unit uses are regulated according to the width of the road they abut, subject to other requirements.',
+    'Industrial uses and Public Utility structures are not regulated on the basis of road width.',
+    'M1/M2 commercial use in D1–D7(A) and D7(B) is regulated by abutting road width, except in Commercial Zones C1–C4.',
+    'A permissible non-residential use in a residential zone may be on the ground floor, or another floor in a residential dwelling only when separate access/staircase is provided.',
+    'A professional office may occupy part of a residential building up to 50 m² with parking and is regulated on a commercial basis.',
   ];
   const applicability = [];
-  if (code) applicability.push(`${useLabel} is ${allowance.allowed ? 'allowed' : 'restricted'} under the selected Table 6.4 road-width band.${allowance.reason ? ` ${allowance.reason}` : ''}`);
-  if (commercialException) applicability.push('The selected C1–C4 Commercial Zone is exempt from the specific M1/M2 road-width control in clause 6.2(3).');
-  else if (commercialInScope && widthControl?.commercialRestrictionText) applicability.push(`Table 6.4 commercial floor restriction for this road band: ${widthControl.commercialRestrictionText}${widthControl.commercialRestrictionNotes ? ` ${widthControl.commercialRestrictionNotes}` : ''}`);
+  if (code) applicability.push(`${useLabel} is ${allowance.allowed ? 'allowed' : 'restricted'} under the selected road-width rules.${allowance.reason ? ` ${allowance.reason}` : ''}`);
+  if (commercialException) applicability.push('The selected C1–C4 Commercial Zone is exempt from the specific M1/M2 road-width control.');
+  else if (commercialInScope && widthControl?.commercialRestrictionText) applicability.push(`Commercial floor restriction for this road band: ${widthControl.commercialRestrictionText}${widthControl.commercialRestrictionNotes ? ` ${widthControl.commercialRestrictionNotes}` : ''}`);
   if (residentialZone && nonResidential) applicability.push('Confirm the separate access/staircase condition before placing this non-residential use above the ground floor of a dwelling.');
   if (/^DW/.test(code)) applicability.push('If the dwelling includes a professional office, the 50 m² limit, parking provision, and commercial-basis treatment apply.');
   applicability.push('These clauses govern use permission and floor placement; numeric FSI, margin, and height values continue to come from their respective schedules.');
-  return <details className="height-source-notes table64-provision-notes"><summary>Table 6.4 use-control provisions</summary><ul>{notes.map((note) => <li key={note}>{note}</li>)}{applicability.map((note) => <li key={note}>{note}</li>)}</ul></details>;
+  return <details className="height-source-notes table64-provision-notes"><summary>Use and road-width guidance</summary><ul>{notes.map((note) => <li key={note}>{note}</li>)}{applicability.map((note) => <li key={note}>{note}</li>)}</ul></details>;
 }
 
 function getRoadSideMargin({ category, authority, area, zoneCode, roadWidth, plotArea, buildingUse, side, buildingUnitArea, buildingHeight, schedules, tallPolicyReady, tallPolicyUnitArea }) {
@@ -517,7 +522,7 @@ function getRoadSideMargin({ category, authority, area, zoneCode, roadWidth, plo
   const authorityCode = authority.match(/\(([^)]+)\)$/)?.[1] ?? authority;
   if (tallPolicyReady && category === 'D1' && ['AUDA', 'SUDA', 'VUDA', 'RUDA', 'GUDA'].includes(authorityCode)) {
     const margin = Number(tallPolicyUnitArea) >= 3500 ? 15 : 12;
-    return { margin, note: `Tall Building policy · Regulation 12.4.8: ${margin} m road-side margin for the selected height category, irrespective of road width.` };
+    return { margin, note: `Tall Building policy: ${margin} m road-side margin for the selected height category, irrespective of road width.` };
   }
   if (category === 'D1' && authorityCode === 'GUDA' && (!/non[\s-]?gmc/i.test(area) || (/\bGMC\b/i.test(area) && !/non[\s-]?gmc/i.test(area)))) return null;
   if (category === 'D6') {
@@ -563,20 +568,20 @@ function getRoadSideMargin({ category, authority, area, zoneCode, roadWidth, plo
     }
     if (zone === 'GI1' || zone === 'GI-1') {
       const row = rowsFor('6.33').find((item) => matchesArea(item.sourceCells?.[0], Number(plotArea)));
-      return row ? { margin: value(row.sourceCells?.[1]) } : { margin: null, note: 'Table 6.33 lists specific plot sizes; no exact plot-size row matches the entered plot area.' };
+      return row ? { margin: value(row.sourceCells?.[1]) } : { margin: null, note: 'The schedule lists specific plot sizes; no exact plot-size row matches the entered plot area.' };
     }
     if (/^IN/.test(String(buildingUse ?? '').toUpperCase()) || /industrial/i.test(buildingUse ?? '')) {
       const row = rowsFor('6.37').find((item) => matchesArea(item.sourceCells?.[0], roadWidth));
       if (!row) return null;
       const unitArea = Number(buildingUnitArea);
-      if (!unitArea) return { margin: null, note: 'Enter building-unit area to resolve the industrial road-side margin in Table 6.37.' };
+      if (!unitArea) return { margin: null, note: 'Enter building-unit area to resolve the industrial road-side margin.' };
       const sideValue = value(unitArea <= 1000 ? row.sourceCells?.[2] : row.sourceCells?.[3]);
       const roadLabel = String(row.sourceCells?.[1] ?? '');
       return { margin: /as per side margin/i.test(roadLabel) ? sideValue : value(roadLabel) };
     }
     if (['R1', 'R2', 'R3'].includes(zone)) {
       const row = rowsFor('6.29').find((item) => matchesArea(item.sourceCells?.[1], Number(plotArea)));
-      if (!row) return { margin: null, note: 'Table 6.29 requires a listed residential plot-size row.' };
+      if (!row) return { margin: null, note: 'A listed residential plot-size row is required.' };
       const roadType = /town/i.test(area ?? '') ? 'town' : /interior/i.test(area ?? '') ? 'interior' : '';
       if (!roadType) return { margin: null, note: 'Enter whether this residential road is a town road or an interior road.' };
       const column = roadType === 'town' ? ({ R1: 2, R2: 3, R3: 4 }[zone]) : ({ R1: 5, R2: 6, R3: 7 }[zone]);
@@ -708,7 +713,7 @@ function getRearSideMarginAssessment({ category, authorityCode, developmentArea,
   const review = (message) => ({ status: 'review', message });
   if (!category || !Number.isFinite(plot) || plot <= 0 || !buildingUse) return needs('plot area and building use');
   if (tallPolicyReady && category === 'D1' && ['AUDA', 'SUDA', 'VUDA', 'RUDA', 'GUDA'].includes(authorityCode)) {
-    return result('12 m', 'Both sides: 12 m each', 'Tall Building policy · Regulation 12.4.8: other-side margins are 12 m; provide 20 m separation between buildings on the same podium and between podiums in one building unit. Nothing except portable security cabins is permitted in margins.', '', { rear: 12, left: 12, right: 12 });
+    return result('12 m', 'Both sides: 12 m each', 'Tall Building policy: other-side margins are 12 m; provide 20 m separation between buildings on the same podium and between podiums in one building unit. Nothing except portable security cabins is permitted in margins.', '', { rear: 12, left: 12, right: 12 });
   }
 
   if (category === 'D9') {
@@ -774,7 +779,7 @@ function getRearSideMarginAssessment({ category, authorityCode, developmentArea,
       const row = rowsFor('6.33').find((item) => inRange(item.sourceCells?.[0], plot));
       const rear = numberOrNull(row?.sourceCells?.[2]);
       const side = numberOrNull(row?.sourceCells?.[3]);
-      return Number.isFinite(rear) && Number.isFinite(side) ? result(`${rear} m`, `${side} m`, '', '', { rear, left: side, right: side }) : review('Table 6.33 requires a listed Green Institutional plot size.');
+      return Number.isFinite(rear) && Number.isFinite(side) ? result(`${rear} m`, `${side} m`, '', '', { rear, left: side, right: side }) : review('A listed Green Institutional plot size is required.');
     }
     if (zone === 'GIDC-1' || zone === 'GIDC-2') {
       const row = rowsFor('6.35').find((item) => /all side margins/i.test(item.sourceCells?.[0] ?? ''));
@@ -802,7 +807,7 @@ function getRearSideMarginAssessment({ category, authorityCode, developmentArea,
       if (!row) return review('The active renewal-zone schedule has no row.');
       if (!height) return needs('building height');
       const margin = numberOrNull(height <= 15 ? row.sourceCells?.[5] : height <= 25 ? row.sourceCells?.[6] : null);
-      return Number.isFinite(margin) ? result(`${margin} m`, `${margin} m`, '', '', { rear: margin, left: margin, right: margin }) : review('Table 6.30 does not list a rear and side margin for this building height.');
+      return Number.isFinite(margin) ? result(`${margin} m`, `${margin} m`, '', '', { rear: margin, left: margin, right: margin }) : review('No rear and side margin is listed for this building height.');
     }
     if ((buildingUseCode === 'DW1' || buildingUseCode === 'DW2') && unit > 0) {
       const row = rowsFor('6.38').find((item) => inRange(item.sourceCells?.[0], unit));
@@ -818,11 +823,11 @@ function getRearSideMarginAssessment({ category, authorityCode, developmentArea,
     }
     if (['R1', 'R2', 'R3'].includes(zone) && plot <= 500) {
       const row = rowsFor('6.28').find((item) => inRange(item.sourceCells?.[1], plot));
-      if (!row) return review('Table 6.28 has no listed residential plot-size row for this plot area.');
+      if (!row) return review('No residential plot-size row is listed for this plot area.');
       const rearText = row.sourceCells?.[zone === 'R2' ? 3 : 2] ?? '';
       const sideText = row.sourceCells?.[zone === 'R2' ? 5 : 4] ?? '';
       const rear = numberOrNull(rearText); const side = numberOrNull(sideText);
-      if (!Number.isFinite(rear) && !Number.isFinite(side)) return review('The matching Table 6.28 row does not specify numeric rear or side margins.');
+      if (!Number.isFinite(rear) && !Number.isFinite(side)) return review('The matching schedule row does not specify numeric rear or side margins.');
       const count = /both\s+sides|any\s+two\s+sides/i.test(sideText) ? 2 : /one\s*side/i.test(sideText) ? 1 : 0;
       return result(Number.isFinite(rear) ? `${rear} m` : 'Not specified', count ? `${count === 2 ? 'Two sides' : 'One side'}: ${side} m` : Number.isFinite(side) ? `${side} m` : 'Not specified', '', '', { ...(Number.isFinite(rear) ? { rear } : {}), ...(count === 2 ? { left: side, right: side } : Number.isFinite(side) && !count ? { left: side, right: side } : {}) }, count ? { count, value: side, sides: ['left', 'right'] } : null);
     }
@@ -888,7 +893,7 @@ function getRearSideMarginAssessment({ category, authorityCode, developmentArea,
     && plot <= Number(smallPlotLimit.replaceAll(',', ''))
     && height > 0 && height <= Number(exceptionHeightLimit)) {
     const value = Number(exceptionMargin);
-    return result(`${value} m`, `${value} m`, `${remark} Applied this Table 6.26 plot-size and building-height exception.`, '', { rear: value, left: value, right: value });
+    return result(`${value} m`, `${value} m`, `${remark} Applied the applicable plot-size and building-height exception.`, '', { rear: value, left: value, right: value });
   }
   if (/any\s+(?:one\s*side|two\s+sides)/i.test(flexibleText) && Number.isFinite(numberOrNull(flexibleText))) {
     const value = numberOrNull(flexibleText);
@@ -1159,7 +1164,7 @@ function FsiCalculator() {
   const effectiveRoadWidth = Math.max(0, ...Object.values(roadWidthValues));
   const heightRows = form.developmentCategory === 'D9'
     ? [{ side: 'D9', width: null, rule: heightRuleFor(form.developmentCategory, authorityCode, form.developmentArea, 0, form.buildingUse, calculatorConfig.schedules) }]
-    : Object.entries(roadWidthValues).map(([side, width]) => ({ side, width, rule: tallPolicyReady ? { tableNumber: 'Tall Building policy', sourceCells: ['D1 Tall Building policy'], roadWidthLabel: `Chapter 12 · ${tallPolicyHeightLabel}`, maximumBuildingHeightText: `${tallPolicyHeightLabel}*` } : heightRuleFor(form.developmentCategory, authorityCode, form.developmentArea, width, form.buildingUse, calculatorConfig.schedules) }));
+    : Object.entries(roadWidthValues).map(([side, width]) => ({ side, width, rule: tallPolicyReady ? { tableNumber: 'Tall Building policy', sourceCells: ['D1 Tall Building policy'], roadWidthLabel: tallPolicyHeightLabel, maximumBuildingHeightText: `${tallPolicyHeightLabel}*` } : heightRuleFor(form.developmentCategory, authorityCode, form.developmentArea, width, form.buildingUse, calculatorConfig.schedules) }));
   const submit = async () => {
     setState({ loading: true, result: null, error: '' });
     if (!form.developmentCategory) { setState({ loading: false, result: null, error: 'Choose a development authority and area category.' }); return; }
@@ -1186,10 +1191,10 @@ function FsiCalculator() {
         const plotArea = Number(form.plotArea);
         result = {
           ...result,
-          message: 'A table-based FSI result is available under CGDCR Chapter 12 · Regulation 12.4.6.',
+          message: 'A verified FSI result is available under the Tall Building policy.',
           calculation: {
             ...result.calculation,
-            table: 'CGDCR Chapter 12 · Regulation 12.4.6',
+            table: 'Tall Building policy',
             maximumFsi: 5.4,
             chargeableFsi,
             baseBuiltUpArea: baseFsi * plotArea,
@@ -1210,7 +1215,7 @@ function FsiCalculator() {
     { id: 'margins', number: '02', title: 'Margins', subtitle: 'Road-side, rear and side margin checks' },
     { id: 'height', number: '03', title: 'Height', subtitle: 'Maximum height for each abutting road' },
   ];
-  const tallPolicyReference = showTallPolicyInputs ? <p className="fsi-result-note">For D1 sites with base FSI ≥1.2 abutting a 30 m or wider road, refer to the Tall Building policy (CGDCR Chapter 12), including its minimum area, frontage, permitted-use, and clearance conditions.</p> : null;
+  const tallPolicyReference = showTallPolicyInputs ? <p className="fsi-result-note">For D1 sites with base FSI ≥1.2 abutting a 30 m or wider road, refer to the Tall Building policy, including its minimum area, frontage, permitted-use, and clearance conditions.</p> : null;
   const activePartInfo = parts.find((part) => part.id === activePart);
   const renderFsiResult = () => state.error ? <StateNotice tone="error">{cleanRuleReference(state.error)}</StateNotice> : state.loading ? <div className="panel-state">Resolving authority, zone, plot size, and applicable FSI parameters…</div> : state.result?.status === 'CALCULATED' ? <><div className="fsi-result-summary"><small>Maximum permissible FSI</small><b>{state.result.calculation.maximumFsi.toFixed(2)}</b></div><div className="fsi-result-breakdown"><span>Base (free) FSI <b>{state.result.calculation.baseFsi == null ? 'Not specified' : state.result.calculation.baseFsi.toFixed(2)}</b></span><span>Chargeable FSI <b>{state.result.calculation.chargeableFsi == null ? 'Not specified' : state.result.calculation.chargeableFsi.toFixed(2)}</b></span><span>Base built-up area <b>{state.result.calculation.baseBuiltUpArea == null ? 'Not specified' : `${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.baseBuiltUpArea)} m²`}</b></span><span>Chargeable built-up area <b>{state.result.calculation.chargeableBuiltUpArea == null ? 'Not specified' : `${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.chargeableBuiltUpArea)} m²`}</b></span><span>Maximum built-up area <b>{new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.maximumBuiltUpArea)} m²</b></span></div>{state.result.calculation.notes.map((note) => <p className="fsi-result-note" key={note}>{cleanRuleReference(note)}</p>)}<p className="fsi-result-note">{cleanRuleReference(state.result.calculation.chargeableBasis)}</p>{state.result.sources.map((source) => <div className="result-reference" key={source.document}><FileText size={15}/><span>{cleanRuleReference(source.document)}</span></div>)}</> : state.result ? <><div className="result-unresolved"><span className="warning-symbol">!</span><div><b>Verified result unavailable</b><small>{cleanRuleReference(state.result.message)}</small></div></div><div className="missing-list"><b>What remains unresolved</b>{state.result.missingInformation.map((item) => <p key={item}><span>•</span>{cleanRuleReference(item)}</p>)}</div><div className="result-reference"><FileText size={15}/><span>No verified regulation or source-page references are available for these inputs.</span></div></> : <div className="result-empty"><Calculator size={22}/><b>FSI calculation is ready</b><p>Complete the shared site details, then calculate to match the authority, zone, permitted use, and road widths to a verified schedule.</p></div>;
   return <AppShell><div className="workspace-page plot-feasibility-page">
@@ -1240,12 +1245,12 @@ function FsiCalculator() {
       {activePart==='margins'&&<div className="feasibility-result-body">
         <div className="margin-input-grid">
           {(form.developmentCategory === 'D6' || (form.developmentCategory === 'D1' && authorityCode === 'RUDA' && (form.buildingUseCode === 'DW3' || (Number(roadWidths.front) > 30 && Number(roadWidths.front) < 45)))) && <label>Building-unit area (m²)<input type="number" min="0.01" step="any" value={marginInputs.buildingUnitArea} onChange={setMarginInput('buildingUnitArea')} placeholder="Enter building-unit area"/></label>}
-          {form.developmentCategory !== 'D9' && <label>Building height (m)<input type="number" min="0.01" step="any" value={marginInputs.buildingHeight} onChange={setMarginInput('buildingHeight')} placeholder="Enter proposed height"/><small>{/^IN/i.test(form.buildingUseCode) ? 'Table 6.26 Industrial use margins are matched by plot size; building height does not select the row.' : 'Used where rear and side margins depend on building height.'}</small></label>}
+          {form.developmentCategory !== 'D9' && <label>Building height (m)<input type="number" min="0.01" step="any" value={marginInputs.buildingHeight} onChange={setMarginInput('buildingHeight')} placeholder="Enter proposed height"/><small>{/^IN/i.test(form.buildingUseCode) ? 'Industrial use margins are matched by plot size; building height does not select the row.' : 'Used where rear and side margins depend on building height.'}</small></label>}
           {form.developmentCategory !== 'D9' && <label className="margin-special-toggle"><input type="checkbox" checked={marginInputs.specialBuilding} onChange={setMarginInput('specialBuilding')}/> Special building</label>}
         </div>
         <RoadMarginDiagram category={form.developmentCategory} authority={form.developmentAuthority} area={form.developmentArea} zoneCode={selectedZone?.code} roadWidths={roadWidths} plotArea={form.plotArea} buildingUse={form.buildingUse} buildingUnitArea={tallPolicyUnitArea || marginInputs.buildingUnitArea} buildingHeight={marginInputs.buildingHeight} rearSideAssessment={rearSideMarginAssessment} schedules={calculatorConfig.schedules} tallPolicyReady={tallPolicyReady} tallPolicyUnitArea={tallPolicyUnitArea}/><Table64ProvisionNotes category={form.developmentCategory} zoneCode={selectedZone?.code} zoneLabel={selectedZone?.zone} buildingUseCode={form.buildingUseCode} buildingUse={form.buildingUse} authorityCode={authorityCode} widthControl={widthControl} widthUseCodes={widthUseCodes}/>{tallPolicyReference}
       </div>}
-      {activePart==='height'&&<div className="feasibility-result-body"><div className="height-result-list">{heightRows.length?heightRows.map(({side,width,rule})=><article className="height-result-row" key={side}><div><small>{form.developmentCategory === 'D9' ? 'CATEGORY D9' : `${side.toUpperCase()} ROAD`}</small><b>{form.developmentCategory === 'D9' ? (form.buildingUse || 'Select a building use') : `${width} m`}</b></div><span className="height-result-arrow">→</span><div className="height-result-value">{rule?<><small>MAXIMUM HEIGHT</small><b>{rule.maximumBuildingHeightText}{rule.tableNumber === 'Tall Building policy' ? '' : ' m'}</b><span>{rule.tableNumber === '6.19' ? `${rule.roadWidthLabel} use` : `${rule.sourceCells[0]} · ${rule.roadWidthLabel}`}</span>{rule.industrialNote&&<span>{cleanRuleReference(rule.industrialNote)}</span>}</>:<><small>{form.developmentCategory === 'D9' ? 'BUILDING USE REQUIRED' : 'NO MATCHING ROW'}</small><b>{form.developmentCategory === 'D9' ? (form.buildingUse ? 'Height result unavailable' : 'Choose a building use') : 'Unresolved'}</b><span>{form.developmentCategory === 'D9' ? 'Available height values cover Residential, Commercial, and Industrial uses.' : 'This category or authority scope is not covered by the supplied height schedule.'}</span></>}</div></article>):<div className="result-empty"><Calculator size={22}/><b>Enter a road width and category</b><p>Height is matched to each abutting road separately.</p></div>}</div>{tallPolicyReady&&<details className="height-source-notes" open><summary>Tall Building policy · height conditions</summary><p>No upper limit is stated in Chapter 12. Height remains subject to Airport NOC, structural safety, EIA clearance, Fire Department NOC, and other applicable approvals.</p></details>}{form.developmentCategory === 'D9' ? <details className="height-source-notes" open={Boolean(form.buildingUse?.toLowerCase().includes('industrial'))}><summary>Notes and provisions</summary><p>A maximum height of 13.00 m for Residential, Commercial, and Industrial use. Additional height for industrial purposes requires approval by the Factory Inspector.</p></details> : !tallPolicyReady&&<details className="height-source-notes"><summary>Notes and provisions</summary><ul>{buildingHeightSource.table.notes.map((note,index)=><li key={`note-${index}`}>{cleanRuleReference(note)}</li>)}{buildingHeightSource.generalProvisions[0].sourceText.map((note,index)=><li key={`rule-${index}`}>{cleanRuleReference(note)}</li>)}</ul></details>}<Table64ProvisionNotes category={form.developmentCategory} zoneCode={selectedZone?.code} zoneLabel={selectedZone?.zone} buildingUseCode={form.buildingUseCode} buildingUse={form.buildingUse} authorityCode={authorityCode} widthControl={widthControl} widthUseCodes={widthUseCodes}/>{tallPolicyReference}</div>}
+      {activePart==='height'&&<div className="feasibility-result-body"><div className="height-result-list">{heightRows.length?heightRows.map(({side,width,rule})=><article className="height-result-row" key={side}><div><small>{form.developmentCategory === 'D9' ? 'CATEGORY D9' : `${side.toUpperCase()} ROAD`}</small><b>{form.developmentCategory === 'D9' ? (form.buildingUse || 'Select a building use') : `${width} m`}</b></div><span className="height-result-arrow">→</span><div className="height-result-value">{rule?<><small>MAXIMUM HEIGHT</small><b>{rule.maximumBuildingHeightText}{rule.tableNumber === 'Tall Building policy' ? '' : ' m'}</b><span>{rule.tableNumber === '6.19' ? `${rule.roadWidthLabel} use` : `${cleanRuleReference(rule.sourceCells[0])} · ${rule.roadWidthLabel}`}</span>{rule.industrialNote&&<span>{cleanRuleReference(rule.industrialNote)}</span>}</>:<><small>{form.developmentCategory === 'D9' ? 'BUILDING USE REQUIRED' : 'NO MATCHING ROW'}</small><b>{form.developmentCategory === 'D9' ? (form.buildingUse ? 'Height result unavailable' : 'Choose a building use') : 'Unresolved'}</b><span>{form.developmentCategory === 'D9' ? 'Available height values cover Residential, Commercial, and Industrial uses.' : 'This category or authority scope is not covered by the supplied height schedule.'}</span></>}</div></article>):<div className="result-empty"><Calculator size={22}/><b>Enter a road width and category</b><p>Height is matched to each abutting road separately.</p></div>}</div>{tallPolicyReady&&<details className="height-source-notes" open><summary>Tall Building policy · height conditions</summary><p>No upper height limit is stated. Height remains subject to Airport NOC, structural safety, EIA clearance, Fire Department NOC, and other applicable approvals.</p></details>}{form.developmentCategory === 'D9' ? <details className="height-source-notes" open={Boolean(form.buildingUse?.toLowerCase().includes('industrial'))}><summary>Notes and provisions</summary><p>A maximum height of 13.00 m for Residential, Commercial, and Industrial use. Additional height for industrial purposes requires approval by the Factory Inspector.</p></details> : !tallPolicyReady&&<details className="height-source-notes"><summary>Notes and provisions</summary><ul>{buildingHeightSource.table.notes.map((note,index)=><li key={`note-${index}`}>{cleanRuleReference(note)}</li>)}{buildingHeightSource.generalProvisions[0].sourceText.map((note,index)=><li key={`rule-${index}`}>{cleanRuleReference(note)}</li>)}</ul></details>}<Table64ProvisionNotes category={form.developmentCategory} zoneCode={selectedZone?.code} zoneLabel={selectedZone?.zone} buildingUseCode={form.buildingUseCode} buildingUse={form.buildingUse} authorityCode={authorityCode} widthControl={widthControl} widthUseCodes={widthUseCodes}/>{tallPolicyReference}</div>}
     </section>
   </div></AppShell>;
 }
