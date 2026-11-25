@@ -1,4 +1,4 @@
-﻿const row = (base, chargeable, maximum, table, notes = []) => ({ base, chargeable, maximum, table, notes });
+const row = (base, chargeable, maximum, table, notes = []) => ({ base, chargeable, maximum, table, notes });
 
 const AUTHORITY_TABLES = {
   'D1:AUDA': {
@@ -179,6 +179,7 @@ function sourceScheduleCandidates(rows, input, authorityCode, zoneCode, useCondi
   const candidates = [];
   for (const source of rows) {
     if (!/^6\.(?:[5-9]|1[0-9])$/.test(source.tableNumber) || source.tableNumber === '6.6') continue;
+    if (input.scheduleRowKey && source.key !== input.scheduleRowKey) continue;
     if (!(source.categoryCodes ?? []).includes(input.developmentCategory)) continue;
     const data = source.parsedData ?? {};
     const cells = source.sourceCells ?? [];
@@ -186,7 +187,8 @@ function sourceScheduleCandidates(rows, input, authorityCode, zoneCode, useCondi
     const scope = tableCode(sourceText);
     if (scope !== 'DEFAULT' && scope !== desiredScope && scope !== authorityCode) continue;
     const rowZoneText = String(data.useZone ?? data.conceptualZone ?? data.zone ?? cells[1] ?? '');
-    let zoneCodes = String(data.zoneCode ?? cells[2] ?? '').toUpperCase().split(/[\/,;]/).map((value) => value.trim()).filter(Boolean);
+    const rawZoneCode = String(data.zoneCode ?? cells[2] ?? '').toUpperCase().trim();
+    let zoneCodes = rawZoneCode.split(/[\/&,;]/).map((value) => value.trim()).filter(Boolean);
     let rowUseCondition = 'ALL';
     if (source.tableNumber === '6.18') {
       const useText = String(data.useText ?? cells[1] ?? '').toLowerCase();
@@ -197,7 +199,8 @@ function sourceScheduleCandidates(rows, input, authorityCode, zoneCode, useCondi
       const useText = String(data.useText ?? cells[1] ?? '').toLowerCase();
       rowUseCondition = /industrial/.test(useText) ? 'INDUSTRIAL' : /commercial/.test(useText) ? 'COMMERCIAL' : 'RESIDENTIAL';
     }
-    if (!zoneCodes.includes(zoneCode) || ((['D8', 'D10'].includes(input.developmentCategory) || input.developmentCategory === 'D9') && rowUseCondition !== 'ALL' && rowUseCondition !== useCondition)) continue;
+    if ((!zoneCodes.includes(String(zoneCode).toUpperCase()) && rawZoneCode !== String(zoneCode).toUpperCase())
+      || ((['D8', 'D10'].includes(input.developmentCategory) || input.developmentCategory === 'D9') && rowUseCondition !== 'ALL' && rowUseCondition !== useCondition)) continue;
     let base; let chargeable; let maximum;
     if (source.tableNumber === '6.19') {
       base = numeric(cells[2] ?? data.fsiText ?? data.fsi);
@@ -274,25 +277,33 @@ function getAuthorityScope(input, authorityCode) {
   return authorityCode || 'DEFAULT';
 }
 
-function resultForNumericRow({ data, zoneCode, zone, plotArea, roadWidth, distanceFromWideRoad, category, authorityCode, permissibleUseCode, buildingUseCode, tallBuildingPolicy, roadWidths, scheduleRows = [] }) {
+function resultForNumericRow({ data, zoneCode, zone, plotArea, roadWidth, qualifyingWideRoadWidth, distanceFromWideRoad, category, authorityCode, permissibleUseCode, buildingUseCode, tallBuildingPolicy, roadWidths, scheduleRows = [] }) {
   let baseFsi = data.base;
   let chargeableFsi = data.chargeable;
   let maximumFsi = data.maximum;
   let appliedTable = `Table ${data.table}`;
   const notes = [...data.notes];
-  const table65ABaseEligible = ['D1', 'D2', 'D4', 'D7A'].includes(category)
-    && roadWidth >= 36
-    && baseFsi >= 1.5
-    && !(authorityCode === 'AUDA' && ['SPD5', 'C5'].includes(zoneCode))
-    && !(authorityCode === 'RUDA' && zoneCode === 'SPD5')
-    && !(authorityCode === 'GUDA' && /commercial zone ii/i.test(zone));
+  const table65ACategoryEligible = ['D1', 'D2', 'D4', 'D7A'].includes(category) && baseFsi >= 1.5;
+  const table65AZoneExempt = (authorityCode === 'AUDA' && ['SPD5', 'C5'].includes(zoneCode))
+    || (authorityCode === 'RUDA' && zoneCode === 'SPD5')
+    || (authorityCode === 'GUDA' && /commercial zone ii/i.test(zone));
+  if (!tallBuildingPolicy?.enabled && table65ACategoryEligible && qualifyingWideRoadWidth == null && distanceFromWideRoad != null) {
+    return unresolved('The qualifying road width is required to assess Table 6.5A.', ['Enter the width of the separate road that is at least 36 m wide; the plot’s abutting road width does not determine this provision.'], { plotArea, roadWidth, distanceFromWideRoad, zoneCode, zone });
+  }
+  if (table65ACategoryEligible && qualifyingWideRoadWidth != null && qualifyingWideRoadWidth < 36 && distanceFromWideRoad != null) {
+    notes.push(`Table 6.5A was not applied: the entered qualifying road width is ${qualifyingWideRoadWidth} m; the provision requires at least 36 m.`);
+  }
+  if (table65ACategoryEligible && qualifyingWideRoadWidth >= 36 && table65AZoneExempt && distanceFromWideRoad != null) {
+    notes.push('Table 6.5A was not applied because this zone is excluded by the regulation.');
+  }
+  const table65ABaseEligible = table65ACategoryEligible && qualifyingWideRoadWidth >= 36 && !table65AZoneExempt;
   const table65AEligible = table65ABaseEligible && distanceFromWideRoad != null && distanceFromWideRoad <= 200;
   if (!tallBuildingPolicy?.enabled && table65ABaseEligible && distanceFromWideRoad == null) {
-    return unresolved('Table 6.5A may apply, but the qualifying road distance is required.', ['Enter the distance from the edge of the 36 m or wider road to confirm that the building unit is within 200 m.'], { plotArea, roadWidth, zoneCode, zone });
+    return unresolved('Table 6.5A may apply, but the qualifying road distance is required.', ['Enter the distance from the edge of the separate 36 m or wider road to confirm that the building unit is within 200 m.'], { plotArea, roadWidth, qualifyingWideRoadWidth, zoneCode, zone });
   }
   if (table65ABaseEligible && distanceFromWideRoad > 200) {
     notes.push('Table 6.5A was not applied: the building unit is more than 200 m from the edge of the qualifying road.');
-  } else if (['D1', 'D2', 'D4', 'D7A'].includes(category) && roadWidth >= 36 && baseFsi < 1.5) {
+  } else if (['D1', 'D2', 'D4', 'D7A'].includes(category) && qualifyingWideRoadWidth >= 36 && baseFsi < 1.5) {
     notes.push(`Table 6.5A was not applied: this zone's base FSI (${baseFsi}) is below the regulation's 1.5 minimum for the 200 m wide-road area.`);
   }
   if (table65AEligible && !tallBuildingPolicy?.enabled) {
@@ -301,15 +312,15 @@ function resultForNumericRow({ data, zoneCode, zone, plotArea, roadWidth, distan
       const matches = wideRoadRows.filter((item) => {
         const text = String(item.parsedData?.roadWidthText ?? item.sourceCells?.[1] ?? '');
         const values = [...text.matchAll(/[\d.]+/g)].map(([value]) => Number(value));
-        return /≥\s*45|>=\s*45/.test(text) ? roadWidth >= (values[0] ?? 45)
-          : values.length > 1 ? roadWidth >= values[0] && roadWidth < values[1]
-            : roadWidth >= (values[0] ?? 36);
+        return /≥\s*45|>=\s*45/.test(text) ? qualifyingWideRoadWidth >= (values[0] ?? 45)
+          : values.length > 1 ? qualifyingWideRoadWidth >= values[0] && qualifyingWideRoadWidth < values[1]
+            : qualifyingWideRoadWidth >= (values[0] ?? 36);
       });
       if (matches.length !== 1 || matches[0].isDeleted) return unresolved('The active wide-road FSI schedule does not provide one usable row for this road width.', ['Review the wide-road schedule rows and their road-width ranges.'], { plotArea, roadWidth, zoneCode, zone });
       const wideMaximum = Number(String(matches[0].sourceCells?.[4] ?? matches[0].parsedData?.maximumFsiText ?? matches[0].parsedData?.maximumFsi ?? '').match(/[\d.]+/)?.[0]);
       if (!Number.isFinite(wideMaximum)) return unresolved('The active wide-road FSI row has no numeric maximum.', ['Enter a numeric maximum in the applicable wide-road schedule row.'], { plotArea, roadWidth, zoneCode, zone });
       maximumFsi = wideMaximum;
-    } else if (!scheduleRows.length) maximumFsi = roadWidth >= 45 ? 4 : 3.6;
+    } else if (!scheduleRows.length) maximumFsi = qualifyingWideRoadWidth >= 45 ? 4 : 3.6;
     else return unresolved('The active wide-road FSI schedule has no row for this category.', ['Add or restore a matching wide-road FSI row in the administrator schedule.'], { plotArea, roadWidth, zoneCode, zone });
     chargeableFsi = Math.max(0, maximumFsi - baseFsi);
     appliedTable = 'Table 6.5A';
@@ -317,11 +328,12 @@ function resultForNumericRow({ data, zoneCode, zone, plotArea, roadWidth, distan
   }
   if (tallBuildingPolicy?.enabled) {
     const allowedAuthority = ['AUDA', 'SUDA', 'VUDA', 'RUDA', 'GUDA'].includes(authorityCode);
-    const allowedUse = /^(DW|M|REC)/i.test(String(buildingUseCode ?? ''));
+    const allowedUse = /^(DW|M|REC)/i.test(String(buildingUseCode ?? ''))
+      || /residential|commercial|recreational|mixed/i.test(String(tallBuildingPolicy.buildingUse ?? ''));
     const widths = Object.values(roadWidths ?? {}).map(Number).filter((value) => Number.isFinite(value) && value > 0);
-    const minimumUnitArea = tallBuildingPolicy.heightTier === 'OVER_150' ? 3500 : 2500;
-    if (category !== 'D1' || !allowedAuthority || baseFsi < 1.2) return unresolved('The Tall Building policy does not apply to this category, authority, or base FSI.', ['Chapter 12 applies to D1 AUDA, SUDA, VUDA, RUDA, and GUDA zones with base FSI at least 1.2.'], { zoneCode, zone });
+    if (category !== 'D1' || !allowedAuthority || baseFsi < 1.2) return unresolved('The Tall Building policy does not apply to this category, authority, or base FSI.', ['Chapter 12 applicability is limited to D1 AUDA, SUDA, VUDA, RUDA, and GUDA sites with base FSI at least 1.2.'], { zoneCode, zone });
     if (!allowedUse) return unresolved('The selected building use is not permitted by the Tall Building policy.', ['Chapter 12 permits residential, commercial, recreational, or mixed use.'], { zoneCode, zone });
+    const minimumUnitArea = tallBuildingPolicy.heightTier === 'OVER_150' ? 3500 : 2500;
     if (Number(tallBuildingPolicy.buildingUnitArea) < minimumUnitArea) return unresolved('The building unit does not qualify for the selected Tall Building height category.', [`The selected height category requires a minimum building-unit area of ${minimumUnitArea.toLocaleString('en-IN')} m².`], { zoneCode, zone });
     if (!widths.some((value) => value >= 30)) return unresolved('The Tall Building road-width requirement is not met.', ['The building unit must abut a Development Plan / Town Planning Scheme road at least 30 m wide.'], { zoneCode, zone });
     maximumFsi = 5.4;
@@ -348,10 +360,10 @@ function resultForNumericRow({ data, zoneCode, zone, plotArea, roadWidth, distan
     status: 'CALCULATED',
     message: `A table-based FSI result is available from ${appliedTable}.`,
     missingInformation: [],
-    inputs: { plotArea, roadWidth, zoneCode, zone },
+    inputs: { plotArea, roadWidth, ...(qualifyingWideRoadWidth == null ? {} : { qualifyingWideRoadWidth }), ...(distanceFromWideRoad == null ? {} : { distanceFromWideRoad }), zoneCode, zone },
     sources: [
       { table: `Table ${data.table}`, document: 'Comprehensive General Development Control Regulations – 2017, Part II' },
-      ...(appliedTable === `Table ${data.table}` ? [] : [{ table: appliedTable, document: 'Comprehensive General Development Control Regulations – 2017, Part II' }]),
+      ...(appliedTable.startsWith('CGDCR Chapter 12') ? [{ table: appliedTable, document: 'Tall Building 27 May 2021.pdf · Chapter 12' }] : appliedTable === `Table ${data.table}` ? [] : [{ table: appliedTable, document: 'Comprehensive General Development Control Regulations – 2017, Part II' }]),
     ],
     calculation,
   };
@@ -377,7 +389,9 @@ export function calculateFsi(input, tableRows = [], scheduleRows = []) {
     const sourceMatch = matchSourceScheduleRow(scheduleRows, input, authorityCode, zoneCode, zoneCode === 'GMD8' ? 'ALL' : useCondition);
     if (sourceMatch.ambiguous) return unresolved('More than one active FSI schedule row matches this zone and use.', ['Refine the zone/use configuration in the administrator schedule so one row applies.'], input);
     if (sourceMatch.row?.isDeleted) return unresolved('The applicable FSI source row has been removed from the administrator schedule.', ['Restore or add the matching FSI source row.'], input);
-    let fsi = fromManagedRow(managed) ?? (sourceMatch.row ? { base: sourceMatch.row.baseFsi, chargeable: sourceMatch.row.chargeableFsi, maximum: sourceMatch.row.maximumFsi, table: sourceMatch.row.tableNumber, notes: sourceMatch.row.notes } : null);
+    let fsi = (input.scheduleRowKey && sourceMatch.row ? { base: sourceMatch.row.baseFsi, chargeable: sourceMatch.row.chargeableFsi, maximum: sourceMatch.row.maximumFsi, table: sourceMatch.row.tableNumber, notes: sourceMatch.row.notes } : null)
+      ?? fromManagedRow(managed)
+      ?? (sourceMatch.row ? { base: sourceMatch.row.baseFsi, chargeable: sourceMatch.row.chargeableFsi, maximum: sourceMatch.row.maximumFsi, table: sourceMatch.row.tableNumber, notes: sourceMatch.row.notes } : null);
     if (!fsi && !scheduleRows.length && zoneCode === 'GMD8') fsi = row(2, 0, 2, '6.18');
     else if (!fsi && !scheduleRows.length && (zoneCode === 'RMD8' || zoneCode === 'RMD9')) {
       if (useCondition === 'RESIDENTIAL_COMMERCIAL') fsi = row(1.2, 0.6, 1.8, '6.18');
@@ -385,7 +399,7 @@ export function calculateFsi(input, tableRows = [], scheduleRows = []) {
       else if (useCondition === 'AGRICULTURAL') fsi = row(0.3, 0, 0.3, '6.18');
     }
     if (!fsi) return unresolved('The selected use does not map to a numeric Table 6.18 row.', ['Specify whether the proposed building use is residential/commercial, industrial, or agricultural.'], input);
-    return resultForNumericRow({ data: fsi, zoneCode, zone: input.zone, plotArea, roadWidth, distanceFromWideRoad: input.distanceFromWideRoad, category: developmentCategory, authorityCode, permissibleUseCode: input.permissibleUseCode, scheduleRows });
+    return resultForNumericRow({ data: fsi, zoneCode, zone: input.zone, plotArea, roadWidth, qualifyingWideRoadWidth: input.qualifyingWideRoadWidth, distanceFromWideRoad: input.distanceFromWideRoad, category: developmentCategory, authorityCode, permissibleUseCode: input.permissibleUseCode, scheduleRows });
   }
 
   if (developmentCategory === 'D9') {
@@ -398,11 +412,13 @@ export function calculateFsi(input, tableRows = [], scheduleRows = []) {
     if (sourceMatch.ambiguous) return unresolved('More than one active FSI schedule row matches this development use.', ['Refine the D9 FSI schedule so only one row applies to this use.'], input);
     if (sourceMatch.row?.isDeleted) return unresolved('The applicable D9 FSI source row has been removed from the administrator schedule.', ['Restore or add the matching D9 FSI source row.'], input);
     const isIndustrial = /industrial/.test(use);
-    const fsi = fromManagedRow(managed) ?? (sourceMatch.row ? { base: sourceMatch.row.baseFsi, chargeable: sourceMatch.row.chargeableFsi, maximum: sourceMatch.row.maximumFsi, table: '6.19', notes: sourceMatch.row.notes } : null) ?? (!scheduleRows.length ? row(1.6, 0, 1.6, '6.19', [
+    const fsi = (input.scheduleRowKey && sourceMatch.row ? { base: sourceMatch.row.baseFsi, chargeable: sourceMatch.row.chargeableFsi, maximum: sourceMatch.row.maximumFsi, table: '6.19', notes: sourceMatch.row.notes } : null)
+      ?? fromManagedRow(managed)
+      ?? (sourceMatch.row ? { base: sourceMatch.row.baseFsi, chargeable: sourceMatch.row.chargeableFsi, maximum: sourceMatch.row.maximumFsi, table: '6.19', notes: sourceMatch.row.notes } : null) ?? (!scheduleRows.length ? row(1.6, 0, 1.6, '6.19', [
       use ? `Maximum built-up coverage is ${isIndustrial ? '50%' : '40%'}.` : 'Maximum built-up coverage depends on development use (40% for residential/commercial and 50% for industrial).',
       'Maximum height is 13.00 m; additional industrial height requires Factory Inspector approval.',
     ]) : null);
-    return resultForNumericRow({ data: fsi, zoneCode, zone: input.zone, plotArea, roadWidth, distanceFromWideRoad: input.distanceFromWideRoad, category: developmentCategory, authorityCode, permissibleUseCode: input.permissibleUseCode, scheduleRows });
+    return resultForNumericRow({ data: fsi, zoneCode, zone: input.zone, plotArea, roadWidth, qualifyingWideRoadWidth: input.qualifyingWideRoadWidth, distanceFromWideRoad: input.distanceFromWideRoad, category: developmentCategory, authorityCode, permissibleUseCode: input.permissibleUseCode, scheduleRows });
   }
 
   const table = getAuthorityTable(input);
@@ -458,9 +474,10 @@ export function calculateFsi(input, tableRows = [], scheduleRows = []) {
   if (developmentCategory === 'D1' && ['AUDA', 'SUDA'].includes(authorityCode) && zoneCode === 'IZ1' && !/commercial|mercantile/i.test(input.buildingUse)) {
     data = row(1, 0, 1, authorityCode === 'AUDA' ? '6.5' : '6.8');
   }
-  if (sourceMatch.row && !managedRow) data = { base: sourceMatch.row.baseFsi, chargeable: sourceMatch.row.chargeableFsi, maximum: sourceMatch.row.maximumFsi, table: sourceMatch.row.tableNumber, notes: sourceMatch.row.notes };
-  if (managedRow) data = fromManagedRow(managedRow);
+  if (sourceMatch.row && (!managedRow || input.scheduleRowKey)) data = { base: sourceMatch.row.baseFsi, chargeable: sourceMatch.row.chargeableFsi, maximum: sourceMatch.row.maximumFsi, table: sourceMatch.row.tableNumber, notes: sourceMatch.row.notes };
+  if (managedRow && !input.scheduleRowKey) data = fromManagedRow(managedRow);
   if (!data) return unresolved('No numeric FSI row matches this authority and zone.', ['The selected zone is not listed with numeric FSI values in the applicable table, or requires a special schedule/condition.'], input);
   if (data.base == null || data.maximum == null) return unresolved('The active FSI schedule row does not contain numeric values for this zone.', ['Update the matching source row or add a normalized FSI row in the administrator table.'], input);
-  return resultForNumericRow({ data, zoneCode, zone: input.zone, plotArea, roadWidth, distanceFromWideRoad: input.distanceFromWideRoad, category: developmentCategory, authorityCode, permissibleUseCode: input.permissibleUseCode, buildingUseCode: input.buildingUseCode, tallBuildingPolicy: input.tallBuildingPolicy, roadWidths: input.roadWidths, scheduleRows });
+  return resultForNumericRow({ data, zoneCode, zone: input.zone, plotArea, roadWidth, qualifyingWideRoadWidth: input.qualifyingWideRoadWidth, distanceFromWideRoad: input.distanceFromWideRoad, category: developmentCategory, authorityCode, permissibleUseCode: input.permissibleUseCode, buildingUseCode: input.buildingUseCode, tallBuildingPolicy: input.tallBuildingPolicy, roadWidths: input.roadWidths, scheduleRows });
 }
+
