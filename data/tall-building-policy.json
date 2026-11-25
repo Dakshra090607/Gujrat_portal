@@ -1,0 +1,36 @@
+{
+  "source": "Tall Building 27 May 2021.pdf · Chapter 12",
+  "categoryCodes": ["D1"],
+  "authorityCodes": ["AUDA", "SUDA", "VUDA", "RUDA", "GUDA"],
+  "tables": [
+    { "tableNumber": "12.2", "title": "Applicability", "headers": ["Category / authority", "Zone condition"], "rows": [
+      ["D1 · AUDA, SUDA, VUDA, RUDA, GUDA", "Any zone where permissible base FSI is ≥1.2"]
+    ]},
+    { "tableNumber": "12.4.2", "title": "Permitted use", "headers": ["Applicable uses"], "rows": [
+      ["Residential; Commercial; Recreational; Mixed use (any combination of the above)"]
+    ]},
+    { "tableNumber": "12.4.3", "title": "Abutting road", "headers": ["Requirement"], "rows": [
+      ["Building unit must abut a Development Plan / Town Planning Scheme road at least 30.00 m wide"]
+    ]},
+    { "tableNumber": "12.4.4", "title": "Minimum area of building unit", "headers": ["Building height", "Minimum area"], "rows": [
+      ["More than 100 m and up to 150 m", "2,500 m²"],
+      ["More than 150 m", "3,500 m²"]
+    ]},
+    { "tableNumber": "12.4.5", "title": "Frontage", "headers": ["Road condition", "Minimum frontage"], "rows": [
+      ["Abutting on a single road", "50.00 m"],
+      ["Abutting on more than one road", "35.00 m on each road"]
+    ]},
+    { "tableNumber": "12.4.6", "title": "Floor Space Index", "headers": ["Calculation", "Maximum total FSI"], "rows": [
+      ["Base FSI + Premium FSI", "5.4"]
+    ]},
+    { "tableNumber": "12.4.8", "title": "Minimum margins and separation", "headers": ["Building height", "Road side", "Other sides", "Between buildings on same podium", "Between podiums in same building unit"], "rows": [
+      ["More than 100 m and up to 150 m", "12 m", "12 m", "15 m", "15 m"],
+      ["More than 150 m", "15 m", "12 m", "20 m", "20 m"]
+    ]}
+  ],
+  "notes": [
+    "Chapter 12 scope: building height more than 100 m, or slenderness ratio (height / minimum width) of 9 or more.",
+    "Chapter 12 states no upper limit for building height; airport NOC, structural safety, EIA clearance, Fire Department NOC and other approvals apply.",
+    "Margins apply irrespective of abutting road width. Nothing except a portable security cabin may be permitted in the margins."
+  ]
+}

@@ -35,6 +35,11 @@ const fsiSchema = z.object({
   distanceFromWideRoad: z.coerce.number().finite().min(0).optional(),
   buildingUse: z.string().trim().max(120).optional(),
   buildingUseCode: z.string().trim().max(40).optional(),
+  tallBuildingPolicy: z.object({
+    enabled: z.boolean(),
+    buildingUnitArea: positiveNumber,
+    heightTier: z.enum(['100_TO_150', 'OVER_150']),
+  }).optional(),
 });
 
 const assessmentSchema = z.object({

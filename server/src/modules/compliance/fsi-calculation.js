@@ -274,7 +274,7 @@ function getAuthorityScope(input, authorityCode) {
   return authorityCode || 'DEFAULT';
 }
 
-function resultForNumericRow({ data, zoneCode, zone, plotArea, roadWidth, distanceFromWideRoad, category, authorityCode, permissibleUseCode, scheduleRows = [] }) {
+function resultForNumericRow({ data, zoneCode, zone, plotArea, roadWidth, distanceFromWideRoad, category, authorityCode, permissibleUseCode, buildingUseCode, tallBuildingPolicy, roadWidths, scheduleRows = [] }) {
   let baseFsi = data.base;
   let chargeableFsi = data.chargeable;
   let maximumFsi = data.maximum;
@@ -287,7 +287,7 @@ function resultForNumericRow({ data, zoneCode, zone, plotArea, roadWidth, distan
     && !(authorityCode === 'RUDA' && zoneCode === 'SPD5')
     && !(authorityCode === 'GUDA' && /commercial zone ii/i.test(zone));
   const table65AEligible = table65ABaseEligible && distanceFromWideRoad != null && distanceFromWideRoad <= 200;
-  if (table65ABaseEligible && distanceFromWideRoad == null) {
+  if (!tallBuildingPolicy?.enabled && table65ABaseEligible && distanceFromWideRoad == null) {
     return unresolved('Table 6.5A may apply, but the qualifying road distance is required.', ['Enter the distance from the edge of the 36 m or wider road to confirm that the building unit is within 200 m.'], { plotArea, roadWidth, zoneCode, zone });
   }
   if (table65ABaseEligible && distanceFromWideRoad > 200) {
@@ -295,7 +295,7 @@ function resultForNumericRow({ data, zoneCode, zone, plotArea, roadWidth, distan
   } else if (['D1', 'D2', 'D4', 'D7A'].includes(category) && roadWidth >= 36 && baseFsi < 1.5) {
     notes.push(`Table 6.5A was not applied: this zone's base FSI (${baseFsi}) is below the regulation's 1.5 minimum for the 200 m wide-road area.`);
   }
-  if (table65AEligible) {
+  if (table65AEligible && !tallBuildingPolicy?.enabled) {
     const wideRoadRows = scheduleRows.filter((item) => item.tableNumber === '6.5A' && (item.categoryCodes ?? []).includes(category));
     if (wideRoadRows.length) {
       const matches = wideRoadRows.filter((item) => {
@@ -315,9 +315,23 @@ function resultForNumericRow({ data, zoneCode, zone, plotArea, roadWidth, distan
     appliedTable = 'Table 6.5A';
     notes.push('Applied the Table 6.5A wide-road maximum. Confirm the qualifying road width, the 200 m distance measured from its edge, and any parcel-boundary or post-notification amalgamation conditions in the regulation.');
   }
+  if (tallBuildingPolicy?.enabled) {
+    const allowedAuthority = ['AUDA', 'SUDA', 'VUDA', 'RUDA', 'GUDA'].includes(authorityCode);
+    const allowedUse = /^(DW|M|REC)/i.test(String(buildingUseCode ?? ''));
+    const widths = Object.values(roadWidths ?? {}).map(Number).filter((value) => Number.isFinite(value) && value > 0);
+    const minimumUnitArea = tallBuildingPolicy.heightTier === 'OVER_150' ? 3500 : 2500;
+    if (category !== 'D1' || !allowedAuthority || baseFsi < 1.2) return unresolved('The Tall Building policy does not apply to this category, authority, or base FSI.', ['Chapter 12 applies to D1 AUDA, SUDA, VUDA, RUDA, and GUDA zones with base FSI at least 1.2.'], { zoneCode, zone });
+    if (!allowedUse) return unresolved('The selected building use is not permitted by the Tall Building policy.', ['Chapter 12 permits residential, commercial, recreational, or mixed use.'], { zoneCode, zone });
+    if (Number(tallBuildingPolicy.buildingUnitArea) < minimumUnitArea) return unresolved('The building unit does not qualify for the selected Tall Building height category.', [`The selected height category requires a minimum building-unit area of ${minimumUnitArea.toLocaleString('en-IN')} m².`], { zoneCode, zone });
+    if (!widths.some((value) => value >= 30)) return unresolved('The Tall Building road-width requirement is not met.', ['The building unit must abut a Development Plan / Town Planning Scheme road at least 30 m wide.'], { zoneCode, zone });
+    maximumFsi = 5.4;
+    chargeableFsi = Math.max(0, maximumFsi - baseFsi);
+    appliedTable = 'CGDCR Chapter 12 · Regulation 12.4.6';
+    notes.push('Tall Building policy applied: total FSI is Base FSI + Premium FSI, capped at 5.4. Premium FSI is available on payment of additional infrastructure charges at 50% of Jantri rate of NA open land.');
+  }
   if (maximumFsi == null) return unresolved('This zone requires a separate FSI table or additional applicability details.', ['The selected zone has no fixed numeric base and maximum FSI in the available table row.'], null);
   if (maximumFsi < baseFsi) return unresolved('The table values need manual review before a result can be established.', ['The base FSI is greater than the stated maximum FSI.'], null);
-  if (data.table === '6.20') return unresolved('Agriculture-zone FSI depends on the permitted activity and Table 6.20 conditions.', ['Select or confirm the applicable Table 6.20 activity and building-unit conditions.'], null);
+  if (data.table === '6.20' && !tallBuildingPolicy?.enabled) return unresolved('Agriculture-zone FSI depends on the permitted activity and Table 6.20 conditions.', ['Select or confirm the applicable Table 6.20 activity and building-unit conditions.'], null);
   const calculation = {
     table: appliedTable,
     baseFsi: data.table === '6.19' ? null : baseFsi,
@@ -448,5 +462,5 @@ export function calculateFsi(input, tableRows = [], scheduleRows = []) {
   if (managedRow) data = fromManagedRow(managedRow);
   if (!data) return unresolved('No numeric FSI row matches this authority and zone.', ['The selected zone is not listed with numeric FSI values in the applicable table, or requires a special schedule/condition.'], input);
   if (data.base == null || data.maximum == null) return unresolved('The active FSI schedule row does not contain numeric values for this zone.', ['Update the matching source row or add a normalized FSI row in the administrator table.'], input);
-  return resultForNumericRow({ data, zoneCode, zone: input.zone, plotArea, roadWidth, distanceFromWideRoad: input.distanceFromWideRoad, category: developmentCategory, authorityCode, permissibleUseCode: input.permissibleUseCode, scheduleRows });
+  return resultForNumericRow({ data, zoneCode, zone: input.zone, plotArea, roadWidth, distanceFromWideRoad: input.distanceFromWideRoad, category: developmentCategory, authorityCode, permissibleUseCode: input.permissibleUseCode, buildingUseCode: input.buildingUseCode, tallBuildingPolicy: input.tallBuildingPolicy, roadWidths: input.roadWidths, scheduleRows });
 }

@@ -24,6 +24,7 @@ import CalculatorUseCodesPanel from './CalculatorUseCodesPanel.jsx';
 import CalculatorRoadWidthPanel from './CalculatorRoadWidthPanel.jsx';
 import CalculatorFsiSchedulesPanel from './CalculatorFsiSchedulesPanel.jsx';
 import CalculatorBuildingHeightPanel from './CalculatorBuildingHeightPanel.jsx';
+import TallBuildingPolicyPanel from './TallBuildingPolicyPanel.jsx';
 import './admin.css';
 
 const workflow = [
@@ -348,6 +349,7 @@ function AdminOverview({ overview, overviewError, refreshing, user, users, users
         <CalculatorFsiSchedulesPanel />
         <CalculatorBuildingHeightPanel />
         <CalculatorFsiSchedulesPanel mode="margins" />
+        <TallBuildingPolicyPanel />
         <CalculatorAuthoritiesPanel />
         <CalculatorTablesPanel />
 
