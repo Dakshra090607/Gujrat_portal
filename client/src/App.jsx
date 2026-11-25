@@ -245,7 +245,8 @@ function RegulationSearch() {
 function AuthoritySearchSelect({ categories, categoryCode, value, query, onQueryChange, onSelect, disabled = false }) {
   const [open, setOpen] = useState(false);
   const pointerSelectingRef = useRef(false);
-  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const selectedValueIsDisplayed = Boolean(value) && query.trim() === value.trim();
+  const normalizedQuery = selectedValueIsDisplayed ? '' : query.trim().toLocaleLowerCase();
   const options = categories
     .filter((category) => !categoryCode || category.code === categoryCode)
     .flatMap((category) => category.authorities.map((authorityRow) => ({
