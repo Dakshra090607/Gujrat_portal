@@ -39,3 +39,27 @@
 @media(max-width:600px){.margin-input-grid{grid-template-columns:1fr 1fr}.margin-input-grid .margin-special-toggle{align-self:auto}}
 .site-road-widths+.site-context-grid{margin-top:16px}
 
+/* Keep calculator dropdowns easy to use with a pointer or touch screen. */
+.plot-feasibility-page .site-context-grid select,
+.plot-feasibility-page .site-zone-summary select,
+.plot-feasibility-page .wide-road-distance-field select,
+.plot-feasibility-page .authority-search-select>input{min-width:0;min-height:42px;font-size:12px}
+.plot-feasibility-page .authority-options{z-index:1000;max-height:min(280px,45vh);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.plot-feasibility-page .authority-search-select:focus-within{z-index:1001}
+.plot-feasibility-page .authority-option{min-height:44px;touch-action:manipulation}
+.plot-feasibility-page .authority-option span{font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+.plot-feasibility-page .authority-option small{font-size:10px;line-height:1.4}
+.plot-feasibility-page select:focus-visible,
+.plot-feasibility-page .authority-search-select>input:focus-visible{outline:2px solid #83a8d2;outline-offset:2px}
+@media(max-width:600px){
+  .plot-feasibility-page .site-context-grid select,
+  .plot-feasibility-page .site-zone-summary select,
+  .plot-feasibility-page .wide-road-distance-field select,
+  .plot-feasibility-page .authority-search-select>input{height:48px;min-height:48px;padding-inline:12px;font-size:16px}
+  .plot-feasibility-page .authority-options{max-height:min(260px,40vh);border-radius:8px}
+  .plot-feasibility-page .authority-option{min-height:50px;padding:10px 12px}
+  .plot-feasibility-page .authority-option span{font-size:14px}
+  .plot-feasibility-page .authority-option small{font-size:11px}
+  .plot-feasibility-page .authority-result-count,.plot-feasibility-page .authority-no-results{font-size:12px}
+}
+

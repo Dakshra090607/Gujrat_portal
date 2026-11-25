@@ -244,6 +244,7 @@ function RegulationSearch() {
 
 function AuthoritySearchSelect({ categories, categoryCode, value, query, onQueryChange, onSelect, disabled = false }) {
   const [open, setOpen] = useState(false);
+  const pointerSelectingRef = useRef(false);
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const options = categories
     .filter((category) => !categoryCode || category.code === categoryCode)
@@ -260,7 +261,7 @@ function AuthoritySearchSelect({ categories, categoryCode, value, query, onQuery
   const visibleOptions = options;
 
   return <div className="authority-search-select" onBlur={(event) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+    if (!event.currentTarget.contains(event.relatedTarget) && !pointerSelectingRef.current) setOpen(false);
   }}>
     <input
       role="combobox"
@@ -279,7 +280,7 @@ function AuthoritySearchSelect({ categories, categoryCode, value, query, onQuery
         if (event.key === 'Escape') setOpen(false);
         if (event.key === 'ArrowDown' && open && visibleOptions.length) {
           event.preventDefault();
-          document.querySelector('#authority-options button')?.focus();
+          event.currentTarget.closest('.authority-search-select')?.querySelector('#authority-options button')?.focus();
         }
         if (event.key === 'Enter' && open) {
           event.preventDefault();
@@ -298,7 +299,9 @@ function AuthoritySearchSelect({ categories, categoryCode, value, query, onQuery
           role="option"
           aria-selected={option.authority === value && option.categoryCode === categoryCode}
           key={`${option.categoryCode}-${option.authority}`}
-          onClick={() => { onSelect(option); setOpen(false); }}
+          onPointerDown={() => { pointerSelectingRef.current = true; }}
+          onPointerCancel={() => { pointerSelectingRef.current = false; setOpen(false); }}
+          onClick={() => { pointerSelectingRef.current = false; onSelect(option); setOpen(false); }}
         >
           <span>{option.authority}</span>
           <small>{option.categoryCode} - {option.categoryLabel.slice(option.categoryCode.length).trim().replace(/^[-\u2013\u2014]\s*/, '')}</small>
@@ -1228,7 +1231,6 @@ function FsiCalculator() {
       {authorityDataState.error&&<StateNotice tone="error">Could not load categories and authorities: {authorityDataState.error}</StateNotice>}
       {useCodeDataState.error&&<StateNotice tone="error">Could not load building uses: {useCodeDataState.error}</StateNotice>}
       {selectedZone&&<details className="site-zone-details"><summary>Selected zone details · {selectedZone.code}</summary><div className="site-zone-summary"><span><b>Conceptualised zone</b>{selectedZone.conceptualisedZone}</span><span><b>Zone code</b>{selectedZone.code}</span><span className="site-permissible-use"><b>Permissible uses</b>{cleanRuleReference(selectedZone.permissibleUse)}</span>{selectedZoneUseCodes.length>0&&<><label>Permitted use code<select value={activeUseCode} onChange={(event)=>{setPermissibleUseCode(event.target.value);clearResult();}}>{selectedZoneUseCodes.map((code)=><option key={code} value={code}>{code}{useCodeRows.find((row)=>row.code===code)?` — ${useCodeRows.find((row)=>row.code===code).classification}`:''}</option>)}</select></label><div className="site-selected-use-detail" aria-live="polite"><b>Building use details{activeUseCode?` · ${activeUseCode}`:''}</b>{activeUseDetails?<><strong>{activeUseDetails.classification}</strong><p>{cleanRuleReference(activeUseDetails.permittedUses)}</p></>:<p>Detailed description for this code is not available.</p>}</div></>}</div></details>}
-      {/* Restrict the Table 6.5A controls to eligible selected zones and their schedule FSI. */}
       {showWideRoadInputs&&<div className="wide-road-distance-field"><label>Qualifying wide road width category<select value={qualifyingWideRoadWidth} onChange={(event)=>{setQualifyingWideRoadWidth(event.target.value);clearResult();}}><option value="">Select road width</option>{wideRoadBandOptions.map(({label,value})=><option key={`${value}-${label}`} value={value}>{label}</option>)}</select></label><label>Distance from the edge of that road (m)<input type="number" min="0" step="any" value={distanceFromWideRoad} onChange={(event)=>{setDistanceFromWideRoad(event.target.value);clearResult();}} placeholder="Enter distance up to 200 m"/></label><small className="field-hint">This zone has base FSI {selectedZoneBaseFsi?.toFixed(2)} in the active dashboard schedule. The provision applies within 200 m of a road at least 36 m wide, subject to its listed exceptions. The qualifying road need not adjoin the plot.</small></div>}
     </section>
     <nav className="feasibility-part-tabs" aria-label="Plot feasibility checks" role="tablist">{parts.map((part)=><button key={part.id} className={`feasibility-part-tab${activePart===part.id?' is-active':''}`} type="button" role="tab" aria-selected={activePart===part.id} aria-controls={`feasibility-${part.id}`} onClick={()=>setActivePart(part.id)}><span>{part.number}</span><b>{part.title}</b><small>{part.subtitle}</small></button>)}</nav>
