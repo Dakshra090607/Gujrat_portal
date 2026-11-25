@@ -63,4 +63,61 @@
   .plot-feasibility-page .authority-option small{font-size:11px}
   .plot-feasibility-page .authority-result-count,.plot-feasibility-page .authority-no-results{font-size:12px}
 }
+.calculator-disclaimer-card{margin-top:20px;padding:22px 24px;border:1px solid #e1e7ed;border-radius:8px;background:#fff;color:#63758b}
+.calculator-disclaimer-card h2{margin:0 0 11px;color:#30445c;font:700 13px Manrope,sans-serif}
+.calculator-disclaimer-card p{margin:8px 0 0;font-size:9px;line-height:1.75}
+@media(max-width:600px){.calculator-disclaimer-card{margin-top:15px;padding:17px 16px}.calculator-disclaimer-card h2{font-size:12px}.calculator-disclaimer-card p{font-size:10px;line-height:1.7}}
 
+/* Keep common interface copy readable across desktop and mobile layouts. */
+body{font-size:16px;line-height:1.55}
+:where(p,li,label,button,input,select,textarea,summary){font-size:max(14px,.88em)!important;line-height:1.55}
+:where(small,.page-kicker,.panel-label,.eyebrow,.status-pill,.workspace-label,.nav-caption,.quick-overline,.source-part,.module-index,.coverage-state,.source-status-tag,.review-pill,.soft-badge,.nav-count,.sidebar-source small,.profile small){font-size:12px!important;line-height:1.5}
+:where(.side-link,.landing-nav a,.text-link,.module-link,.topbar-crumb,.date-chip){font-size:14px!important}
+:where(th,td){font-size:13px!important;line-height:1.5}
+@media(max-width:760px){
+  :where(p,li,label,button,input,select,textarea,summary){font-size:max(15px,.92em)!important}
+  :where(input,select,textarea){font-size:16px!important}
+  :where(small,.page-kicker,.panel-label,.eyebrow,.status-pill,.workspace-label,.nav-caption,.quick-overline,.source-part,.module-index,.coverage-state,.source-status-tag,.review-pill,.soft-badge,.nav-count,.sidebar-source small,.profile small){font-size:12px!important}
+  :where(th,td){font-size:13px!important}
+}
+.site-road-widths-fields-only{grid-template-columns:minmax(0,1fr);margin-top:0;padding-top:0;border-top:0}
+
+/* Refine spacing and type scale for the calculator's three input rows. */
+.plot-feasibility-page .site-context-card>.site-context-grid{row-gap:22px}
+.plot-feasibility-page .site-context-card>.site-road-widths-fields-only{margin-top:22px;padding-top:20px;border-top:1px solid #edf0f3}
+.plot-feasibility-page .site-context-grid>label,.plot-feasibility-page .site-road-widths .road-width-grid label{gap:8px;color:#3d5068;font-size:15px;font-weight:650;line-height:1.4}
+.plot-feasibility-page .site-context-grid input,.plot-feasibility-page .site-context-grid select,.plot-feasibility-page .site-road-widths input,.plot-feasibility-page .authority-search-select>input{height:48px;min-height:48px;padding-inline:13px;font-size:16px!important;line-height:1.4}
+.plot-feasibility-page .site-context-grid .field-hint,.plot-feasibility-page .site-context-grid label>small{font-size:13px!important;line-height:1.5}
+.plot-feasibility-page .feasibility-part-tabs{gap:12px;margin:20px 0}
+.plot-feasibility-page .feasibility-part-tab{min-height:82px;column-gap:13px;padding:15px 17px}
+.plot-feasibility-page .feasibility-part-tab>span{font-size:13px!important;letter-spacing:.5px}
+.plot-feasibility-page .feasibility-part-tab>b{font:700 17px/1.3 Manrope,sans-serif}
+.plot-feasibility-page .feasibility-part-tab>small{margin-top:5px;font-size:14px!important;line-height:1.45}
+.plot-feasibility-page .feasibility-part-heading h2{font-size:21px}
+.plot-feasibility-page .feasibility-part-heading p{font-size:14px;line-height:1.5}
+.plot-feasibility-page .feasibility-part-heading .panel-label{font-size:12px!important}
+.plot-feasibility-page .feasibility-action{min-height:46px;padding-inline:18px;font-size:15px}
+.plot-feasibility-page .road-margin-diagram{width:100%;margin:0 auto 18px;padding:0;border:0;border-radius:0;background:transparent}
+.plot-feasibility-page .road-margin-diagram svg{display:block;width:min(100%,820px);height:auto;margin:0 auto;overflow:visible}
+.plot-feasibility-page .road-margin-diagram .road-margin-note{display:block;margin-top:8px;color:#63758b;font-size:14px!important;line-height:1.6}
+@media(max-width:760px){
+  .plot-feasibility-page .site-context-card>.site-context-grid{row-gap:17px}
+  .plot-feasibility-page .site-context-card>.site-road-widths-fields-only{margin-top:19px;padding-top:17px}
+  .plot-feasibility-page .site-context-grid>label,.plot-feasibility-page .site-road-widths .road-width-grid label{font-size:15px}
+  .plot-feasibility-page .feasibility-part-tabs{gap:10px;margin:17px 0}
+  .plot-feasibility-page .feasibility-part-tab{min-height:74px;padding:13px 15px}
+  .plot-feasibility-page .feasibility-part-tab>b{font-size:17px}
+  .plot-feasibility-page .feasibility-part-tab>small{font-size:14px!important}
+  .plot-feasibility-page .feasibility-part-heading h2{font-size:20px}
+  .plot-feasibility-page .road-margin-diagram svg{width:100%;margin-bottom:0}
+  .plot-feasibility-page .road-margin-diagram .road-margin-note{font-size:13px!important}
+}
+.plot-feasibility-page .site-context-card{padding:0 0 22px;border:0;border-bottom:1px solid #dfe5eb;border-radius:0;background:transparent}
+.plot-feasibility-page .site-context-grid{padding-inline:0}
+.plot-feasibility-page .site-zone-details{padding:10px 0;border:0;border-top:1px solid #e6ebf0;border-bottom:1px solid #e6ebf0;border-radius:0;background:transparent}
+.plot-feasibility-page .feasibility-part-tabs{padding-bottom:18px;border-bottom:1px solid #dfe5eb}
+.plot-feasibility-page .feasibility-part-panel{min-height:0;padding:19px 0 0;border:0;border-radius:0;background:transparent}
+.plot-feasibility-page .feasibility-part-heading{padding-bottom:16px}
+.plot-feasibility-page .height-source-notes{padding:11px 0;border:0;border-top:1px solid #e6ebf0;border-radius:0;background:transparent}
+.plot-feasibility-page .margin-source-card{padding:12px 0;border:0;border-top:1px solid #e6ebf0;border-bottom:1px solid #e6ebf0;border-radius:0;background:transparent}
+.plot-feasibility-page .calculator-disclaimer-card{margin-top:20px;padding:18px 0 0;border:0;border-top:1px solid #dfe5eb;border-radius:0;background:transparent}
