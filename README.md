@@ -91,3 +91,102 @@ The source PDFs are preserved in this workspace and the seeded rows currently st
 - [Implementation roadmap](IMPLEMENTATION-ROADMAP.md)
 - [Extraction notes](docs/EXTRACTION.md)
 - [Milestone 5A implementation brief](docs/MILESTONE-5A-IMPLEMENTATION-PROMPT.md)
+
+## Repository structure and code map
+
+This repository is the BuildRule Gujarat application. The browser client, API, source PDFs, extraction artifacts, and database scripts are organized as follows:
+
+```text
+.
+├── api/
+│   └── index.js                    # Serverless API entry point
+├── client/
+│   ├── public/                     # Static browser assets
+│   ├── src/
+│   │   ├── App.jsx                 # Client routes and page composition
+│   │   ├── main.jsx                # React application entry point
+│   │   ├── data/                   # Client-side authority and schedule data
+│   │   ├── features/
+│   │   │   ├── admin/              # Admin console and calculator configuration panels
+│   │   │   ├── auth/               # Authentication and profile views
+│   │   │   └── review/             # Regulation review workbench
+│   │   ├── lib/                    # API client and authentication helpers
+│   │   └── styles.css              # Shared application styles
+│   ├── .env.example                # Public client config placeholders
+│   ├── index.html                  # Browser HTML entry point
+│   └── vite.config.js              # Vite configuration
+├── data/
+│   └── extracted/                  # PDF extraction output and manifest
+├── docs/                           # Architecture, extraction, search, and project briefs
+├── scripts/
+│   └── ingest/                     # PDF extraction and validation tools
+├── server/
+│   ├── data/                       # Rule schedule and authority source data
+│   ├── migrations/                 # Ordered PostgreSQL schema migrations
+│   ├── scripts/                    # Migration, source seeding, indexing, and admin commands
+│   ├── source-documents/           # Original CGDCR PDF files
+│   ├── src/
+│   │   ├── app.js                  # Express app and API middleware
+│   │   ├── server.js               # HTTP server startup
+│   │   ├── config/                 # Environment and database configuration
+│   │   ├── db/                     # PostgreSQL model-store helpers
+│   │   ├── models/                 # Data model registration
+│   │   └── modules/                # Auth, search, documents, compliance, review, and admin APIs
+│   ├── test/                       # Unit, safety, and integration tests
+│   └── .env.example                # Server environment placeholders
+├── tests/                          # Extraction pipeline tests
+├── compose.yaml                    # Optional local PostgreSQL service
+├── neon.ts                         # Neon project and Auth provisioning configuration
+├── package.json                    # Root workspaces and common commands
+└── README.md                       # Setup, data state, and repository guide
+```
+
+### Main files by responsibility
+
+**Application and routing**
+
+- `client/src/App.jsx` defines the browser routes and connects them to feature pages.
+- `client/src/main.jsx` mounts the React application and shared providers.
+- `client/src/lib/api.js` configures requests from the browser to the API; `client/src/lib/auth.js` handles client authentication helpers.
+- `server/src/app.js` creates the Express application, middleware, and API routes. `server/src/server.js` starts the local HTTP listener.
+- `api/index.js` adapts the Express API for the serverless deployment entry point.
+
+**CGDCR rules and calculations**
+
+- `server/src/modules/compliance/` contains the FSI calculation endpoint and its calculation logic.
+- `server/data/` contains configured authorities, FSI schedules, margin schedules, and height/use/zone reference data.
+- `client/src/data/` contains client-facing authority and table data used by calculator controls and views.
+- `client/src/features/admin/Calculator*.jsx` provides administrator panels for maintaining calculator authorities, schedules, road widths, tables, use codes, and zones. `TallBuildingPolicyPanel.jsx` manages tall-building policy configuration.
+- The calculator uses configured rule data and returns unresolved results when necessary rules or applicability details have not been verified; extracted text alone is not treated as an approved rule.
+
+**Regulation documents and search**
+
+- `server/source-documents/` stores the three original CGDCR PDFs.
+- `server/src/modules/documents/routes.js` serves source-document endpoints.
+- `server/src/modules/regulations/routes.js` provides regulation/source-text endpoints.
+- `server/src/modules/search/routes.js` implements keyword and question search routes; `cloudflare-ai.js` contains the optional Cloudflare AI integration.
+- `client/src/features/review/ReviewWorkbench.jsx` is the source review interface. Search results and review records retain their source information so users can verify passages against the PDFs.
+- `data/extracted/` stores page-level extraction artifacts and the source manifest. `scripts/ingest/extract_cgdcr.py` extracts text; `validate_extraction.py` checks the extraction output.
+
+**Administration, accounts, and database**
+
+- `client/src/features/admin/AdminDashboard.jsx` composes the admin console; adjacent panels expose account and calculator configuration tools.
+- `server/src/modules/admin/` contains admin API routes and server-side calculator configuration handlers.
+- `server/src/modules/auth/` verifies identity and applies API authentication; `server/src/modules/users/routes.js` contains user-related API operations.
+- `server/src/config/` loads environment and database configuration. `server/src/db/model-store.js` provides database-backed model operations.
+- `server/migrations/001_postgres_core.sql` creates the PostgreSQL core schema; `002_rag_search.sql` adds retrieval/search storage.
+- `server/scripts/` includes `migrate.js`, `seed-source-documents.js`, `validate-database.js`, `index-rag.js`, and `admin-create.js` for setup and maintenance workflows.
+
+### How the pieces work together
+
+The React client sends authenticated requests to the Express API. Neon Managed Auth handles sign-in and session tokens; the server verifies tokens and loads application roles from PostgreSQL. Search endpoints retrieve source passages and attach their document/page provenance. The calculator reads configured authority and schedule data and returns preliminary results only where applicable source-backed inputs exist. The admin console manages users, review workflows, and calculator configuration through protected API routes. SQL migrations and source seeding are explicit server-side commands rather than browser operations.
+
+The three CGDCR PDFs are source material, not software instructions. Their extracted candidates remain unverified until reviewed with citations and audit records. Follow the existing verification safeguards described in [Architecture](ARCHITECTURE.md) before treating regulatory values as authoritative.
+
+### Environment file guide
+
+- Root `.env.local`: local Neon branch and Auth configuration; ignored by Git.
+- `server/.env`: server-only database, Auth verification, and optional Cloudflare settings; copy from `server/.env.example` and keep it out of Git.
+- `client/.env`: browser-safe Vite settings only; copy from `client/.env.example`. Do not put database credentials or private Cloudflare tokens in client variables because Vite embeds `VITE_*` values in browser assets.
+
+The `.env.example` files contain placeholders and explain the expected keys. Never copy real credentials into README files, source code, commits, or client builds.
