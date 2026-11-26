@@ -5,20 +5,22 @@ import ReviewWorkbench from './features/review/ReviewWorkbench.jsx';
 import AdminDashboard from './features/admin/AdminDashboard.jsx';
 import AuthPage from './features/auth/AuthPage.jsx';
 import ProfilePage from './features/auth/ProfilePage.jsx';
+import PlotDiagram2D from './features/cgdcr/PlotDiagram2D.jsx';
+import './features/cgdcr/cgdcr.css';
 import { authClient } from './lib/auth.js';
 import buildingHeightSource from './data/table-6-23-building-height.json';
 import zoneTableFallback from './data/table-6-2.json';
 import {
   ArrowDownRight, ArrowRight, BookOpen, Building2, Calculator, CheckCircle2, LogOut,
   ChevronDown, CircleHelp, Compass, FileCheck2, FileText, Layers3, Menu,
-  Search, ShieldCheck, Sparkles, X,
+  Search, ShieldCheck, Sparkles, X, ExternalLink,
 } from 'lucide-react';
 
 const navItems = [
   { label: 'Overview', to: '/app', icon: Compass },
+  { label: 'CGDCR Planning', to: '/cgdcr', icon: Calculator },
   { label: 'Regulation explorer', to: '/regulations', icon: BookOpen },
   { label: 'Search regulations', to: '/search', icon: Search },
-  { label: 'Calculator', to: '/fsi-calculator', icon: Calculator },
   { label: 'Compliance checker', to: '/compliance', icon: FileCheck2 },
   { label: 'Permission guide', to: '/permission-guide', icon: Layers3 },
   { label: 'Admin console', to: '/admin', icon: ShieldCheck },
@@ -74,7 +76,7 @@ function Landing() {
                 Explore regulations <ArrowRight size={16} />
               </Link>
             )}
-            <Link className="button button-outline" to="/fsi-calculator">Check development potential <ArrowDownRight size={16} /></Link>
+            <Link className="button button-outline" to="/cgdcr">Check development potential <ArrowDownRight size={16} /></Link>
           </div>
           <div className="hero-proof"><ShieldCheck size={17} /><span>Source traceability built in</span><span className="proof-divider" /><span>Preliminary assistance</span><span className="proof-divider" /><span>Gujarat focused</span></div>
         </div>
@@ -196,17 +198,33 @@ function HighlightedSnippet({ text, query }) {
   return <>{text.slice(0, index)}<mark>{text.slice(index, index + query.length)}</mark>{text.slice(index + query.length)}</>;
 }
 
+const QUICK_SEARCH_TOPICS = [
+  'Table 6.5 (D1 FSI)',
+  'Table 6.24 (Margins)',
+  'Table 6.23 (Building Height)',
+  'Table 6.2 (Permissible Uses)',
+  'Tall Building policy',
+  'Table 6.5A (Wide Road FSI)',
+  'Parking requirements',
+];
+
+function detectClauseNumber(text = '') {
+  const match = String(text).match(/\b(?:Regulation\s+\d+(?:\.\d+)*|Clause\s+\d+(?:\.\d+)*|Table\s+\d+(?:\.\d+)*[A-Z]?)\b/i);
+  return match ? match[0] : null;
+}
+
 function RegulationSearch() {
   const navigate = useNavigate();
   const [q, setQ] = useState('');
   const [part, setPart] = useState('');
   const [state, setState] = useState({ loading: false, data: [], pagination: null, answer: '', notice: '', error: '' });
-  const search = async (event, nextPage = 1) => {
+  const search = async (event, nextPage = 1, overrideQuery = null) => {
     event?.preventDefault();
-    if (!q.trim()) { setState({ loading: false, data: [], pagination: null, answer: '', notice: '', error: 'Enter a question, keyword, phrase, regulation number, or technical term.' }); return; }
+    const queryTerm = (overrideQuery ?? q).trim();
+    if (!queryTerm) { setState({ loading: false, data: [], pagination: null, answer: '', notice: '', error: 'Enter a question, keyword, phrase, regulation number, or technical term.' }); return; }
     setState((current) => ({ ...current, loading: true, error: '', notice: '' }));
     try {
-      const response = await api.post('/search/ask', { q: q.trim(), ...(part && { part }) }, { timeout: 120_000 });
+      const response = await api.post('/search/ask', { q: queryTerm, ...(part && { part }) }, { timeout: 120_000 });
       const sources = response.data.sources.map((source) => ({
         citationId: source.citationId,
         sourceDocument: { _id: source.sourceDocumentId, part: source.part, partTitle: source.part, filename: source.filename },
@@ -218,7 +236,7 @@ function RegulationSearch() {
       setState({ loading: false, data: sources, pagination: null, answer: response.data.answer, notice: '', error: '' });
     } catch (ragError) {
       try {
-        const response = await api.get('/search', { params: { q: q.trim(), ...(part && { part }), page: nextPage, pageSize: 10 } });
+        const response = await api.get('/search', { params: { q: queryTerm, ...(part && { part }), page: nextPage, pageSize: 10 } });
         setState({
           loading: false,
           data: response.data.data,
@@ -232,13 +250,64 @@ function RegulationSearch() {
       }
     }
   };
-  return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> REGULATION SEARCH</div><div className="page-title-row"><div><h1>Search the source text</h1><p>Ask a question or search for a clause. Answers use retrieved passages linked to their original PDF pages.</p></div></div>
-    <form className="search-panel" onSubmit={search}><div className="search-input-wrap"><Search size={18}/><input value={q} onChange={(event) => setQ(event.target.value)} placeholder="e.g. What setbacks apply near a road?" aria-label="Search the source text"/><button className="button button-primary" type="submit" disabled={state.loading}>{state.loading ? 'Searching…' : 'Search'}</button></div><div className="filter-row"><label>Part <select value={part} onChange={(event) => setPart(event.target.value)}><option value="">All parts</option><option>Part I</option><option>Part II</option><option>Part III</option></select></label><span>AI-assisted retrieval · PDF page citations · Source text needs review</span></div></form>
+
+  const handleTopicClick = (topic) => {
+    const cleaned = topic.replace(/\s*\([^)]*\)$/, '');
+    setQ(cleaned);
+    search(null, 1, cleaned);
+  };
+
+  return <AppShell><div className="workspace-page"><div className="page-kicker">BUILD RULE GUJARAT <span>/</span> CGDCR REGULATION SEARCH</div><div className="page-title-row"><div><h1>CGDCR Regulation Search &amp; Citations</h1><p>Search questions, clause numbers, tables, and regulation keywords. Every result is linked to its verified source page and original PDF.</p></div></div>
+    <form className="search-panel" onSubmit={search}>
+      <div className="search-input-wrap"><Search size={18}/><input value={q} onChange={(event) => setQ(event.target.value)} placeholder="e.g. Table 6.5, Regulation 12.4, What setbacks apply near a road?" aria-label="Search the source text"/><button className="button button-primary" type="submit" disabled={state.loading}>{state.loading ? 'Searching…' : 'Search'}</button></div>
+      <div className="quick-search-chips" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', margin: '10px 0 6px' }}>
+        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, alignSelf: 'center', marginRight: '4px' }}>Quick Topics:</span>
+        {QUICK_SEARCH_TOPICS.map((topic) => (
+          <button
+            key={topic}
+            type="button"
+            onClick={() => handleTopicClick(topic)}
+            style={{ fontSize: '10px', padding: '3px 8px', borderRadius: '12px', background: '#f1f5f9', border: '1px solid #cbd5e1', color: '#334155', cursor: 'pointer', fontWeight: 600 }}
+          >
+            {topic}
+          </button>
+        ))}
+      </div>
+      <div className="filter-row"><label>Part <select value={part} onChange={(event) => setPart(event.target.value)}><option value="">All parts</option><option>Part I</option><option>Part II</option><option>Part III</option></select></label><span>AI-assisted retrieval · Original PDF links · Source text needs review</span></div>
+    </form>
     {state.error && <StateNotice tone={state.error.includes('Enter') ? 'info' : 'error'}>{state.error}</StateNotice>}
     {state.notice && <StateNotice>{state.notice}</StateNotice>}
     {state.loading && <div className="panel-state">Searching extracted pages…</div>}
     {!state.loading && state.answer && <section className="rag-answer-card"><span className="panel-label">ANSWER FROM SOURCE PASSAGES</span><p>{state.answer}</p><small>Informational only. Retrieved passages are extracted material awaiting regulatory review; this is not an official interpretation.</small></section>}
-    {!state.loading && (state.answer || state.pagination) && <><div className="search-results-head"><b>{state.answer ? `${state.data.length} cited source passage${state.data.length === 1 ? '' : 's'}` : `${state.pagination.total} source page${state.pagination.total === 1 ? '' : 's'} found`}</b><span>{state.answer ? 'Open the cited PDF page to verify the source' : 'Exact keyword matches'}</span></div>{state.data.length ? <div className="search-results">{state.data.map((result) => <article key={`${result.sourceDocument?._id}-${result.pdfPageNumber}-${result.citationId ?? ''}`} className="search-result"><div className="result-meta"><span>{result.citationId ? `[${result.citationId}] · ` : ''}{result.sourceDocument?.part} · {result.sourceDocument?.partTitle}</span><span className="review-pill">EXTRACTED · NEEDS REVIEW</span></div><button className="result-snippet" onClick={() => navigate(`/regulations?document=${result.sourceDocument?._id}&page=${result.pdfPageNumber}`)}><HighlightedSnippet text={result.snippet} query={state.answer ? '' : q.trim()}/></button><div className="result-footer"><span>{result.sourceDocument?.filename}</span><button onClick={() => navigate(`/regulations?document=${result.sourceDocument?._id}&page=${result.pdfPageNumber}`)}>PDF page {result.pdfPageNumber} <ArrowRight size={14}/></button></div></article>)}</div> : <div className="hierarchy-pending"><Search size={18}/><div><b>No relevant source passages found.</b><p>Try a different wording or clear the part filter.</p></div></div>}{state.pagination?.pages > 1 && <div className="pagination-row"><button className="reader-button" disabled={state.pagination.page <= 1} onClick={(event) => search(event, state.pagination.page - 1)}>Previous</button><span>Page {state.pagination.page} of {state.pagination.pages}</span><button className="reader-button" disabled={state.pagination.page >= state.pagination.pages} onClick={(event) => search(event, state.pagination.page + 1)}>Next</button></div>}</>}
+    {!state.loading && (state.answer || state.pagination) && <><div className="search-results-head"><b>{state.answer ? `${state.data.length} cited source passage${state.data.length === 1 ? '' : 's'}` : `${state.pagination.total} source page${state.pagination.total === 1 ? '' : 's'} found`}</b><span>{state.answer ? 'Open the cited PDF page to verify the source' : 'Exact keyword matches'}</span></div>{state.data.length ? <div className="search-results">{state.data.map((result) => {
+      const clause = detectClauseNumber(result.snippet);
+      return (
+        <article key={`${result.sourceDocument?._id}-${result.pdfPageNumber}-${result.citationId ?? ''}`} className="search-result">
+          <div className="result-meta">
+            <span>{result.citationId ? `[${result.citationId}] · ` : ''}{result.sourceDocument?.part} · {result.sourceDocument?.partTitle}</span>
+            {clause && <span style={{ padding: '2px 6px', borderRadius: '4px', background: '#eff6ff', color: '#1d4ed8', fontSize: '10px', fontWeight: 700, border: '1px solid #bfdbfe' }}>{clause}</span>}
+            <span className="review-pill">EXTRACTED · NEEDS REVIEW</span>
+          </div>
+          <button className="result-snippet" onClick={() => navigate(`/regulations?document=${result.sourceDocument?._id}&page=${result.pdfPageNumber}`)}><HighlightedSnippet text={result.snippet} query={state.answer ? '' : q.trim()}/></button>
+          <div className="result-footer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+            <span>{result.sourceDocument?.filename}</span>
+            <div className="search-result-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <a
+                className="btn-open-pdf"
+                href={`${api.defaults.baseURL || '/api/v1'}/documents/${result.sourceDocument?._id}/pdf#page=${result.pdfPageNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FileText size={12} /> Original PDF (p. {result.pdfPageNumber}) <ExternalLink size={10} />
+              </a>
+              <button className="btn-read-extracted" onClick={() => navigate(`/regulations?document=${result.sourceDocument?._id}&page=${result.pdfPageNumber}`)}>
+                Read in Viewer <ArrowRight size={12}/>
+              </button>
+            </div>
+          </div>
+        </article>
+      );
+    })}</div> : <div className="hierarchy-pending"><Search size={18}/><div><b>No relevant source passages found.</b><p>Try a different wording or clear the part filter.</p></div></div>}{state.pagination?.pages > 1 && <div className="pagination-row"><button className="reader-button" disabled={state.pagination.page <= 1} onClick={(event) => search(event, state.pagination.page - 1)}>Previous</button><span>Page {state.pagination.page} of {state.pagination.pages}</span><button className="reader-button" disabled={state.pagination.page >= state.pagination.pages} onClick={(event) => search(event, state.pagination.page + 1)}>Next</button></div>}</>}
   </div></AppShell>;
 }
 
@@ -675,34 +744,28 @@ function RoadMarginDiagram({ category, authority, area, zoneCode, roadWidths, pl
     }
     return [side, { road: false, value: sideMargin ?? null, message: '' }];
   }));
-  const plot = { x: 150, y: 48, width: 200, height: 150 };
-  const roadRects = {
-    rear: <rect x="135" y="12" width="230" height="30" rx="2" fill="#e8ebef"/>,
-    left: <rect x="70" y="33" width="74" height="180" rx="2" fill="#e8ebef"/>,
-    right: <rect x="356" y="33" width="74" height="180" rx="2" fill="#e8ebef"/>,
-    front: <rect x="135" y="204" width="230" height="30" rx="2" fill="#e8ebef"/>,
-  };
-  const marginRects = {
-    rear: <rect x={plot.x} y={plot.y} width={plot.width} height="22" fill="#f8efec" stroke="#e8c9be" strokeWidth="0.8"/>,
-    left: <rect x={plot.x} y={plot.y} width="22" height={plot.height} fill="#f8efec" stroke="#e8c9be" strokeWidth="0.8"/>,
-    right: <rect x={plot.x + plot.width - 22} y={plot.y} width="22" height={plot.height} fill="#f8efec" stroke="#e8c9be" strokeWidth="0.8"/>,
-    front: <rect x={plot.x} y={plot.y + plot.height - 22} width={plot.width} height="22" fill="#f8efec" stroke="#e8c9be" strokeWidth="0.8"/>,
-  };
-  const marginValue = (side) => {
-    const value = marginValues[side].value;
-    if (value == null) return '';
-    const location = side === 'front' ? 'Front' : side === 'rear' ? 'Rear' : 'Side';
-    const roadQualifier = marginValues[side].road && side !== 'front' ? ' road' : '';
-    const amount = value === 0 ? 'Nil' : `${value} m`;
-    return `${location}${roadQualifier} margin · ${amount}`;
-  };
   const notes = [...new Set([
     ...(rearSideAssessment?.status !== 'available' && rearSideAssessment?.message ? [rearSideAssessment.message] : []),
     ...(rearSideAssessment?.status === 'available' ? [rearSideAssessment.note, rearSideAssessment.maximumBuiltUpArea ? `Maximum built-up area: ${rearSideAssessment.maximumBuiltUpArea}.` : '', rearSideAssessment.allocation ? 'One representative placement is shown for requirements that allow a choice of side.' : ''] : []),
     ...Object.values(marginValues).map((info) => info?.message ?? ''),
   ].filter(Boolean))];
-  const diagramViewBox = roadSides.length ? '65 10 370 224' : '145 48 210 150';
-  return <section className="road-margin-diagram" aria-label="Building unit margin diagram"><svg viewBox={diagramViewBox} role="img" aria-label="Plot diagram showing front, side, and rear margins, with road-facing margins where roads adjoin">{roadSides.map((side) => <g key={`road-${side}`}>{roadRects[side]}</g>)}<rect x={plot.x} y={plot.y} width={plot.width} height={plot.height} fill="#fff" stroke="#7c8997" strokeWidth="1.5"/>{sides.map((side) => {const x = side === 'left' ? plot.x + 11 : side === 'right' ? plot.x + plot.width - 11 : plot.x + plot.width / 2; const y = side === 'rear' ? plot.y + 12 : side === 'front' ? plot.y + plot.height - 10 : plot.y + plot.height / 2; const sideMargin = side === 'left' || side === 'right'; return <g key={`margin-${side}`}>{marginValues[side].value > 0 && marginRects[side]}<text x={x} y={y} textAnchor="middle" dominantBaseline="middle" transform={sideMargin ? `rotate(-90 ${x} ${y})` : undefined} fontSize={sideMargin ? '7' : '8'} fontWeight="700" fill="#75483d">{marginValue(side)}</text></g>;})}<text x="250" y="127" textAnchor="middle" fontSize="11" fontWeight="700" fill="#43546a">Building unit</text>{roadSides.map((side) => <text key={`label-${side}`} x={side === 'left' ? 107 : side === 'right' ? 393 : 250} y={side === 'front' ? 226 : side === 'rear' ? 31 : 128} textAnchor="middle" dominantBaseline="middle" fontSize="8" fontWeight="700" fill="#59697d">Road · {roadWidths[side]} m</text>)}</svg>{notes.map((note) => <small className="road-margin-note" key={note}>{cleanRuleReference(note)}</small>)}</section>;
+
+  return (
+    <PlotDiagram2D
+      category={category}
+      authority={authority}
+      area={area}
+      zoneCode={zoneCode}
+      roadWidths={roadWidths}
+      plotArea={plotArea}
+      buildingUse={buildingUse}
+      buildingUnitArea={tallPolicyUnitArea || buildingUnitArea}
+      buildingHeight={buildingHeight}
+      rearSideAssessment={rearSideAssessment}
+      marginValues={marginValues}
+      notes={notes}
+    />
+  );
 }
 
 function getRearSideMarginAssessment({ category, authorityCode, developmentArea, zoneCode, plotArea, buildingUnitArea, buildingHeight, buildingUse, buildingUseCode, specialBuilding, schedules, tallPolicyReady }) {
@@ -1221,8 +1284,8 @@ function FsiCalculator() {
   const activePartInfo = parts.find((part) => part.id === activePart);
   const renderFsiResult = () => state.error ? <StateNotice tone="error">{cleanRuleReference(state.error)}</StateNotice> : state.loading ? <div className="panel-state">Resolving authority, zone, plot size, and applicable FSI parameters…</div> : state.result?.status === 'CALCULATED' ? <><div className="fsi-result-summary"><small>Maximum permissible FSI</small><b>{state.result.calculation.maximumFsi.toFixed(2)}</b></div><div className="fsi-result-breakdown"><span>Base (free) FSI <b>{state.result.calculation.baseFsi == null ? 'Not specified' : state.result.calculation.baseFsi.toFixed(2)}</b></span><span>Chargeable FSI <b>{state.result.calculation.chargeableFsi == null ? 'Not specified' : state.result.calculation.chargeableFsi.toFixed(2)}</b></span><span>Base built-up area <b>{state.result.calculation.baseBuiltUpArea == null ? 'Not specified' : `${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.baseBuiltUpArea)} m²`}</b></span><span>Chargeable built-up area <b>{state.result.calculation.chargeableBuiltUpArea == null ? 'Not specified' : `${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.chargeableBuiltUpArea)} m²`}</b></span><span>Maximum built-up area <b>{new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(state.result.calculation.maximumBuiltUpArea)} m²</b></span></div>{state.result.calculation.notes.map((note) => <p className="fsi-result-note" key={note}>{cleanRuleReference(note)}</p>)}<p className="fsi-result-note">{cleanRuleReference(state.result.calculation.chargeableBasis)}</p>{state.result.sources.map((source) => <div className="result-reference" key={source.document}><FileText size={15}/><span>{cleanRuleReference(source.document)}</span></div>)}</> : state.result ? <><div className="result-unresolved"><span className="warning-symbol">!</span><div><b>Verified result unavailable</b><small>{cleanRuleReference(state.result.message)}</small></div></div><div className="missing-list"><b>What remains unresolved</b>{state.result.missingInformation.map((item) => <p key={item}><span>•</span>{cleanRuleReference(item)}</p>)}</div><div className="result-reference"><FileText size={15}/><span>No verified regulation or source-page references are available for these inputs.</span></div></> : <div className="result-empty"><Calculator size={22}/><b>FSI calculation is ready</b><p>Complete the shared site details, then calculate to match the authority, zone, permitted use, and road widths to a verified schedule.</p></div>;
   return <AppShell><div className="workspace-page plot-feasibility-page">
-    <div className="page-kicker">BUILD RULE GUJARAT <span>/</span> PLOT FEASIBILITY</div>
-    <div className="page-title-row"><div><h1>Land/Plot Feasibility Calculator</h1><p>Enter the site details once, then review FSI, margins, and height in separate checks.</p></div><span className="source-status-tag"><ShieldCheck size={14}/> SOURCE-LINKED</span></div>
+    <div className="page-kicker">BUILD RULE GUJARAT <span>/</span> CGDCR PLANNING &amp; FEASIBILITY</div>
+    <div className="page-title-row"><div><h1>CGDCR Planning &amp; Land Feasibility Calculator</h1><p>Evaluate development potential: permissible FSI, front/rear/side setbacks, permissible height, interactive 2D plot geometry, and tall-building policy under CGDCR-2017.</p></div><span className="source-status-tag"><ShieldCheck size={14}/> CGDCR SOURCE-LINKED</span></div>
     <section className="site-context-card">
       <div className="site-context-grid">
         <label><span>Development authority &amp; area category <span className="required-asterisk" aria-hidden="true">*</span></span><select required value={form.developmentCategory} onChange={setCategory} disabled={authorityDataState.loading || Boolean(authorityDataState.error)}><option value="">{authorityDataState.loading ? 'Loading categories…' : developmentCategories.length ? 'Choose a category' : 'No active categories'}</option>{developmentCategories.map(({ code, label }) => <option key={code} value={code}>{label}</option>)}</select></label>
@@ -1290,6 +1353,7 @@ export default function App() {
     <Route path="/app" element={<Dashboard />} />
     <Route path="/regulations" element={<RegulationExplorer />} />
     <Route path="/search" element={<RegulationSearch />} />
+    <Route path="/cgdcr" element={<FsiCalculator />} />
     <Route path="/fsi-calculator" element={<FsiCalculator />} />
     <Route path="/compliance" element={<ComplianceChecker />} />
     <Route path="/permission-guide" element={<PermissionGuide />} />

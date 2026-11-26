@@ -15,4 +15,18 @@ if (process.env.BUILDRULE_SKIP_DOTENV !== '1') {
   // A user-provided Neon CLI export may be named `env` without a dot prefix.
   dotenv.config({ path: path.join(projectRoot, 'env'), override: false });
   dotenv.config({ path: path.join(projectRoot, 'server', '.env'), override: false });
+
+  // Map GUJRATPORTAL_ namespaced environment keys
+  if (!process.env.DATABASE_URL && process.env.GUJRATPORTAL_DATABASE_URL) {
+    process.env.DATABASE_URL = process.env.GUJRATPORTAL_DATABASE_URL;
+  }
+  if (!process.env.DATABASE_URL_UNPOOLED && process.env.GUJRATPORTAL_DATABASE_URL_UNPOOLED) {
+    process.env.DATABASE_URL_UNPOOLED = process.env.GUJRATPORTAL_DATABASE_URL_UNPOOLED;
+  }
+  if (!process.env.CLOUDFLARE_ACCOUNT_ID && process.env.GUJRATPORTAL_CLOUDFLARE_ACCOUNT_ID) {
+    process.env.CLOUDFLARE_ACCOUNT_ID = process.env.GUJRATPORTAL_CLOUDFLARE_ACCOUNT_ID;
+  }
+  if (!process.env.CLOUDFLARE_AI_TOKEN && process.env.GUJRATPORTAL_CLOUDFLARE_AI_TOKEN) {
+    process.env.CLOUDFLARE_AI_TOKEN = process.env.GUJRATPORTAL_CLOUDFLARE_AI_TOKEN;
+  }
 }

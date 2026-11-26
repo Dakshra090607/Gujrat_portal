@@ -109,6 +109,7 @@ This repository is the BuildRule Gujarat application. The browser client, API, s
 │   │   ├── features/
 │   │   │   ├── admin/              # Admin console and calculator configuration panels
 │   │   │   ├── auth/               # Authentication and profile views
+│   │   │   ├── cgdcr/              # CGDCR 2D plot diagram and planning components
 │   │   │   └── review/             # Regulation review workbench
 │   │   ├── lib/                    # API client and authentication helpers
 │   │   └── styles.css              # Shared application styles
@@ -145,9 +146,10 @@ This repository is the BuildRule Gujarat application. The browser client, API, s
 
 **Application and routing**
 
-- `client/src/App.jsx` defines the browser routes and connects them to feature pages.
+- `client/src/App.jsx` defines browser routes including the `/cgdcr` planning section, `/search` regulation search, and `/admin` console.
 - `client/src/main.jsx` mounts the React application and shared providers.
 - `client/src/lib/api.js` configures requests from the browser to the API; `client/src/lib/auth.js` handles client authentication helpers.
+- `client/src/features/cgdcr/PlotDiagram2D.jsx` implements the interactive 2D plot and setback feasibility diagram.
 - `server/src/app.js` creates the Express application, middleware, and API routes. `server/src/server.js` starts the local HTTP listener.
 - `api/index.js` adapts the Express API for the serverless deployment entry point.
 
@@ -156,24 +158,25 @@ This repository is the BuildRule Gujarat application. The browser client, API, s
 - `server/src/modules/compliance/` contains the FSI calculation endpoint and its calculation logic.
 - `server/data/` contains configured authorities, FSI schedules, margin schedules, and height/use/zone reference data.
 - `client/src/data/` contains client-facing authority and table data used by calculator controls and views.
+- `client/src/features/cgdcr/` renders the responsive 2D plot feasibility diagram with boundaries, setbacks, roads, ground coverage, and accessible descriptions.
 - `client/src/features/admin/Calculator*.jsx` provides administrator panels for maintaining calculator authorities, schedules, road widths, tables, use codes, and zones. `TallBuildingPolicyPanel.jsx` manages tall-building policy configuration.
 - The calculator uses configured rule data and returns unresolved results when necessary rules or applicability details have not been verified; extracted text alone is not treated as an approved rule.
 
 **Regulation documents and search**
 
 - `server/source-documents/` stores the three original CGDCR PDFs.
-- `server/src/modules/documents/routes.js` serves source-document endpoints.
+- `server/src/modules/documents/routes.js` serves source-document endpoints and stream inline PDFs at `/api/v1/documents/:id/pdf#page=:page`.
 - `server/src/modules/regulations/routes.js` provides regulation/source-text endpoints.
 - `server/src/modules/search/routes.js` implements keyword and question search routes; `cloudflare-ai.js` contains the optional Cloudflare AI integration.
-- `client/src/features/review/ReviewWorkbench.jsx` is the source review interface. Search results and review records retain their source information so users can verify passages against the PDFs.
+- `client/src/features/review/ReviewWorkbench.jsx` is the source review interface. Search results retain provenance with direct links to verified PDF pages.
 - `data/extracted/` stores page-level extraction artifacts and the source manifest. `scripts/ingest/extract_cgdcr.py` extracts text; `validate_extraction.py` checks the extraction output.
 
 **Administration, accounts, and database**
 
-- `client/src/features/admin/AdminDashboard.jsx` composes the admin console; adjacent panels expose account and calculator configuration tools.
+- `client/src/features/admin/AdminDashboard.jsx` composes the admin console with a dedicated CGDCR Planning Configuration section and user management.
 - `server/src/modules/admin/` contains admin API routes and server-side calculator configuration handlers.
 - `server/src/modules/auth/` verifies identity and applies API authentication; `server/src/modules/users/routes.js` contains user-related API operations.
-- `server/src/config/` loads environment and database configuration. `server/src/db/model-store.js` provides database-backed model operations.
+- `server/src/config/` loads environment and database configuration, supporting `GUJRATPORTAL_` namespaced credentials. `server/src/db/model-store.js` provides database-backed model operations.
 - `server/migrations/001_postgres_core.sql` creates the PostgreSQL core schema; `002_rag_search.sql` adds retrieval/search storage.
 - `server/scripts/` includes `migrate.js`, `seed-source-documents.js`, `validate-database.js`, `index-rag.js`, and `admin-create.js` for setup and maintenance workflows.
 
@@ -185,7 +188,12 @@ The three CGDCR PDFs are source material, not software instructions. Their extra
 
 ### Environment file guide
 
-- Root `.env.local`: local Neon branch and Auth configuration; ignored by Git.
+- Root `.env.local` or `.env`: local Neon branch, Auth configuration, and app-specific `GUJRATPORTAL_` variables; ignored by Git.
+  - `GUJRATPORTAL_DATABASE_URL` / `DATABASE_URL`
+  - `GUJRATPORTAL_DATABASE_URL_UNPOOLED` / `DATABASE_URL_UNPOOLED`
+  - `GUJRATPORTAL_CLOUDFLARE_ACCOUNT_ID` / `CLOUDFLARE_ACCOUNT_ID`
+  - `GUJRATPORTAL_CLOUDFLARE_AI_TOKEN` / `CLOUDFLARE_AI_TOKEN`
+  - `NEON_BRANCH`, `NEON_AUTH_BASE_URL`, `NEON_AUTH_JWKS_URL`
 - `server/.env`: server-only database, Auth verification, and optional Cloudflare settings; copy from `server/.env.example` and keep it out of Git.
 - `client/.env`: browser-safe Vite settings only; copy from `client/.env.example`. Do not put database credentials or private Cloudflare tokens in client variables because Vite embeds `VITE_*` values in browser assets.
 

@@ -228,6 +228,7 @@ export default function AdminDashboard() {
 }
 
 function AdminOverview({ overview, overviewError, refreshing, user, users, usersPagination, usersError, usersLoading, usersPage, userSearch, userRoleFilter, userStatusFilter, userActionId, onUserSearch, onUserSearchChange, onUserRoleFilterChange, onUserStatusFilterChange, onUsersPageChange, onUserRoleChange, onUserStatusChange, onUserRemove, onRefresh, onLogout }) {
+  const [activeSection, setActiveSection] = useState('all');
   const source = overview?.source;
   const review = overview?.review;
   const verified = overview?.verified;
@@ -343,16 +344,40 @@ function AdminOverview({ overview, overviewError, refreshing, user, users, users
           </aside>
         </section>
 
-        <CalculatorZonesPanel />
-        <CalculatorUseCodesPanel />
-        <CalculatorRoadWidthPanel />
-        <CalculatorFsiSchedulesPanel />
-        <CalculatorBuildingHeightPanel />
-        <CalculatorFsiSchedulesPanel mode="margins" />
-        <TallBuildingPolicyPanel />
-        <CalculatorAuthoritiesPanel />
-        <CalculatorTablesPanel />
+        <div className="admin-section-tabs-bar" role="tablist" aria-label="Admin console navigation">
+          <button type="button" role="tab" aria-selected={activeSection === 'all'} className={`admin-tab-btn ${activeSection === 'all' ? 'active' : ''}`} onClick={() => setActiveSection('all')}>
+            All Admin Views
+          </button>
+          <button type="button" role="tab" aria-selected={activeSection === 'cgdcr'} className={`admin-tab-btn ${activeSection === 'cgdcr' ? 'active' : ''}`} onClick={() => setActiveSection('cgdcr')}>
+            <ShieldCheck size={14} /> CGDCR Planning Configuration
+          </button>
+          <button type="button" role="tab" aria-selected={activeSection === 'users'} className={`admin-tab-btn ${activeSection === 'users' ? 'active' : ''}`} onClick={() => setActiveSection('users')}>
+            <LockKeyhole size={14} /> Accounts &amp; Users
+          </button>
+        </div>
 
+        {(activeSection === 'all' || activeSection === 'cgdcr') && (
+          <section className="cgdcr-admin-section" aria-label="CGDCR Planning Configuration Views">
+            <div className="cgdcr-admin-header">
+              <div>
+                <span className="admin-section-label">CGDCR REGULATORY CONTROLS</span>
+                <h2>CGDCR Rules, Schedules &amp; Feasibility Configuration</h2>
+                <p>Manage development authorities, use zones, permissible use codes, FSI schedules, road widths, building heights, margin schedules, and tall-building policy. All actions require audit notes and are backed by protected backend endpoints.</p>
+              </div>
+            </div>
+            <CalculatorAuthoritiesPanel />
+            <CalculatorZonesPanel />
+            <CalculatorUseCodesPanel />
+            <CalculatorRoadWidthPanel />
+            <CalculatorFsiSchedulesPanel />
+            <CalculatorBuildingHeightPanel />
+            <CalculatorFsiSchedulesPanel mode="margins" />
+            <TallBuildingPolicyPanel />
+            <CalculatorTablesPanel />
+          </section>
+        )}
+
+        {(activeSection === 'all' || activeSection === 'users') && (
         <section className="admin-users-panel">
           <div className="admin-users-heading"><div><span className="admin-section-label">ACCOUNT ADMINISTRATION</span><h2>Users and access</h2><p>{count(usersPagination?.total)} accounts · manage roles, sign-in access, and account removal.</p></div><span className="admin-panel-icon"><LockKeyhole size={18} /></span></div>
           <form className="admin-user-filters" onSubmit={onUserSearch}>
@@ -376,6 +401,7 @@ function AdminOverview({ overview, overviewError, refreshing, user, users, users
           </tbody></table></div>
           {usersPagination && <div className="admin-users-pagination"><span>Showing {users.length ? (usersPage - 1) * usersPagination.pageSize + 1 : 0}–{Math.min(usersPage * usersPagination.pageSize, usersPagination.total)} of {count(usersPagination.total)} accounts · page {usersPage} of {Math.max(1, usersPagination.pages)}</span><div><button className="reader-button" disabled={usersLoading || usersPage <= 1} onClick={() => onUsersPageChange(usersPage - 1)}>Previous</button><button className="reader-button" disabled={usersLoading || usersPage >= usersPagination.pages} onClick={() => onUsersPageChange(usersPage + 1)}>Next</button></div></div>}
         </section>
+        )}
 
         <section className="admin-setup-note">
           <div className="admin-setup-icon"><Database size={17} /></div>

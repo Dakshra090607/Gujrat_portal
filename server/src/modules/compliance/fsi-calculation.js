@@ -254,7 +254,10 @@ function fromManagedRow(item) {
 }
 
 function unresolved(message, missingInformation, inputs) {
-  return { status: 'UNRESOLVED', message, missingInformation, inputs, sources: [], calculation: null };
+  const formattedMessage = message.startsWith('Unable to establish a verified FSI result')
+    ? message
+    : `Unable to establish a verified FSI result: ${message}`;
+  return { status: 'UNRESOLVED', message: formattedMessage, missingInformation, inputs, sources: [], calculation: null };
 }
 
 function getAuthorityCode(value = '') {
